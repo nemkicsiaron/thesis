@@ -1,4 +1,5 @@
-# Arhitektúrája a 
+# Arhitektúrája a p2p rendszernek
+
 ### 1. Kliensek
 - A más tartalmát nem hosztoló, azaz csak böngészői szinten létező felhasználók
 - JSON formában, lokálisan és csak lokálisan tárolva, RSA titkosított fájl reprezentálja a profiljukat
