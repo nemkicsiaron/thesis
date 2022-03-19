@@ -8,19 +8,19 @@ datasource db {
 }
 
 model Category {
-  id Int @id @default(autoincrement())
-  name String @unique
+  id    Int    @id @default(autoincrement())
+  name  String @unique
   posts Post[]
 }
 
 model Post {
   title       String
-  category    Category? @relation(fields: [categoryId], references: [id])
   categoryId  Int?
-  published   Boolean? @default(false)
+  published   Boolean?  @default(false)
   description String?
   price       String
-  created     DateTime @default(now())
+  created     DateTime  @default(now())
   author      String
-  signature   String   @unique
+  signature   String    @unique
+  category    Category? @relation(fields: [categoryId], references: [id])
 }
