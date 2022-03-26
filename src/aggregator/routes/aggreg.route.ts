@@ -1,21 +1,25 @@
 import { Router } from "express";
-import { PrismaClient } from "@prisma/client";
-import { nextTick } from "process";
+import fetch from "node-fetch"
+import { indexer } from "../indexing/indexer";
 
-const prisma = new PrismaClient();
-const router = Router();
+const aggregrouter = Router();
 
-router.get('/', (req, res) => {
+aggregrouter.get('/', (req, res) => {
     return res.json("Lajos");
 });
 
-router.get('/allcat', async (req, res) => {
+aggregrouter.get('/alldb', (req, res) => {
     try {
-        const allCats = await prisma.category.findMany();
-        res.json(allCats);
+        res.json(indexer());
     } catch (error) {
         console.error(error);
     }
 });
 
-export default router;
+aggregrouter.get('/cat', async (req, res) => {
+    var response = await fetch("http://localhost:3000/api/allcat");
+    var data = await response.json();
+    res.json(data);
+});
+
+export default aggregrouter;

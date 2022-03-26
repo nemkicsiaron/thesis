@@ -1,8 +1,10 @@
 import { Router } from "express";
-import router from "./aggreg.route";
+import aggregrouter from "./aggreg.route";
+import authrouter from "./auth.route";
 
 const routes = Router();
 
-routes.use('/aggreg', router);
+routes.use('/aggreg', aggregrouter);
+routes.use('/auth', authrouter);
 
 export default routes;
