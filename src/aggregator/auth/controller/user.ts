@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import bcryptjs from "bcryptjs"
 import signJWT from "../functions/signJWT";
-import IUser from "../interfaces/user";
+import IUser from "../../interfaces/user";
 import { TokenExpiredError } from "jsonwebtoken";
 
 const NAMESPACE = "User";
@@ -15,6 +15,10 @@ const validateToken = (req: Request, res: Response, next: NextFunction) => {
 
 const register = (req: Request, res: Response, next: NextFunction) => {
     let { username, password } = req.body;
+    let user = {
+        username: "",
+        
+    }
     bcryptjs.hash(password, 69, (hashError, hash) => {
         if(hashError)
         {
