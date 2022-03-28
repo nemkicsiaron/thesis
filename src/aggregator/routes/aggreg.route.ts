@@ -1,6 +1,5 @@
 import { Router } from "express";
-import fetch from "node-fetch"
-import { indexer } from "../indexing/indexer";
+import { indexer, serverslist } from "../indexing/indexer";
 
 const aggregrouter = Router();
 
@@ -10,13 +9,21 @@ aggregrouter.get('/', (req, res) => {
 
 aggregrouter.get('/alldb', (req, res) => {
     try {
-        res.json(indexer());
+        res.json(serverslist());
     } catch (error) {
         console.error(error);
     }
 });
 
-aggregrouter.get('/cat', async (req, res) => {
+aggregrouter.post('/discover', (req, res) => {
+    try {
+        res.json(indexer(req.body.address, req.body.cat));
+    } catch (error) {
+        console.error(error);
+    }
+});
+
+aggregrouter.get('/allcat', async (req, res) => {
     var response = await fetch("http://localhost:3000/api/allcat");
     var data = await response.json();
     res.json(data);
