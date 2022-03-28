@@ -1,8 +1,6 @@
 import { Router } from "express";
-import { PrismaClient } from "@prisma/client";
-import { nextTick } from "process";
+import { listallcat } from "../functions/listallcat";
 
-const prisma = new PrismaClient();
 const router = Router();
 
 router.get('/', (req, res) => {
@@ -11,7 +9,7 @@ router.get('/', (req, res) => {
 
 router.get('/allcat', async (req, res) => {
     try {
-        const allCats = await prisma.category.findMany();
+        const allCats = listallcat();
         res.json(allCats);
     } catch (error) {
         console.error(error);
