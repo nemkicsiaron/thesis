@@ -1,9 +1,8 @@
-import jwt from "jsonwebtoken"
 import IUser from "../../interfaces/user"
 
 const NAMESPACE = "Auth";
 
-const signJWT = (user: IUser, callback: (error: Error | null, token: string | null) => void): void => {
+/*const signJWT = (user: IUser, callback: (error: Error | null, token: string | null) => void): void => {
     var timeSinceEpoch = new Date().getTime();
     var expirationTime = timeSinceEpoch + 3_600 * 100_000;
     var expirationTimeInSeconds = Math.floor(expirationTime / 1_000);
@@ -34,4 +33,4 @@ const signJWT = (user: IUser, callback: (error: Error | null, token: string | nu
     }
 }
 
-export default signJWT;
+export default signJWT;*/

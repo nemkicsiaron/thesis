@@ -1,9 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import jwt from "jsonwebtoken"
 
 const NAMESPACE = "Auth";
 
-const extractJWT = (req: Request, res: Response, next: NextFunction) => {
+/*const extractJWT = (req: Request, res: Response, next: NextFunction) => {
     let token = req.headers.authorization?.split(' ')[1];
     if(token) {
         jwt.verify(token, "supersecret", (error, decoded) => {
@@ -24,4 +23,4 @@ const extractJWT = (req: Request, res: Response, next: NextFunction) => {
             message: "Unauthorized access error"
         });
     }
-}
+}*/

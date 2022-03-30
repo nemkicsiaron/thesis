@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import bcryptjs from "bcryptjs"
-import signJWT from "../functions/signJWT";
+import { writeFile, readFile } from "fs";
+import { generateKey } from "openpgp"
+//import signJWT from "../functions/signJWT";
 import IUser from "../../interfaces/user";
-import { TokenExpiredError } from "jsonwebtoken";
 
 const NAMESPACE = "User";
 
@@ -13,23 +13,43 @@ const validateToken = (req: Request, res: Response, next: NextFunction) => {
     });
 };
 
-const register = (req: Request, res: Response, next: NextFunction) => {
+const register = async (req: Request, res: Response, next: NextFunction) => {
     let { username, password } = req.body;
-    let user = {
-        username: "",
+
+    if(!username) {
+        res.status(400).json({
+            message: "No username given!"
+        });
+    }
+
+    if(!password) {
+        res.status(400).json({
+            message: "No password given!"
+        });
+    } else if (password.length < 6) {
+        res.status(400).json({
+            message: "Password too short!"
+        });
+    }
+    
+    let { privateKey, publicKey } = await generateKey({
+        type: "rsa",
+        userIDs: [{name: username}],
+        passphrase: password
+    });
+
+    let user: IUser = {
+        username: username || "",
+        publickey: publicKey,
+        privatekey: privateKey
         
     }
-    bcryptjs.hash(password, 69, (hashError, hash) => {
-        if(hashError)
-        {
-            return res.status(500).json({
-                message: hashError.message,
-                error: hashError
-            });
-        }
 
-        // TODO: save user into DB
-        
+    writeFile(".user.secret", user.username + '\n' + user.publickey + '\n' + user.privatekey, e => {
+        if(e) {
+            return console.error(e);
+        }
+        console.log("Secrets exported successfully!");
     });
 };
 
