@@ -1,6 +1,7 @@
 import express from "express";
 import { rateLimit, RateLimitRequestHandler } from "express-rate-limit";
 import routes from "./routes";
+import keepalive from "./indexing/keepalive";
 import controller from "./auth/controller/user"
 
 const aggregator: express.Application = express();
@@ -14,6 +15,8 @@ const limiter: RateLimitRequestHandler = rateLimit({
 aggregator.use(express.json());
 aggregator.use(routes);
 aggregator.use(limiter);
+
+keepalive();
 
 aggregator.listen(port,() => {
     console.log(`Aggregator Server listening on port: ${port}`);
