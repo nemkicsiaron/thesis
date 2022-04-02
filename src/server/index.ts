@@ -1,8 +1,8 @@
 import express from "express";
 import { rateLimit, RateLimitRequestHandler } from "express-rate-limit"
+import { connect } from "http2";
 import routes from "./routes";
 import { aggregatorUri } from "./util/config";
-import { listallcat } from "./functions/listallcat";
 
 const server: express.Application = express();
 const port: number = 3000;
@@ -17,21 +17,7 @@ server.use(express.json());
 server.use(routes);
 server.use(limiter);
 
-server.listen(port, async () => {
-    try {
-        const discoveryaddr = aggregatorUri + "/discover";
-        console.log(discoveryaddr);
-        const body = {
-            address: "http://localhost:3000",
-            cat: await listallcat()
-        };
-        await fetch(discoveryaddr, {
-            method: "post",
-            body: JSON.stringify(body),
-            headers: {"Content-Type": "application/json"}
-        });
-    } catch (error) {
-        console.error(error);
-    }
+server.listen(port, () => {
+    connect(aggregatorUri)
     console.log(`Server listening on port: ${port}`);
 });
