@@ -1,6 +1,6 @@
 import express from "express";
 import { rateLimit, RateLimitRequestHandler } from "express-rate-limit"
-import { connect } from "http2";
+import discovery from "./functions/discovery";
 import routes from "./routes";
 import { aggregatorUri } from "./util/config";
 
@@ -18,6 +18,6 @@ server.use(routes);
 server.use(limiter);
 
 server.listen(port, () => {
-    connect(aggregatorUri)
+    discovery(aggregatorUri);
     console.log(`Server listening on port: ${port}`);
 });
