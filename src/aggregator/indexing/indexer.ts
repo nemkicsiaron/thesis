@@ -5,11 +5,11 @@ var servers: IServer[] = [];
 
 export function indexer(addr: string, categories?: Category[]): number {
     console.log("Registered new server on address: " + addr);
-    return servers.push({address: addr, categories: categories || [], activesince: new Date()});
+    return servers.push({address: addr, categories: categories || [], lastactive: new Date()});
 }
 
 export function update(addr: string): void {
-    servers.map(s => {if(s.address === addr) {s.activesince = new Date()}});
+    servers.map(s => {if(s.address === addr) {s.lastactive = new Date()}});
 }
 
 export function badaddr(addr: string): void {

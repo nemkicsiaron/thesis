@@ -13,7 +13,7 @@ async function probe(s: IServer) {
         }
     } catch (error: any) {
         console.error(error);
-        if(s.activesince.getTime() <= new Date().getTime() + (4 * 15 * 60 * 1000)) {
+        if(s.lastactive.getTime() <= new Date().getTime() + (4 * 15 * 60 * 1000)) {
             badaddr(s.address);
         }
     }

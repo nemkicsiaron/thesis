@@ -1,4 +1,6 @@
+import Post from "./post"
+
 export default interface Category {
-    id: number,
-    name: string
+    name: string,
+    post: Post[]
 }
