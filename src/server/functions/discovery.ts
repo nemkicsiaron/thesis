@@ -1,7 +1,7 @@
 import { Category } from "@prisma/client";
 import listallcat from "./listallcat";
 
-export default async function discovery(discoveryaddr: string) {
+export default async function discovery(discoveryaddr: string): Promise<boolean> {
     discoveryaddr += "/aggreg/discover";
     try {
         const categorylist: Category[] = await listallcat(); 
@@ -14,7 +14,9 @@ export default async function discovery(discoveryaddr: string) {
             body: JSON.stringify(body),
             headers: {"Content-Type": "application/json"}
         });
+        return true;
     } catch (error) {
         console.error(error);
+        return false;
     }
 }

@@ -5,11 +5,11 @@ import discovery from "../functions/discovery";
 
 const router = Router();
 
-router.get('/', (req, res) => {
+router.get('/', (_, res) => {
     return res.json("Lajos");
 });
 
-router.get('/allcat', (req, res) => {
+router.get('/allcat', (_, res) => {
     try {
         const allCats = listallcat();
         res.json(allCats);
@@ -18,7 +18,7 @@ router.get('/allcat', (req, res) => {
     }
 });
 
-router.get('/probe', (req, res) => {
+router.get('/probe', (_, res) => {
     const allok: boolean = true;
     if(allok) {
         res.status(200).json({
@@ -27,9 +27,17 @@ router.get('/probe', (req, res) => {
     }
 });
 
-router.post('/discovery', (req, res) => {
+router.post('/discovery', async (req, res) => {
     const discoveryaddr = (req.body.address || aggregatorUri);
-    discovery(discoveryaddr)
+    if(await discovery(discoveryaddr)) {
+        res.status(200).json("Successful discovery");
+    } else {
+        res.status(500).json("There was a problem with discovery process!");
+    }
+});
+
+router.get('/find', () => {
+
 });
 
 export default router;
