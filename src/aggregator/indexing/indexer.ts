@@ -4,7 +4,9 @@ import IServer from "../interfaces/servers";
 var servers: IServer[] = [];
 
 export function indexer(addr: string, categories?: Category[]): number {
-    console.log("Registered new server on address: " + addr);
+    if (servers.some(server => server.address === addr)) throw new Error("Server already registered");
+    else console.log("Registered new server on address: " + addr);
+
     return servers.push({address: addr, categories: categories || [], lastactive: new Date()});
 }
 

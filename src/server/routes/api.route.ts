@@ -2,6 +2,7 @@ import { Router } from "express";
 import { aggregatorUri } from "../util/config";
 import listallcat from "../functions/listallcat";
 import discovery from "../functions/discovery";
+import findpost from "../functions/findpost";
 
 const router = Router();
 
@@ -36,8 +37,46 @@ router.post('/discovery', async (req, res) => {
     }
 });
 
-router.get('/find', () => {
+/*
+router.get('/findpost/:searchterm/:category/:minprice/:maxprice', (req, res) => {
+    const searchterm = req.params.searchterm;
+    const category = req.params.category;
+    const minprice = req.params.minprice;
+    const maxprice = req.params.maxprice;
 
+    console.log("searchterm: " + searchterm, " category: " + category, " minprice: " + minprice, " maxprice: " + maxprice);
+});*/
+
+router.get('/findpost/:searchterm/:minprice/:maxprice', async (req, res) => {
+
+    const searchterm = req.params.searchterm || (req.query.searchterm ?? "").toString();
+    const minprice = req.params.minprice || (req.query.minprice ?? "").toString();
+    const maxprice = req.params.maxprice || (req.query.maxprice ?? "").toString();
+
+    console.log(new Date(), ":", searchterm, minprice, maxprice);
+
+    try {
+        const posts = await findpost(searchterm, minprice, maxprice);
+        res.status(200).json(posts);
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json(error);
+    }
+});
+
+
+router.get('/filterbycategory/:category', async (req, res) => {
+    const category = req.params.category || req.query.category?.toString();
+    console.log("Searching for category: " + category);
+    const allCats = await listallcat();
+    const cat = allCats.find(c => c.name === category);
+    if(cat) {
+        console.log("Category found: " + cat.name);
+        res.status(200).json(true);
+    } else {
+        res.status(404).json("Category not found");
+    }
 });
 
 export default router;
