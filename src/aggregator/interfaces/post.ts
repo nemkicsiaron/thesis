@@ -8,5 +8,5 @@ export default interface Post {
     created: Date,
     author: string,
     signature: string,
-    categoryRelation: Category
+    categoryRelation?: Category
 }
