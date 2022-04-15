@@ -5,7 +5,7 @@ const authrouter = Router();
 
 authrouter.get('/validate', controller.validateToken);
 authrouter.post('/register', controller.register);
-authrouter.post('login', controller.login);
+authrouter.post('/login', controller.login);
 authrouter.get('/get/all', controller.getAllUsers);
 
 export default authrouter;
