@@ -2,18 +2,21 @@ import { serverslist } from "../indexing/indexer";
 import Post from "../interfaces/post";
 import IServer from "../interfaces/servers";
 
-function filterbycategory(category: string): IServer[] {
-    return (serverslist().filter(async function(s) {
+async function filterbycategory(category: string): Promise<IServer[]> {
+    var servers = serverslist();
+    const results = await Promise.all(servers.map(async function(s) {
         const fetchres = await fetch(s.address + '/api/filterbycategory?' + new URLSearchParams({ category: category }))
-        console.log(fetchres.status);
-        return fetchres.status === 200;
+        const data = await fetchres.json();
+        return { server: s, hascategory: data === true};
     }))
+
+    return results.filter(x => x.hascategory).map(x => x.server);
 };
 
-export default function servercatquery(searchterm: string, category: string, minprice?: number, maxprice?: number): Post[] {
+export default async function servercatquery(searchterm: string, category: string, minprice?: number, maxprice?: number): Promise<Post[]> {
     console.log("Searching category including servers for: " + searchterm);
 
-    const goodservers = filterbycategory(category);
+    const goodservers = await filterbycategory(category);
     var posts: Post[] = [];
 
     console.log(goodservers);
