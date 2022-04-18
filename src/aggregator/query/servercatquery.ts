@@ -19,22 +19,22 @@ export default async function servercatquery(searchterm: string, category: strin
     const goodservers = await filterbycategory(category);
     var posts: Post[] = [];
 
-    console.log(goodservers);
+    //console.log(goodservers);
 
-    if (goodservers.length === 0 && !goodservers) throw new Error("No servers found");
+    if (goodservers.length === 0 || !goodservers) throw new Error("No servers found storing given category: " + category);
 
-    goodservers.forEach(async s => {
+    Promise.all(goodservers.map(async s => {
         try {
             const res = (await fetch(s.address + '/api/findpost/?' + new URLSearchParams({
                 searchterm: searchterm.toString(),
                 minprice: minprice ? minprice.toString() : "",
                 maxprice: maxprice ? maxprice.toString() : ""
             })));
-            posts += (await res.json());
+            posts.push(...(await res.json()));
         } catch (error) {
             console.error(error);
         }
-    });
+    }));
 
     return posts;
 };

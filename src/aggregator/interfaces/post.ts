@@ -8,5 +8,5 @@ export default interface Post {
     description?: string,
     created: Date,
     author: string,
-    signature: string
+    signature?: string
 }

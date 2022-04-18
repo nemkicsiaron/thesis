@@ -42,15 +42,16 @@ aggregrouter.get('/findpost', async (req, res) => {
         try {
             console.log("Category query");
             const posts = await servercatquery(searchterm, category, Number(minprice), Number(maxprice));
-            console.log("Done");
+            console.log("Done:", posts);
             res.status(200).json(posts);
-        } catch (error) {
+        } catch (error: any) {
             console.error(error);
-            res.status(404).json(error);
+            res.status(404).json(error.message);
         }
     } else {
         console.log("General query");
         const posts = await generalquery(searchterm, Number(minprice), Number(maxprice));
+        console.log("Done:", posts);
         res.status(200).json(posts);
     }
 });
@@ -65,26 +66,28 @@ aggregrouter.post('/newpost', async (req, res) => {
     const data = await req.body;
     var serveraddr: string = data.server?.toString();
     if(!serveraddr) serveraddr = serverslist().find(s => calculateBetweenDates(s.lastactive, new Date()) < 15)?.address ?? "";
-    console.log(serveraddr);
+    //console.log(serveraddr);
     const newpost: Post = {
         title : data.post.title,
         category: data.post.category,
         publish: data.post.publish,
         price: data.post.price,
         author: data.post.author,
-        signature: data.post.signature,
+        //signature: data.post.signature,
         description: data.post.description,
         created: new Date(),
         //categoryRelation: (await listallcat(serveraddr)).find(c => c.name === data.post.category)
     };
 
-    await fetch(serveraddr + "/api/newpost", {
+    const createres = await fetch(serveraddr + "/api/newpost", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
             },
         body: JSON.stringify(newpost)
-    })
+    });
+
+    res.status(200).json(await createres.json());
 });
 
 export default aggregrouter;

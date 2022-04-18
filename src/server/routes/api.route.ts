@@ -48,6 +48,7 @@ router.get('/findpost', async (req, res) => {
 
     try {
         const posts = await findpost(searchterm, minprice, maxprice);
+        console.log(new Date(), ":", posts);
         res.status(200).json(posts);
     }
     catch (error) {

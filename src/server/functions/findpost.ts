@@ -9,13 +9,11 @@ export default async function findpost(searchterm: string, minprice: string, max
             published: true
         }
     });
-    console.log(searchterm);
-    //if (category) res = res.filter(p => p.category === category);
 
-    const sureminprice = minprice ? parseInt(minprice) : 0;
-    const suremaxprice = maxprice ? parseInt(maxprice) : Number.MAX_SAFE_INTEGER;
-
+    //console.log(res);
     return res.filter(p => p.title.toLowerCase().includes(searchterm.toLowerCase()) &&
-             parseInt(p.price) >= sureminprice &&
-             parseInt(p.price) <= suremaxprice);
+             parseInt(p.price) >= (parseInt(minprice) || 0) &&
+             parseInt(p.price) <= (parseInt(maxprice) || Number.MAX_SAFE_INTEGER));
+    //console.log(posts);
+    //return posts;
 }
