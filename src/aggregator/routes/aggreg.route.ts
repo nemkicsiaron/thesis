@@ -65,18 +65,20 @@ aggregrouter.post('/newpost', async (req, res) => {
     const data = await req.body;
     var serveraddr: string = data.server?.toString();
     if(!serveraddr) serveraddr = serverslist().find(s => calculateBetweenDates(s.lastactive, new Date()) < 15)?.address ?? "";
+    console.log(serveraddr);
     const newpost: Post = {
         title : data.post.title,
         category: data.post.category,
         publish: data.post.publish,
+        price: data.post.price,
         author: data.post.author,
         signature: data.post.signature,
         description: data.post.description,
         created: new Date(),
-        categoryRelation: (await listallcat(serveraddr)).find(c => c.name === data.post.category)
+        //categoryRelation: (await listallcat(serveraddr)).find(c => c.name === data.post.category)
     };
 
-    await fetch(serveraddr + "api/newpost", {
+    await fetch(serveraddr + "/api/newpost", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"

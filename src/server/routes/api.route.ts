@@ -3,6 +3,7 @@ import { aggregatorUri } from "../util/config";
 import listallcat from "../functions/listallcat";
 import discovery from "../functions/discovery";
 import findpost from "../functions/findpost";
+import newpost from "../functions/newpost";
 
 const router = Router();
 
@@ -67,6 +68,15 @@ router.get('/filterbycategory', async (req, res) => {
     } else {
         res.status(404).json("Category not found");
     }
+});
+
+router.post('/newpost', async (req, res) => {
+    const post = req.body;
+    console.log(post);
+
+    const createres = await newpost(post);
+    if(createres) res.status(200).json(createres);
+    else res.status(500).json("There was a problem with creating the post!");
 });
 
 export default router;
