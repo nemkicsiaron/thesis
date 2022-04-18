@@ -1,10 +1,17 @@
-import { Post, PrismaClient} from "@prisma/client";
+import { Post, PrismaClient } from "@prisma/client";
+import listallcat from "./listallcat";
 
 const prisma = new PrismaClient();
 
 export default async function newpost(post: Post): Promise<Post | null> {
 
     try {
+        await prisma.category.upsert({
+            where: { name: post.category },
+            update: {},
+            create: { name: post.category }
+        });
+
         const newPost: Post = await prisma.post.create({
             data: {
                 title: post.title,
@@ -14,7 +21,7 @@ export default async function newpost(post: Post): Promise<Post | null> {
                 price: post.price,
                 created: post.created,
                 author: post.author,
-                signature: post.signature,
+                signature: post.signature
             },
         });
         return newPost;
