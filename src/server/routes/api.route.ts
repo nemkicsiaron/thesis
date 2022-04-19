@@ -4,6 +4,8 @@ import listallcat from "../functions/listallcat";
 import discovery from "../functions/discovery";
 import findpost from "../functions/findpost";
 import newpost from "../functions/newpost";
+import deletepost from "../functions/deletepost";
+import updatepost from "../functions/updatepost";
 
 const router = Router();
 
@@ -72,12 +74,27 @@ router.get('/filterbycategory', async (req, res) => {
 });
 
 router.post('/newpost', async (req, res) => {
-    const post = req.body;
+    const post = await req.body;
     console.log(post);
 
     const createres = await newpost(post);
     if(createres) res.status(200).json(createres);
     else res.status(500).json("There was a problem with creating the post!");
+});
+
+router.delete('/deletepost', async (req, res) => {
+    const data = await req.body;
+    const deleteres = await deletepost(data.title, data.author, data.signature);
+    if(deleteres.status === "success") res.status(200).json(deleteres.message);
+    else res.status(500).json("There was a problem with deleting the post!");
+});
+
+router.put('updatepost', async (req, res) => {
+    const data = await req.body;
+
+    const updateres = await updatepost(data.updatepost, data.oldsignature);
+    if(updateres.status === "success") res.status(200).json(updateres.message);
+    else res.status(500).json("There was a problem with updating the post!");
 });
 
 export default router;

@@ -1,5 +1,4 @@
 import { Post, PrismaClient } from "@prisma/client";
-import listallcat from "./listallcat";
 
 const prisma = new PrismaClient();
 
