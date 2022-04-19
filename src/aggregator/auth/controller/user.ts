@@ -1,6 +1,6 @@
+import { generateKey, generateKeyPair } from "crypto";
 import { NextFunction, Request, Response } from "express";
-import { writeFile, readFile } from "fs";
-import { generateKey } from "openpgp"
+import { writeFile, readFile, rmSync } from "fs";
 //import signJWT from "../functions/signJWT";
 import IUser from "../../interfaces/user";
 
@@ -14,7 +14,7 @@ const validateToken = (req: Request, res: Response, next: NextFunction) => {
 };
 
 const register = async (req: Request, res: Response, next: NextFunction) => {
-    let { username, password } = req.body;
+    let { username, password } = await req.body;
 
     if(!username) {
         res.status(400).json({
@@ -31,19 +31,40 @@ const register = async (req: Request, res: Response, next: NextFunction) => {
             message: "Password too short!"
         });
     }
-    
-    let { privateKey, publicKey } = await generateKey({
-        type: "rsa",
-        userIDs: [{name: username}],
-        passphrase: password
-    });
+
 
     let user: IUser = {
         username: username || "",
-        publickey: publicKey,
-        privatekey: privateKey
-        
+        publickey: "",
+        privatekey: ""
     }
+
+    generateKeyPair("rsa", {
+        modulusLength: 4096,
+        publicKeyEncoding: {
+            type: "spki",
+            format: "pem"
+        },
+        privateKeyEncoding: {
+            type: "pkcs8",
+            format: "pem",
+            cipher: "aes-256-cbc",
+            passphrase: password
+        }
+    }, (error, publicKey, privateKey) => {
+        if(error) {
+            res.status(500).json({
+                message: "Error generating keypair"
+            });
+            return console.error(error);
+        }
+        else {
+            user.privatekey = privateKey;
+            user.publickey = publicKey;
+        }
+    });
+
+    localStorage.setItem(username, JSON.stringify(user));
 
     writeFile(".user.secret", user.username + '\n' + user.publickey + '\n' + user.privatekey, e => {
         if(e) {
@@ -51,14 +72,29 @@ const register = async (req: Request, res: Response, next: NextFunction) => {
         }
         console.log("Secrets exported successfully!");
     });
+
+    res.status(200).json(user);
 };
 
-const login = (req: Request, res: Response, next: NextFunction) => {
+const login = (req: Request, res: Response, next: NextFunction): IUser | null => {
     let {username, password} = req.body;
-
-        // TODO: save user into DB
-    let user: IUser = {username: "un", publickey: "pub", privatekey: "priv"};
-
+    let user: IUser;
+    readFile(".user.secret", (e, data) => {
+        if(e) {
+            return console.error(e);
+        }
+        let [fusername, publickey, privatekey] = data.toString().split('\n');
+        if(fusername === username) {
+            user.username = fusername;
+            user.publickey = publickey;
+            user.privatekey = privatekey;
+            res.status(200).json("successfully logged in");
+            return user;
+        }
+        else res.status(400).json({
+            message: "Invalid username or password!"});
+    });
+    return null;
 };
 
 const getAllUsers = (req: Request, res: Response, next: NextFunction) => {
