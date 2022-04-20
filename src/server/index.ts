@@ -5,7 +5,7 @@ import routes from "./routes";
 import { aggregatorUri } from "./util/config";
 
 const server: express.Application = express();
-const port: number = 3000;
+const port: number = 5000;
 const limiter: RateLimitRequestHandler = rateLimit({
     windowMs: 10 * 60 * 1000, // 10min
     max: 100, // 100 req per `window` per IP
