@@ -1,0 +1,76 @@
+h1 {
+    padding: 1vh;
+    font-family: 'Jaapokki';
+    font-size: 6rem !important;
+}
+
+.intro-text {
+    position: static;
+    min-height: 100vh;
+}
+
+.scrolldown{
+    border-radius: 150px !important;
+    color: #c6c6c6 !important;
+    outline-color: #c6c6c6;
+    background-color: transparent !important;
+    height: 6vh;
+    align-self: center;
+    margin-left: 48%;
+    margin-right: 48%;
+    display: inline;
+    font-size: 18px !important;
+}
+
+.home-page {
+    font-family: 'Cascadia';
+    align-items: center;
+    flex-direction: column;
+    align-content: center;
+    background-color: #282c34;
+    color: white;
+    width: 100vw;
+    padding: 2rem;
+    position: absolute;
+    display: block !important;
+}
+
+.btn-list {
+    justify-content: space-between;
+    margin: 0.4vh;
+    background-color: #282c34;
+    position: static;
+    margin-top: 1vh;
+}
+
+.list-btn {
+    margin: 2%;
+}
+
+blockquote {
+    position: relative;
+    padding-left:50px;
+    font-size: 3.5vw;
+    font-weight: 500;
+    color:rgb(133, 133, 133);
+    quotes: "\201C" "\201D" "\2018" "\2019";
+
+    &::before,
+    &::after {
+      color: #c6c6c6;
+      font-size: 2.0em;
+      font-weight: 400;
+      line-height: 0.1em;
+    }
+    &::before {
+          position: static;
+          left:0;
+      content: open-quote;
+      margin-right: 0.15em;
+      vertical-align: -0.15em;
+    }
+    &::after {
+      content: close-quote;
+      vertical-align: -0.7em;
+    }
+}

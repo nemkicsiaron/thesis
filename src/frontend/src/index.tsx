@@ -1,8 +1,58 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { Route, Routes, BrowserRouter as Router} from 'react-router-dom';
 import './index.css';
-import App from './App';
+import Home from './routes/Home';
+import Profile from './routes/Profile';
+import NotFound from './routes/NotFound';
+import Info from './routes/Info';
 import reportWebVitals from './reportWebVitals';
+
+const App = () => {
+  /*return (
+      <NotificationProvider>
+          <LoginProvider>
+              <Main />
+          </LoginProvider>
+      </NotificationProvider>
+  );*/
+  return <Main />;
+};
+
+const Main = () => {
+  /*
+  const [loginStatus, login] = useCookieLogin();
+  const { notificationDispatch } = useContext(NotificationContext);
+
+  useEffectAsync(login, []);
+  useEffect(() => {
+      if(loginStatus instanceof Failed) {
+          console.error('Error communicating with the server', loginStatus.error);
+          notificationDispatch({ type: 'addError', message: 'Hiba a szerverrel való kommunikációban' });
+      }
+
+  }, [loginStatus]);
+
+  if(loginStatus instanceof Idle || loginStatus instanceof Loading) return <p>Loading...</p>;
+
+  */
+
+  return (
+      <Router>
+          <div className="main-layout">
+
+              <div className="main-content">
+                  <Routes>
+                      <Route path="/profile" element={<Profile />} />
+                      <Route path="/" element={<Home />} />
+                      <Route path="/info" element = {<Info />} />
+                      <Route path="*" element={<NotFound />} />
+                  </Routes>
+              </div>
+          </div>
+      </Router>
+  );
+};
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

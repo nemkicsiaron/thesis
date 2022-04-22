@@ -1,0 +1,24 @@
+
+.profile-main {
+    font-family: 'Cascadia';
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    background-color: #282c34;
+    color: white;
+    height: 100vh;
+    padding: 2rem;
+}
+
+.profile-list {
+    display: inline-block;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 0.4vh;
+    background-color: #282c34;
+}
+
+.list-btn {
+    margin: 2%;
+}
