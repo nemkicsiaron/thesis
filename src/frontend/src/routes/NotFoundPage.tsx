@@ -3,7 +3,7 @@ import './styles/NotFound.scss';
 import { Link } from "react-router-dom";
 import { Button } from "reactstrap";
 
-const NotFound = () => {
+const NotFoundPage = () => {
     return (
         <div>
             <h1 className="notFoundTitle">404 - A keresett oldal nem található</h1>
@@ -12,4 +12,4 @@ const NotFound = () => {
     );
 }
 
-export default NotFound;
+export default NotFoundPage;

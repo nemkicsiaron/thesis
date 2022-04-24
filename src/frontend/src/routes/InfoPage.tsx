@@ -1,7 +1,8 @@
-
+import {Link} from "react-router-dom"
+import {Button} from "reactstrap"
 import "./styles/Info.scss"
 
-const Info = () => {
+const InfoPage = () => {
     return (
         <div className="info-page">
             <span>
@@ -16,8 +17,9 @@ const Info = () => {
                     Lorem, ipsum dolor sit amet consectetur adipisicing elit. A sapiente expedita error perferendis corrupti dolorem ab iste saepe distinctio, harum voluptatum quibusdam doloremque asperiores fugit nulla quam totam ipsum cupiditate.
                 </p>
             </span>
+            <Button type="button" className="btn list-btn" color="danger" size="lg" tag={Link} to="/">Vissza a főoldalra</Button>
         </div>
     );
 };
 
-export default Info;
+export default InfoPage;

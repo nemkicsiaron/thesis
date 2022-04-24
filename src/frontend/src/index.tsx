@@ -2,11 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Route, Routes, BrowserRouter as Router} from 'react-router-dom';
 import './index.css';
-import Home from './routes/Home';
-import Profile from './routes/Profile';
-import NotFound from './routes/NotFound';
-import Info from './routes/Info';
+import Home from './routes/HomePage';
+import ProfilePage from './routes/ProfilePage';
+import NotFoundPage from './routes/NotFoundPage';
+import Servers from './routes/ServersPage';
+import InfoPage from './routes/InfoPage';
 import reportWebVitals from './reportWebVitals';
+import RegisterPage from './routes/RegisterPage';
 
 const App = () => {
   /*return (
@@ -43,10 +45,12 @@ const Main = () => {
 
               <div className="main-content">
                   <Routes>
-                      <Route path="/profile" element={<Profile />} />
                       <Route path="/" element={<Home />} />
-                      <Route path="/info" element = {<Info />} />
-                      <Route path="*" element={<NotFound />} />
+                      <Route path="/profile" element={<ProfilePage />} />
+                      <Route path="/servers" element={<Servers />} />
+                      <Route path="/info" element = {<InfoPage />} />
+                      <Route path='/register' element = {<RegisterPage />} />
+                      <Route path="*" element={<NotFoundPage />} />
                   </Routes>
               </div>
           </div>

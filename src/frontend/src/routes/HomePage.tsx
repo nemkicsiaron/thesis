@@ -3,7 +3,7 @@ import {Button, ListGroup} from "reactstrap";
 import "./styles/Home.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-export default () => {
+const Home = () => {
     return (
         <div className="home-page">
             <div className="intro-text">
@@ -21,4 +21,6 @@ export default () => {
             </div>
         </div>
     );
-}
+};
+
+export default Home;
