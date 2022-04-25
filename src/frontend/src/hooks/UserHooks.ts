@@ -1,13 +1,6 @@
-import { generateKeyPair } from "crypto";
 
 export default function useRegister() {
-    const register = async (username: string, password: string, onGenerated:(pubkey: string, privkey: string) => void ) => {
-
-        if(!username) {
-            return{
-                message: "No username given!"
-            };
-        }
+    const register = async (password: string, onGenerated:(pubkey: ArrayBuffer, privkey: ArrayBuffer) => void ) => {
 
         if(!password) {
             return{
@@ -18,35 +11,20 @@ export default function useRegister() {
                 message: "Password too short!"
             };
         }
-
-        let user = {
-            username: username || "",
-            publickey: "",
-            privatekey: ""
-        }
-
-        generateKeyPair("rsa", {
-            modulusLength: 4096,
-            publicKeyEncoding: {
-                type: "spki",
-                format: "pem"
+        let keypair = await window.crypto.subtle.generateKey(
+            {
+                name: "RSA-OAEP",
+                modulusLength: 4096,
+                publicExponent: new Uint8Array(password.length),
+                hash: {name: "SHA-256"}
             },
-            privateKeyEncoding: {
-                type: "pkcs8",
-                format: "pem",
-                cipher: "aes-256-cbc",
-                passphrase: password
-            }
-        }, (error, publicKey, privateKey) => {
-            if(error) {
-                return console.error(error);
-            }
-            else {
-                user.privatekey = privateKey;
-                user.publickey = publicKey;
-            }
-        });
-    };
+            true,
+            ["encrypt", "decrypt", "sign", "verify"]
+        );
+        let pubkey = await window.crypto.subtle.exportKey("spki", keypair.publicKey);
+        let privkey = await window.crypto.subtle.exportKey("pkcs8", keypair.privateKey);
 
+        onGenerated( pubkey, privkey);
+    }
     return {register: register};
 }
