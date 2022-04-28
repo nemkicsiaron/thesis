@@ -1,6 +1,6 @@
 
 export default function useRegister() {
-    const register = async (password: string, onGenerated:(pubkey: ArrayBuffer, privkey: ArrayBuffer) => void ) => {
+    const register = async (password: string, onGenerated:(pubkey: string, privkey: string) => void ) => {
 
         if(!password) {
             return{
@@ -13,18 +13,23 @@ export default function useRegister() {
         }
         let keypair = await window.crypto.subtle.generateKey(
             {
-                name: "RSA-OAEP",
-                modulusLength: 4096,
-                publicExponent: new Uint8Array(password.length),
-                hash: {name: "SHA-256"}
+                name: "RSA-PSS",
+                modulusLength: 2048,
+                publicExponent: new Uint8Array([0x01, 0x00, 0x01]),
+                hash: {name: "SHA-256"},
             },
             true,
-            ["encrypt", "decrypt", "sign", "verify"]
+            ["sign", "verify"]
         );
+
         let pubkey = await window.crypto.subtle.exportKey("spki", keypair.publicKey);
         let privkey = await window.crypto.subtle.exportKey("pkcs8", keypair.privateKey);
+        //privkey = window.crypto.subtle.wrapKey("pkcs8", privkey, )
 
-        onGenerated( pubkey, privkey);
+        let pubkeystr = window.btoa(String.fromCharCode.apply(null, [...new Uint8Array(pubkey)]));
+        let privkeystr = window.btoa(String.fromCharCode.apply(null, [...new Uint8Array(privkey)]));
+
+        onGenerated(`-----BEGIN PUBLIC KEY-----\n${pubkeystr}\n-----END PUBLIC KEY-----`, `-----BEGIN PRIVATE KEY-----\n${privkeystr}\n-----END PRIVATE KEY-----`);
     }
     return {register: register};
 }
