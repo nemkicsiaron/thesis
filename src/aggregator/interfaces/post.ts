@@ -1,5 +1,3 @@
-import Category from "./category"
-
 export default interface Post {
     title: string,
     category: string,
