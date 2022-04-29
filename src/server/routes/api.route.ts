@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { aggregatorUri } from "../util/config";
+import { aggregatorUri, ownUri } from "../util/config";
 import listallcat from "../functions/listallcat";
 import discovery from "../functions/discovery";
 import findpost from "../functions/findpost";
@@ -33,7 +33,7 @@ router.get('/probe', (_, res) => {
 
 router.post('/discovery', async (req, res) => {
     const discoveryaddr = (req.body.address || aggregatorUri);
-    if(await discovery(discoveryaddr)) {
+    if(await discovery(discoveryaddr, ownUri)) {
         res.status(200).json("Successful discovery");
     } else {
         res.status(500).json("There was a problem with discovery process!");

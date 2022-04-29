@@ -6,6 +6,7 @@
     "clean": "tsc --build --clean",
     "prestart": "npm run build",
     "start": "node --experimental-fetch --experimental-specifier-resolution=node --experimental-modules ./build",
+    "predemon": "npm run build",
     "demon": "nodemon --experimental-fetch --experimental-specifier-resolution=node --experimental-modules ./build"
   },
   "devDependencies": {

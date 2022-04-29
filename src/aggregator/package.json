@@ -9,6 +9,7 @@
     "clean": "tsc --build --clean",
     "prestart": "npm run build",
     "start": "node --experimental-fetch --experimental-specifier-resolution=node ./build",
+    "predemon": "npm run build",
     "demon": "nodemon --experimental-fetch --experimental-specifier-resolution=node ./build"
   },
   "keywords": [],

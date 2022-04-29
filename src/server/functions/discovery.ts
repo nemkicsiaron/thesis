@@ -1,13 +1,12 @@
-import { Category } from "@prisma/client";
 import listallcat from "./listallcat";
 
-export default async function discovery(discoveryaddr: string): Promise<boolean> {
+export default async function discovery(discoveryaddr: string, ownaddr: string): Promise<boolean> {
     discoveryaddr += "/aggreg/discover";
     try {
-        const categorylist: Category[] = await listallcat(); 
+        const categorylist: string[] = (await listallcat()).map(c => c.name);
         const body = {
-            address: "http://localhost:3000",
-            cat: categorylist.map(c => c.name)
+            address: ownaddr,
+            cat: categorylist
         };
         await fetch(discoveryaddr, {
             method: "post",
