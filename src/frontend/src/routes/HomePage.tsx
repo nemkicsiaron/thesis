@@ -15,6 +15,7 @@ const Home = () => {
             <div className="btn-list">
                 <ListGroup id='home-list'>
                     <Button type="button" className="btn list-btn" color="primary" size="lg" tag={Link} to="/servers">Szerverek megtekintése</Button>
+                    <Button type="button" className="btn list-btn" color="primary" size="lg" tag={Link} to="/posts">Hirdetések megtekintése</Button>
                     <Button type="button" className="btn list-btn" color="info" size="lg" tag={Link} to="/profile">Profil megtekintése</Button>
                     <Button type="button" className="btn list-btn" color="info" size="lg" tag={Link} to="/info">Több infó a projektről</Button>
                 </ListGroup>

@@ -9,6 +9,7 @@ import Servers from './routes/ServersPage';
 import InfoPage from './routes/InfoPage';
 import reportWebVitals from './reportWebVitals';
 import RegisterPage from './routes/RegisterPage';
+import PostsPage from './routes/PostsPage';
 
 const App = () => {
   /*return (
@@ -42,12 +43,12 @@ const Main = () => {
   return (
       <Router>
           <div className="main-layout">
-
               <div className="main-content">
                   <Routes>
                       <Route path="/" element={<Home />} />
                       <Route path="/profile" element={<ProfilePage />} />
                       <Route path="/servers" element={<Servers />} />
+                      <Route path="/posts" element={<PostsPage />} />
                       <Route path="/info" element = {<InfoPage />} />
                       <Route path='/register' element = {<RegisterPage />} />
                       <Route path="*" element={<NotFoundPage />} />

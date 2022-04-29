@@ -25,6 +25,7 @@ const ServersPage = () => {
             setIsErrorLoading(true);
         } finally {
             setIsLoading(false);
+            setServers(servers.concat(dummyServer));
         }
     }
     return (
@@ -37,7 +38,7 @@ const ServersPage = () => {
                         <ListGroupItem key={server.address}>
                         <strong>{server.address}</strong>
                         <p>{server.lastactive.toString()}</p>
-                        <Button type="button" className="btn" id="server-list-btn" color="success" size="lg" tag={Link} to="/:thatserver">megtekintés</Button>
+                        <Button type="button" className="btn" id="server-list-btn" color="success" size="lg" tag={Link} to="/:thatserver">Megtekintés</Button>
                         </ListGroupItem>
             ))}
             </ListGroup>
