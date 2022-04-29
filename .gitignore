@@ -112,4 +112,3 @@ node_modules
 # secrets
 *.secret
 .*
-config.*
