@@ -1,8 +1,9 @@
 import express from "express";
+import cors from "cors";
 import { rateLimit, RateLimitRequestHandler } from "express-rate-limit";
 import routes from "./routes";
 import keepalive from "./indexing/keepalive";
-import controller from "./auth/controller/user"
+//import controller from "./auth/controller/user"
 
 const aggregator: express.Application = express();
 const port: number = 4000;
@@ -13,6 +14,7 @@ const limiter: RateLimitRequestHandler = rateLimit({
 });
 
 aggregator.use(express.json());
+aggregator.use(cors());
 aggregator.use(routes);
 aggregator.use(limiter);
 

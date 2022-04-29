@@ -15,11 +15,20 @@ aggregrouter.get('/', (req, res) => {
 
 aggregrouter.get('/alldb', (req, res) => {
     try {
+        res.setHeader('Content-Type', 'application/json');
+        res.setHeader('Access-Control-Allow-Origin', '*');
         res.json(serverslist());
     } catch (error) {
         console.error(error);
     }
 });
+
+aggregrouter.get('/allcat', (req, res) => {
+});
+
+aggregrouter.get('/allcat/:server', (req, res) => {
+});
+
 
 aggregrouter.post('/discover', (req, res) => {
     try {

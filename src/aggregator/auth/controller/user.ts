@@ -1,7 +1,6 @@
-import { generateKey, generateKeyPair } from "crypto";
+/*import { generateKey, generateKeyPair } from "crypto";
 import { NextFunction, Request, Response } from "express";
 import { writeFile, readFile, rmSync } from "fs";
-//import signJWT from "../functions/signJWT";
 import IUser from "../../interfaces/user";
 
 const NAMESPACE = "User";
@@ -102,3 +101,4 @@ const getAllUsers = (req: Request, res: Response, next: NextFunction) => {
 };
 
 export default { validateToken, register, login, getAllUsers};
+*/
