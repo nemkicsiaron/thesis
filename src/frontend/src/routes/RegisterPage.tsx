@@ -17,22 +17,31 @@ const RegisterPage = () => {
     const [password, setPassword] = React.useState("");
     const [passwordcontrol, setPasswordcontrol] = React.useState("");
     const useRegisterHook: any = useRegister();
-    const onSubmit = () => {
+    const onSubmit = async () => {
         if(password !== passwordcontrol) {
             window.alert("A jelszavak nem egyeznek!");
-            return
+            return;
             //throw new PasswordError("Passwords do not match");
         }
-        useRegisterHook.register(password, (pubkey: string, privkey: string) => {
-            console.log("success");
+        if(!username) {
+            window.alert("Nem adtál meg felhasználónevet!");
+            return;
+        }
+
+        const newuser = await useRegisterHook.register(password, (pubkey: string, privkey: string) => {
+            console.log("successful registration");
+
             const a = document.createElement("a");
-            const file = new Blob([username + "\n\n" + pubkey + "\n\n" + privkey ], { type: "text/plain" });
+            document.body.appendChild(a);
+            const file = new Blob([username + "\n\n" + pubkey + "\n\n" + privkey ], { type: "text/plain;charset=utf-8" });
             a.href = URL.createObjectURL(file);
             a.download = ".userdata.pem";
             a.click();
+            document.body.removeChild(a);
             URL.revokeObjectURL(a.href);
-            window.alert("Sikeres regisztráció!");
         });
+
+        window.alert(newuser.message);
     };
 
     return (

@@ -4,11 +4,13 @@ export default function useRegister() {
 
         if(!password) {
             return{
-                message: "No password given!"
+                error: true,
+                message: "Nincs jelszó!"
             };
         } else if (password.length < 6) {
             return{
-                message: "Password too short!"
+                error: true,
+                message: "Túl rövid jelszó!"
             };
         }
         let keypair = await window.crypto.subtle.generateKey(
@@ -30,6 +32,7 @@ export default function useRegister() {
         let privkeystr = window.btoa(String.fromCharCode.apply(null, [...new Uint8Array(privkey)]));
 
         onGenerated(`-----BEGIN PUBLIC KEY-----\n${pubkeystr}\n-----END PUBLIC KEY-----`, `-----BEGIN PRIVATE KEY-----\n${privkeystr}\n-----END PRIVATE KEY-----`);
+        return {message: "Sikeres kulcsgenerálás!"};
     }
     return {register: register};
 }

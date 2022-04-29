@@ -1,31 +1,47 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Button, ListGroup, ListGroupItem } from "reactstrap";
+import { Button, Label, ListGroup, ListGroupItem } from "reactstrap";
+import listAllServers from "../components/services/ServerServices";
 import IServer from "../interfaces/servers";
 
 import "./styles/Servers.scss";
 
 const ServersPage = () => {
-    const dummy: IServer = {
-        address: "http://dummyaddress.com:2000",
+    const dummyServer: IServer = {
+        address: "dummyaddress",
         categories: [],
         lastactive: new Date()
     }
-
-    const servers: IServer[] = [dummy];
+    const [servers, setServers] = React.useState<IServer[]>([]);
+    const [isErrorLoading, setIsErrorLoading] = React.useState(false);
+    const [isLoading, setIsLoading] = React.useState(false);
+    async function loadServers() {
+        setIsLoading(true)
+        try {
+            setServers(await listAllServers());
+        } catch (error) {
+            console.log(error);
+            window.alert(error);
+            setIsErrorLoading(true);
+        } finally {
+            setIsLoading(false);
+        }
+    }
     return (
         <div className="servers-page">
-            <h1>Servers</h1>
+            <h1>Szerverek</h1>
+            <Button type="button" onClick={loadServers} className="btn list-btn" color="success" size="lg">Szerverek betöltése</Button>
+            <Label className="error-label">{isLoading ? "Szerverek betöltése folyamatban!" : ""}</Label>
             <ListGroup>
-            {
-                servers.map(server => (
-                        <ListGroupItem className="d-flex">
-                            <strong>{server.address}</strong>
-                            <Button type="button" className="btn" color="success" size="lg" tag={Link} to="/:thatserver">megtekintés</Button>
+            {   (servers).map(server => (
+                        <ListGroupItem key={server.address}>
+                        <strong>{server.address}</strong>
+                        <p>{server.lastactive.toString()}</p>
+                        <Button type="button" className="btn" id="server-list-btn" color="success" size="lg" tag={Link} to="/:thatserver">megtekintés</Button>
                         </ListGroupItem>
             ))}
             </ListGroup>
-            <Button type="button" className="btn list-btn" color="danger" size="lg" tag={Link} to="/">Vissza a főoldalra</Button>
+            <Button type="button" className="btn back-btn" color="danger" size="lg" tag={Link} to="/">Vissza a főoldalra</Button>
         </div>
     );
 };
