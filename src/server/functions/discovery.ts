@@ -9,7 +9,7 @@ export default async function discovery(discoveryaddr: string, ownaddr: string):
             cat: categorylist
         };
         await fetch(discoveryaddr, {
-            method: "post",
+            method: "POST",
             body: JSON.stringify(body),
             headers: {"Content-Type": "application/json"}
         });
