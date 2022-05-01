@@ -13,14 +13,27 @@ router.get('/', (_, res) => {
     return res.json("Lajos");
 });
 
-router.get('/allcat', (_, res) => {
+router.get('/allcat', async (_, res) => {
     try {
-        const allCats = listallcat();
+        const allCats = await listallcat();
+        console.log(new Date(), ":", allCats)
         res.json(allCats);
     } catch (error) {
         console.error(error);
     }
 });
+/*
+router.get('/allposts', async (_, res) => {
+    console.log("allposts");
+    try {
+        const allPosts = await findpost("","","");
+        console.log(new Date() + ":" + allPosts);
+        res.status(200).json(allPosts);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json(error);
+    }
+});*/
 
 router.get('/probe', (_, res) => {
     const allok: boolean = true;
@@ -46,11 +59,11 @@ router.get('/findpost', async (req, res) => {
     const minprice = (req.query.minprice ?? "").toString();
     const maxprice = (req.query.maxprice ?? "").toString();
 
-    console.log(new Date(), ":", searchterm, minprice, maxprice);
+    console.log(new Date(), "Search for:", searchterm, minprice, maxprice);
 
     try {
         const posts = await findpost(searchterm, minprice, maxprice);
-        console.log(new Date(), ":", posts);
+        //console.log(new Date(), ":", posts);
         res.status(200).json(posts);
     }
     catch (error) {

@@ -2,8 +2,24 @@ import Category from "../interfaces/category";
 import IServer from "../interfaces/servers";
 
 export default async function listallcat(serveraddr?: string) : Promise<Category[]> {
-    if(!serveraddr) throw new Error("No server given");
+    if(serveraddr) {
+        var response = await fetch(serveraddr + "/api/allcat", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+                }
+            });
+        return await response.json();
+    }
+    else {
+        var allCats: Category[] = []
+        try {
 
-    var response = await fetch(serveraddr + "/api/allcat");
-    return await response.json();
+        } catch (error) {
+            console.error(error);
+        }
+        finally {
+            return allCats
+        }
+    }
 }
