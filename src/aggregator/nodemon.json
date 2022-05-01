@@ -2,15 +2,15 @@
 
     "ignore": [
         ".git",
-        "node_modules"
+        "node_modules/"
     ],
     "watch": [
         "**/*"
     ],
     "events": {
-        "restart": "start cmd /b /c npm run build || npm run build & exit 1"
+        "restart": "start /min \"Build\" cmd /c npm run build || npm run build & exit 1"
     },
     "verbose": true,
-    "delay": 7500,
+    "delay": 1500,
     "ext": "js,ts,json"
 }

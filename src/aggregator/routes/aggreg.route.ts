@@ -2,33 +2,50 @@ import { Router } from "express";
 import calculateBetweenDates from "../functions/betweendates";
 import listallcat from "../functions/listallcat";
 import { indexer, serverslist } from "../indexing/indexer";
-import Category from "../interfaces/category";
 import Post from "../interfaces/post";
 import generalquery from "../crud/generalquery";
 import servercatquery from "../crud/servercatquery";
 
 const aggregrouter = Router();
 
-aggregrouter.get('/', (req, res) => {
-    return res.json("Lajos");
+aggregrouter.get('/', (_, res) => {
+    return res.json("Szia Dominik");
 });
 
-aggregrouter.get('/alldb', (req, res) => {
+aggregrouter.get('/alldb', (_, res) => {
     try {
         res.setHeader('Content-Type', 'application/json');
         res.setHeader('Access-Control-Allow-Origin', '*');
         res.json(serverslist());
     } catch (error) {
         console.error(error);
+        res.status(500).json(error);
     }
 });
 
-aggregrouter.get('/allcat', (req, res) => {
+
+aggregrouter.get('/allcat', async (req, res) => {
+    try {
+        res.setHeader('Content-Type', 'application/json');
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        const server = req.query.server?.toString();
+        res.json(await listallcat(server));
+    } catch (error) {
+        console.error(error);
+        res.status(500).json(error);
+    }
 });
 
-aggregrouter.get('/allcat/:server', (req, res) => {
+aggregrouter.get('/allposts', async (_, res) => {
+    try {
+        res.setHeader('Content-Type', 'application/json');
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.status(200).json(await generalquery(""));
+    } catch (error) {
+        console.error(error);
+        res.status(500).json(error);
+    }
 });
-
 
 aggregrouter.post('/discover', (req, res) => {
     try {
@@ -40,6 +57,9 @@ aggregrouter.post('/discover', (req, res) => {
 
 
 aggregrouter.get('/findpost', async (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+
     const category = (req.query.category ?? "").toString();
     const searchterm =(req.query.searchterm ?? "").toString();
     const minprice = (req.query.minprice ?? "").toString();
@@ -65,13 +85,11 @@ aggregrouter.get('/findpost', async (req, res) => {
     }
 });
 
-aggregrouter.get('/allcat', async (req, res) => {
-    const server = req.query.server?.toString();
-    console.log(server);
-    res.json(listallcat(server));
-});
-
 aggregrouter.post('/newpost', async (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+
+
     const data = await req.body;
     var serveraddr: string = data.server?.toString();
     if(!serveraddr) serveraddr = serverslist().find(s => calculateBetweenDates(s.lastactive, new Date()) < 15)?.address ?? "";
@@ -128,9 +146,7 @@ aggregrouter.delete('/deletepost', async (req, res) => {
 });
 
 aggregrouter.put('/updatepost', async (req, res) => {
-
+    console.log(req.body);
 });
-
-
 
 export default aggregrouter;
