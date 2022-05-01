@@ -4,7 +4,7 @@ import "./styles/Info.scss"
 
 const InfoPage = () => {
     return (
-        <div className="info-page">
+        <div className="main-page">
             <span>
                 <h1>Info</h1>
                 <p>

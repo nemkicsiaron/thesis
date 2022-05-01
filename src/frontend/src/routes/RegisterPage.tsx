@@ -45,7 +45,7 @@ const RegisterPage = () => {
     };
 
     return (
-        <div className="register-page">
+        <div className="main-page">
             <h1> Regisztráció </h1>
             <Form className="register-form">
             <Input type="text" value={username} onChange={(value) => setUsername(value.target.value)} placeholder="Felhasználónév" />
@@ -55,7 +55,7 @@ const RegisterPage = () => {
             </InputGroup>
             </Form>
             <Button type="submit" onClick={onSubmit} className="btn list-btn" color="success" size="lg">Profil létrehozása</Button>
-            <Button type="button" className="btn list-btn" color="danger" size="lg" tag={Link} to="/">Vissza a főoldalra</Button>
+            <Button type="button" className="btn back-btn" color="danger" size="lg" tag={Link} to="/">Vissza a főoldalra</Button>
         </div>
     );
 };

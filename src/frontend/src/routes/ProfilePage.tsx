@@ -11,11 +11,11 @@ const ProfilePage: React.FC = () => {
     const onLogin = () => {
     };
     return (
-        <div className="profile-main">
+        <div className="main-page">
             <ListGroup className="mt-4 btn-list">
                 <Button type="button" className="btn list-btn" color="success" size="lg" tag={Link} to="/register" >Regisztrálás</Button>
                 <Button type="submit" onClick={onLogin} className="btn list-btn" color="success" size="lg">Profil betöltése</Button>
-                <Button type="button" className="btn list-btn" color="danger" size="lg" tag={Link} to="/">Vissza a főoldalra</Button>
+                <Button type="button" className="btn back-btn" color="danger" size="lg" tag={Link} to="/">Vissza a főoldalra</Button>
             </ListGroup>
         </div>
     );

@@ -14,10 +14,16 @@
   font-style: normal;
 }
 
+h1 {
+  padding: 1vh;
+  font-family: 'Jaapokki';
+  font-size: 6rem !important;
+}
+
 body {
   margin: 0;
-  font-family: 'Jaapokki' !important;
-  scroll-behavior: smooth !important;
+  font-family: 'Jaapokki', 'Cascadia', sans-serif;
+  scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -26,3 +32,21 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }*/
+
+.main-page {
+  font-family: 'Cascadia';
+  align-items: center;
+  flex-direction: column;
+  align-content: center;
+  background-color: #282c34;
+  color: white;
+  width: 100vw;
+  min-height: 100vh;
+  padding: 2rem;
+  position: absolute;
+}
+
+
+.back-btn, .list-btn {
+  margin: 2%;
+}

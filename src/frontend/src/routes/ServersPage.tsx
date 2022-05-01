@@ -13,7 +13,6 @@ const ServersPage = () => {
         lastactive: new Date()
     }
     const [servers, setServers] = React.useState<IServer[]>([]);
-    const [isErrorLoading, setIsErrorLoading] = React.useState(false);
     const [isLoading, setIsLoading] = React.useState(false);
     async function loadServers() {
         setIsLoading(true)
@@ -22,14 +21,13 @@ const ServersPage = () => {
         } catch (error) {
             console.log(error);
             window.alert(error);
-            setIsErrorLoading(true);
         } finally {
             setIsLoading(false);
             setServers(servers.concat(dummyServer));
         }
     }
     return (
-        <div className="servers-page">
+        <div className="main-page">
             <h1>Szerverek</h1>
             <Button type="button" onClick={loadServers} className="btn list-btn" color="success" size="lg">Szerverek betöltése</Button>
             <Label className="error-label">{isLoading ? "Szerverek betöltése folyamatban!" : ""}</Label>

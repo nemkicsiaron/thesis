@@ -5,7 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 const Home = () => {
     return (
-        <div className="home-page">
+        <div className="main-page">
             <div className="intro-text">
                 <h1>PEER-TO-PEER <br /> PIAC <br /> PORTÁL</h1>
                 <br />
