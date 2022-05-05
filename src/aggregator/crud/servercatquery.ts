@@ -14,7 +14,7 @@ async function filterbycategory(category: string): Promise<IServer[]> {
 };
 
 export default async function servercatquery(searchterm: string, category: string, minprice?: number, maxprice?: number): Promise<Post[]> {
-    console.log("Searching category including servers for: " + searchterm);
+    console.log(new Date(), "Searching category including servers for: " + searchterm);
 
     const goodservers = await filterbycategory(category);
     var posts: Post[] = [];
