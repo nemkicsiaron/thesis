@@ -1,0 +1,61 @@
+$buttoncolor: #198754;
+
+.list-group{
+    :hover {
+        filter: brightness(80%);
+        transition: 0.30s;
+        -webkit-transition: 0.30s;
+        -moz-transition: 0.30s;
+        -ms-transition: 0.30s;
+    }
+    strong {
+        font-size: 1.2rem;
+        padding-bottom: 3rem;
+    }
+    display: flexbox;
+    margin-right: 20%;
+}
+
+li.list-group-item {
+    padding: 0;
+    margin: 1vh;
+}
+
+.lg-item {
+    margin: 0.9vh;
+}
+
+.categoy-dropdown {
+    width: 80%;
+    margin-right: .3%;
+    display: inline;
+  &:focus {
+    border: 1px solid #00a6f3;
+  }
+}
+
+.lg-item p:hover{
+    pointer-events: none;
+}
+
+#post-list-btn{
+    background-color: $buttoncolor;
+    margin-right: 4vw;
+    margin-bottom: 1vh;
+    float: right;
+}
+
+.search-input {
+    max-width: 80%;
+    margin-bottom: 0.41%;
+
+}
+
+.price-input {
+    max-width: 39.8%;
+    margin-right: .3%;
+    display: inline;
+  &:focus {
+    border: 1px solid #00a6f3;
+  }
+}

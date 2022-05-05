@@ -1,3 +1,11 @@
+#home-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 0%;
+    margin: 0%;
+}
+
 .intro-text {
     position: static;
     min-height: 100vh;

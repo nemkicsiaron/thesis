@@ -33,6 +33,16 @@ code {
     monospace;
 }*/
 
+@media(max-width: 600px) {
+  h1 {
+    font-size: calc(2.375rem + 1.5vw) !important;
+  }
+
+  .main-page{
+    padding: 1rem !important;
+  }
+}
+
 .main-page {
   font-family: 'Cascadia';
   align-items: center;
@@ -42,7 +52,7 @@ code {
   color: white;
   width: 100vw;
   min-height: 100vh;
-  padding: 2rem;
+  padding: 2rem 2rem 2rem 5rem;
   position: absolute;
 }
 
