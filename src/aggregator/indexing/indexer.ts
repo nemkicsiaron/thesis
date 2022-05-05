@@ -18,4 +18,10 @@ export function badaddr(addr: string): void {
     servers = servers.filter(s => {return s.address !== addr});
 }
 
+export function parseservers(servers: any[]) {
+    servers.map(s => {
+        indexer(s.address, s.categories);
+    });
+}
+
 export function serverslist(): IServer[] {return servers}

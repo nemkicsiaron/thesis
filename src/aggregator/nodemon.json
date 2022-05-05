@@ -2,7 +2,8 @@
 
     "ignore": [
         ".git",
-        "node_modules/"
+        "node_modules*",
+        "auth"
     ],
     "watch": [
         "**/*"
@@ -12,5 +13,7 @@
     },
     "verbose": true,
     "delay": 1500,
-    "ext": "js,ts,json"
+    "ext": "js,ts,json",
+    "inspect": true,
+    "signal": "SIGTERM"
 }
