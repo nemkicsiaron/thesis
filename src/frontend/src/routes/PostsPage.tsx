@@ -19,7 +19,7 @@ const PostsPage = () => {
         signature: "dummysignature - " + Math.random().toString(36).substring(7)
     }
     const [posts, setPosts] = React.useState<Post[]>([]);
-    const [categories, setCategories] = React.useState<string[]>([]);
+    const [categories, setCategories] = React.useState<string[]>(["Minden kategória"]);
     const [isLoading, setIsLoading] = React.useState(true);
     const [searchTerm, setSearchTerm] = React.useState("");
     const [category, setCategory] = React.useState("");
@@ -29,7 +29,9 @@ const PostsPage = () => {
 
     const toggle = () => setDropdownOpen(prevState => !prevState);
 
-    listAllCategories().then(categories =>{ setCategories(categories);});
+    React.useEffect(() => {
+        listAllCategories().then(cats =>{ setCategories([...categories, ...cats]);});
+    }, []);
 
     React.useEffect(() => {
         if(searchTerm.trim() || category.trim() ||
@@ -65,8 +67,8 @@ const PostsPage = () => {
             <Form>
             <Input type="text" value={searchTerm} className="search-input" onChange={(value) => setSearchTerm(value.target.value)} placeholder="Cím" />
             <Dropdown className="category-dropdown" isOpen={dropdownOpen} toggle={toggle}>
-                <DropdownToggle caret>{category}</DropdownToggle>
-                <DropdownMenu right>
+                <DropdownToggle caret>{category || "Kategóriák"}</DropdownToggle>
+                <DropdownMenu end>
                     <DropdownItem header>Talált kategóriák</DropdownItem>
                     {
                         categories.map(category => (
