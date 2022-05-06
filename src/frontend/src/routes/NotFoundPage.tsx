@@ -5,7 +5,7 @@ import { Button } from "reactstrap";
 
 const NotFoundPage = () => {
     return (
-        <div>
+        <div className="main-page">
             <h1 className="notFoundTitle">404 - A keresett oldal nem található</h1>
             <Button type="button" className="btn list-btn" color="danger" size="lg" tag={Link} to="/">Vissza a főoldalra</Button>
         </div>
