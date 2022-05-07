@@ -39,7 +39,9 @@ const Main = () => {
   if(loginStatus instanceof Idle || loginStatus instanceof Loading) return <p>Loading...</p>;
 
   */
-
+  React.useEffect(() => {
+    document.title = "Peer-to-peer piac portál";
+ }, []);
   return (
       <Router>
           <div className="main-layout">
