@@ -10,6 +10,9 @@ import InfoPage from './routes/InfoPage';
 import reportWebVitals from './reportWebVitals';
 import RegisterPage from './routes/RegisterPage';
 import PostsPage from './routes/PostsPage';
+import LoginPage from './routes/LoginPage';
+import LoginProvider from './components/contexts/LoginProvider';
+import ManagePage from './routes/ManagePage';
 
 const App = () => {
   /*return (
@@ -19,7 +22,11 @@ const App = () => {
           </LoginProvider>
       </NotificationProvider>
   );*/
-  return <Main />;
+  return (
+    <LoginProvider>
+      <Main />;
+    </LoginProvider>
+  )
 };
 
 const Main = () => {
@@ -53,6 +60,8 @@ const Main = () => {
                       <Route path="/posts" element={<PostsPage />} />
                       <Route path="/info" element = {<InfoPage />} />
                       <Route path='/register' element = {<RegisterPage />} />
+                      <Route path='/login' element = {<LoginPage />} />
+                      <Route path="/manage" element={<ManagePage />} />
                       <Route path="*" element={<NotFoundPage />} />
                   </Routes>
               </div>
