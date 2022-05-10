@@ -4,6 +4,7 @@ import useRegister from "../hooks/UserHooks";
 import React from "react";
 
 import "./styles/Register.scss";
+import hashCode from "../components/services/UserServices";
 /*
 class PasswordError extends Error {
     constructor(message: string) {
@@ -30,18 +31,17 @@ const RegisterPage = () => {
 
         const newuser = await useRegisterHook.register(password, (pubkey: string, privkey: string) => {
             console.log("successful registration");
-
             const a = document.createElement("a");
             document.body.appendChild(a);
-            const file = new Blob([username + "\n\n" + pubkey + "\n\n" + privkey ], { type: "text/plain;charset=utf-8" });
+            const file = new Blob([username + "\n\n" + hashCode(password) + "\n\n" + pubkey + "\n\n" + privkey ], { type: "text/plain;charset=utf-8" }); //type: "text/plain;charset=utf-8"
             a.href = URL.createObjectURL(file);
-            a.download = ".userdata.pem";
+            a.download = ".userdata.ppem";
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(a.href);
         });
 
-        window.alert(newuser.message);
+        if(newuser.error) window.alert(newuser.message);
     };
 
     return (
