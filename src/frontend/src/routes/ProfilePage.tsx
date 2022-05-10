@@ -1,16 +1,16 @@
 import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, ListGroup } from "reactstrap";
-
-import "bootstrap/dist/css/bootstrap.min.css";
-import "./styles/Profile.scss";
-import { Failed } from "../hooks/LoginHooks";
+import { Failed, useLogout } from "../hooks/LoginHooks";
 import LoginProvider, { LoggedIn, LoginContext } from "../components/contexts/LoginProvider";
+
+import "./styles/Profile.scss";
 
 
 
 const ProfilePage: React.FC = () => {
     const {loginState} = useContext(LoginContext);
+    const [logoutState, logout] = useLogout();
     const navigate = useNavigate();
 
     React.useEffect(() => {
@@ -18,6 +18,12 @@ const ProfilePage: React.FC = () => {
             window.alert(`Nem sikerült bejelentkezni: ${loginState.error}`)
         }
     }, [loginState]);
+
+    React.useEffect(() => {
+        if(logoutState instanceof Failed) {
+            window.alert(`Nem sikerült bejelentkezni: ${logoutState.error}`)
+        }
+    }, [logoutState]);
 
     const manage = () => {
         if(!(loginState instanceof LoggedIn)) {
@@ -51,9 +57,10 @@ const ProfilePage: React.FC = () => {
                     )}
                 </div>
                 <ListGroup className="mt-4 btn-list">
-                    <Button type="button" className="btn list-btn" color="success" size="lg" tag={Link} to="/register" >Regisztrálás</Button>
                     <Button type="submit" className="btn list-btn" color="success" size="lg" tag={Link} to="/login">Profil betöltése</Button>
                     <Button type="button" className="btn list-btn" color="info" size="lg" onClick={() => manage()}>Hirdetések kezelése</Button>
+                    <Button type="button" className="btn list-btn" color="info" size="lg" tag={Link} to="/register" >Regisztrálás</Button>
+                    <Button type="button" className="btn back-btn" color="danger" size="lg" onClick={logout}>Kijelentkezés</Button>
                     <Button type="button" className="btn back-btn" color="danger" size="lg" tag={Link} to="/">Vissza a főoldalra</Button>
                 </ListGroup>
             </div>

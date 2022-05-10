@@ -37,10 +37,10 @@ const LoginPage = () => {
             const data = reader.result ?? "";
             const lines = data.toString().split("\n").filter(line => line.trim().length > 0);
             setPasswordhash(lines[1]);
-            if( lines[2] == "-----BEGIN PUBLIC KEY-----" &&
-                lines[4] == "-----END PUBLIC KEY-----" &&
-                lines[5] == "-----BEGIN PRIVATE KEY-----" &&
-                lines[7] == "-----END PRIVATE KEY-----") {
+            if( lines[2] === "-----BEGIN PUBLIC KEY-----" &&
+                lines[4] === "-----END PUBLIC KEY-----" &&
+                lines[5] === "-----BEGIN PRIVATE KEY-----" &&
+                lines[7] === "-----END PRIVATE KEY-----") {
                     setDummyuser({ username: lines[0], publickey: lines[3], privatekey: lines[6] });
             }
         }
@@ -55,7 +55,10 @@ const LoginPage = () => {
             console.log(u);
             return;
         }
-        if(hashCode(password).toString() !== passwordhash) window.alert("Hibás jelszó!");
+        if(hashCode(password).toString() !== passwordhash){
+            window.alert("Hibás jelszó!");
+            return;
+        }
 
         login(u);
         navigate("/profile");

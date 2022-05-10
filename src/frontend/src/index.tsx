@@ -13,6 +13,7 @@ import PostsPage from './routes/PostsPage';
 import LoginPage from './routes/LoginPage';
 import LoginProvider from './components/contexts/LoginProvider';
 import ManagePage from './routes/ManagePage';
+import CreatePage from './routes/CreatePage';
 
 const App = () => {
   /*return (
@@ -62,6 +63,7 @@ const Main = () => {
                       <Route path='/register' element = {<RegisterPage />} />
                       <Route path='/login' element = {<LoginPage />} />
                       <Route path="/manage" element={<ManagePage />} />
+                      <Route path="/create" element={<CreatePage />} />
                       <Route path="*" element={<NotFoundPage />} />
                   </Routes>
               </div>
