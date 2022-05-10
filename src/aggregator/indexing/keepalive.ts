@@ -19,14 +19,14 @@ async function probe(s: IServer) {
     }
 }
 
-function probeeach() {
-    serverslist().forEach(s => {
+export function probeeach() {
+    Promise.all(serverslist().map(s => {
         console.log("Probing " + s.address);
         probe(s);
-    });
+    }));
     console.log(serverslist());
 }
 
-export default function keepalive() {
+export function keepalive() {
     setInterval(probeeach, 15 * 60 * 1000);
 }

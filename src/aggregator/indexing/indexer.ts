@@ -1,5 +1,6 @@
 import Category from "../interfaces/category";
 import IServer from "../interfaces/servers";
+import { probeeach } from "./keepalive";
 
 var servers: IServer[] = [];
 
@@ -22,6 +23,7 @@ export function parseservers(servers: any[]) {
     servers.map(s => {
         indexer(s.address, s.categories);
     });
+    probeeach();
 }
 
 export function serverslist(): IServer[] {return servers}

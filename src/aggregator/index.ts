@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import { rateLimit, RateLimitRequestHandler } from "express-rate-limit";
 import routes from "./routes";
-import keepalive from "./indexing/keepalive";
+import { keepalive } from "./indexing/keepalive";
 import saveservers from "./indexing/saveservers";
 import loadservers from "./indexing/loadservers";
 //import controller from "./auth/controller/user"
