@@ -24,8 +24,10 @@ export const LoginContext = React.createContext<LoginContextType>({
 const reducer = (state: LoginState, action: LoginAction): LoginState => {
     switch(action.type) {
         case 'login':
+            sessionStorage.setItem('user', JSON.stringify(action.user));
             return new LoggedIn(action.user);
         case 'logout':
+            sessionStorage.removeItem('user');
             return new LoggedOut();
         default:
             return state;

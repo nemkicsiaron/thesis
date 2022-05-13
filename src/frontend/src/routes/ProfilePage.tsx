@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, ListGroup } from "reactstrap";
-import { Failed, useLogout } from "../hooks/LoginHooks";
+import { Failed, Idle, useLogin, useLogout } from "../hooks/LoginHooks";
 import LoginProvider, { LoggedIn, LoggedOut, LoginContext } from "../components/contexts/LoginProvider";
 
 import "./styles/Profile.scss";
@@ -10,18 +10,25 @@ import "./styles/Profile.scss";
 
 const ProfilePage: React.FC = () => {
     const {loginState} = useContext(LoginContext);
+    const [loginStatus, login] = useLogin();
     const [logoutState, logout] = useLogout();
     const navigate = useNavigate();
 
     React.useEffect(() => {
         if(loginState instanceof Failed) {
             window.alert(`Nem sikerült bejelentkezni: ${loginState.error}`)
+        } else if(loginState instanceof LoggedOut && loginStatus instanceof Idle) {
+            try {
+                let user = JSON.parse(sessionStorage.getItem("user")?.toString() ?? "");
+                if(loginStatus instanceof Idle && user) login(user);
+            } catch {
+            }
         }
-    }, [loginState]);
+    }, [loginState, loginStatus, login]);
 
     React.useEffect(() => {
         if(logoutState instanceof Failed) {
-            window.alert(`Nem sikerült bejelentkezni: ${logoutState.error}`)
+            window.alert(`Nem sikerült kijelentkezni: ${logoutState.error}`)
         }
     }, [logoutState]);
 
@@ -41,7 +48,7 @@ const ProfilePage: React.FC = () => {
                     <h2>Felhasználónév:
                     {
                         loginState instanceof LoggedIn && (
-                            <h3>{loginState.user.username}</h3>
+                            <p>{loginState.user.username}</p>
                     )}
                     </h2>
                     <h2>Nyilvános kulcs:</h2>

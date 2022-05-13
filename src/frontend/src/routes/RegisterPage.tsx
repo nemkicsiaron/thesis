@@ -1,10 +1,10 @@
-import { Button, Form, Input, InputGroup } from "reactstrap";
-import { Link } from "react-router-dom";
-import useRegister from "../hooks/UserHooks";
 import React from "react";
+import { Button, Form, Input, InputGroup } from "reactstrap";
+import { Link, useNavigate } from "react-router-dom";
+import {useRegister} from "../hooks/UserHooks";
+import {hashCode} from "../components/services/UserServices";
 
 import "./styles/Register.scss";
-import hashCode from "../components/services/UserServices";
 /*
 class PasswordError extends Error {
     constructor(message: string) {
@@ -18,6 +18,8 @@ const RegisterPage = () => {
     const [password, setPassword] = React.useState("");
     const [passwordcontrol, setPasswordcontrol] = React.useState("");
     const useRegisterHook: any = useRegister();
+    const navigate: any = useNavigate();
+
     const onSubmit = async () => {
         if(password !== passwordcontrol) {
             window.alert("A jelszavak nem egyeznek!");
@@ -42,6 +44,7 @@ const RegisterPage = () => {
         });
 
         if(newuser.error) window.alert(newuser.message);
+        else navigate("/profile");
     };
 
     return (

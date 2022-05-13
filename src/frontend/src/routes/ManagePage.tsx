@@ -1,19 +1,29 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "reactstrap";
-import { LoggedIn, LoginContext } from "../components/contexts/LoginProvider";
+import { LoggedIn, LoggedOut, LoginContext } from "../components/contexts/LoginProvider";
+import { Failed, Idle, useLogin } from "../hooks/LoginHooks";
 
 const ManagePage = () => {
     const {loginState} = React.useContext(LoginContext);
+    const [loginStatus, login] = useLogin();
     const navigate = useNavigate();
 
     React.useEffect(() => {
-        if(!(loginState instanceof LoggedIn)) {
-            window.alert("Hirdetéseid kezelésehez be kell jelentkezned!");
-            navigate("/profile");
-            return;
+        if(loginState instanceof Failed) {
+            window.alert(`Nem sikerült bejelentkezni: ${loginState.error}`)
+        } else if(loginState instanceof LoggedOut && loginStatus instanceof Idle) {
+            try {
+                let user = JSON.parse(sessionStorage.getItem("user")?.toString() ?? "");
+                if(loginStatus instanceof Idle && user) login(user);
+
+            } catch {
+                window.alert("Hirdetéseid kezelésehez be kell jelentkezned!");
+                navigate("/profile");
+            }
         }
-    }, [loginState, navigate]);
+    }, [loginState, loginStatus, login, navigate]);
+
 
     return (
         <div className="main-page">

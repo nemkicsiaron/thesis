@@ -111,13 +111,15 @@ aggregrouter.delete('/deletepost', async (req, res) => {
     const newpost: Post = {
         title : data.post.title,
         category: data.post.category,
-        publish: data.post.publish,
+        published: data.post.published,
         price: data.post.price,
         author: data.post.author,
         signature: data.post.signature,
         description: data.post.description,
         created: data.post.created,
     };
+
+    console.log(data.post.publish);
 
     try {
         const deleteres = await fetch(data.server?.toString() + "/api/deletepost", {

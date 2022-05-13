@@ -1,13 +1,12 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, Input } from "reactstrap";
-import hashCode from "../components/services/UserServices";
-import { Failed, useLogin, useLogout } from "../hooks/LoginHooks";
+import { hashCode, importKeyPair } from "../components/services/UserServices";
+import { Failed, Loaded, useLogin } from "../hooks/LoginHooks";
 import IUser from "../interfaces/user";
 
 const LoginPage = () => {
     const [loginState, login] = useLogin();
-    const [logoutState, logout] = useLogout();
     const [password, setPassword] = React.useState("");
     const [passwordhash, setPasswordhash] = React.useState("");
     const [dummyuser, setDummyuser] = React.useState({ username: "", publickey: "" , privatekey: "" });
@@ -16,14 +15,11 @@ const LoginPage = () => {
     React.useEffect(() => {
         if(loginState instanceof Failed) {
             window.alert(`Nem sikerült bejelentkezni: ${loginState.error}`);
+        } else if (loginState instanceof Loaded) {
+            sessionStorage.setItem("user", JSON.stringify(loginState.value));
+            navigate("/profile");
         }
-    }, [loginState]);
-
-    React.useEffect(() => {
-        if(logoutState instanceof Failed) {
-            window.alert(`Nem sikerült kijelentkezni: ${logoutState.error}`);
-        }
-    }, [logoutState]);
+    }, [loginState, navigate]);
 
     const handleFile = (e: any) => {
         const file: File = e.target.files[0];
@@ -51,7 +47,7 @@ const LoginPage = () => {
 
     const handleSubmit = (u: IUser) => {
         if(!u.username.trim() || !u.publickey.trim() || !u.privatekey.trim()) {
-            window.alert("A feltöltött fájl nem tartalmaz minden szükséges infót!")
+            window.alert("A betöltött fájl nem tartalmaz minden szükséges infót!")
             console.log(u);
             return;
         }
@@ -60,8 +56,16 @@ const LoginPage = () => {
             return;
         }
 
-        login(u);
-        navigate("/profile");
+        importKeyPair(u.publickey, u.privatekey).then((keys) => {
+            if(keys) login(u);
+            else {
+                window.alert("Hibás kulcsok!");
+                console.log(keys);
+            }
+        }).catch(error => {
+            console.log(error);
+            window.alert(error);
+        });
     }
 
     return (
@@ -70,7 +74,6 @@ const LoginPage = () => {
             <Input type="file" onChange={handleFile}/>
             <Input type="password" placeholder="Jelszó" onChange={(value) => setPassword(value.target.value)} />
             <Button type="button" className="btn" color="success" size="lg" onClick={() => {handleSubmit(dummyuser)}}>Bejelentkezés</Button>
-            <Button type="button" className="btn" color="success" size="lg" onClick={() => {logout()}}>Kijelentkezés</Button>
             <Button type="button" className="btn back-btn" color="danger" size="lg" tag={Link} to="/">Vissza a főoldalra</Button>
         </div>
 )};
