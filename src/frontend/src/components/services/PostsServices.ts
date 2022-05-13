@@ -15,8 +15,10 @@ export async function listAllPosts(): Promise<Post[]> {
 
 export async function findPost(searchterm: string, category: string, minprice: string, maxprice: string): Promise<Post[]> {
     try {
+        if(category.includes("Minden")) category = "";
         const result = await fetch(`${aggregatorUri}/aggreg/findpost/?` + new URLSearchParams({
                 searchterm: searchterm,
+                category: category,
                 minprice: minprice ? minprice.toString() : "",
                 maxprice: maxprice ? maxprice.toString() : ""
             }), {

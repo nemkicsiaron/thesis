@@ -89,22 +89,11 @@ aggregrouter.post('/newpost', async (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Access-Control-Allow-Origin', '*');
 
-
     const data = await req.body;
     var serveraddr: string = data.server?.toString();
     if(!serveraddr) serveraddr = serverslist().find(s => calculateBetweenDates(s.lastactive, new Date()) < 15)?.address ?? "";
     //console.log(serveraddr);
-    const newpost: Post = {
-        title : data.post.title,
-        category: data.post.category,
-        publish: data.post.publish,
-        price: data.post.price,
-        author: data.post.author,
-        signature: data.post.signature,
-        description: data.post.description,
-        created: new Date(),
-        //categoryRelation: (await listallcat(serveraddr)).find(c => c.name === data.post.category)
-    };
+    const newpost: Post = data.post;
 
     const createres = await fetch(serveraddr + "/api/newpost", {
         method: "POST",

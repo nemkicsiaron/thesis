@@ -6,23 +6,23 @@ import { findPost, listAllPosts } from "../components/services/PostsServices";
 import Post from "../interfaces/post";
 
 import "./styles/Posts.scss";
+// const dummyPost: Post = {
+//     title: "dummytitle",
+//     category: "dummycategory",
+//     published: true,
+//     price: "420",
+//     description: "dummydescription",
+//     created: new Date(),
+//     author: "dummyauthor",
+//     signature: "dummysignature - " + Math.random().toString(36).substring(7)
+// }
 
 const PostsPage = () => {
-    const dummyPost: Post = {
-        title: "dummytitle",
-        category: "dummycategory",
-        publish: true,
-        price: "420",
-        description: "dummydescription",
-        created: new Date(),
-        author: "dummyauthor",
-        signature: "dummysignature - " + Math.random().toString(36).substring(7)
-    }
     const [posts, setPosts] = React.useState<Post[]>([]);
     const [categories, setCategories] = React.useState<string[]>(["Minden kategória"]);
+    const [category, setCategory] = React.useState("");
     const [isLoading, setIsLoading] = React.useState(true);
     const [searchTerm, setSearchTerm] = React.useState("");
-    const [category, setCategory] = React.useState("");
     const [minPrice, setMinPrice] = React.useState("0");
     const [maxPrice, setMaxPrice] = React.useState("");
     const [dropdownOpen, setDropdownOpen] = React.useState(false);
@@ -30,7 +30,12 @@ const PostsPage = () => {
     const toggle = () => setDropdownOpen(prevState => !prevState);
 
     React.useEffect(() => {
-        listAllCategories().then(cats =>{ setCategories([...categories, ...cats]);});
+        (async () => {
+            setCategories([...categories, ...await listAllCategories()]);
+            console.log(categories)
+        })();
+
+        return () => {};
     }, []);
 
     React.useEffect(() => {
@@ -50,7 +55,7 @@ const PostsPage = () => {
         }
         else {
             listAllPosts().then(allposts => {
-                setPosts(allposts.concat(dummyPost));
+                setPosts(allposts);
             }).catch(error => {
                 console.log(error);
                 window.alert(error);
@@ -65,19 +70,19 @@ const PostsPage = () => {
         <div className="main-page">
             <h1> Hirdetések </h1>
             <Form>
-            <Input type="text" value={searchTerm} className="search-input" onChange={(value) => setSearchTerm(value.target.value)} placeholder="Cím" />
-            <Dropdown className="category-dropdown" isOpen={dropdownOpen} toggle={toggle}>
-                <DropdownToggle caret>{category || "Kategóriák"}</DropdownToggle>
-                <DropdownMenu end>
-                    <DropdownItem header>Talált kategóriák</DropdownItem>
-                    {
-                        categories.map(category => (
-                            <DropdownItem key={category} onClick={() => setCategory(category)}>{category}</DropdownItem>
-                    ))}
-                </DropdownMenu>
-            </Dropdown>
-            <Input type="number" value={minPrice} className="price-input" onChange={(value) => setMinPrice(value.target.value)} placeholder="Minimális ár" />
-            <Input type="number" value={maxPrice} className="price-input" onChange={(value) => setMaxPrice(value.target.value)} placeholder="Maximális ár" />
+                <Input type="text" value={searchTerm} className="search-input" onChange={(value) => setSearchTerm(value.target.value)} placeholder="Cím" />
+                <Dropdown className="category-dropdown" isOpen={dropdownOpen} toggle={toggle}>
+                    <DropdownToggle caret>{category || "Kategóriák"}</DropdownToggle>
+                    <DropdownMenu end>
+                        <DropdownItem header>Talált kategóriák</DropdownItem>
+                        {
+                            categories?.map(cat => (
+                                <DropdownItem key={cat} onClick={() => setCategory(cat)}><p>{cat}</p></DropdownItem>
+                        ))}
+                    </DropdownMenu>
+                </Dropdown>
+                <Input type="number" value={minPrice} className="price-input" onChange={(value) => setMinPrice(value.target.value)} placeholder="Minimális ár" />
+                <Input type="number" value={maxPrice} className="price-input" onChange={(value) => setMaxPrice(value.target.value)} placeholder="Maximális ár" />
             </Form>
             <Button type="button" onClick={() => setIsLoading(true)} className="btn list-btn" color="success" size="lg">Hirdetés keresése</Button>
             <Button type="button" className="btn back-btn" color="danger" size="lg" tag={Link} to="/">Vissza a főoldalra</Button>

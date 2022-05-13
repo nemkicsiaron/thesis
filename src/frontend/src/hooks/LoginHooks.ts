@@ -37,8 +37,8 @@ export const useLogout = (): [ Status<boolean,Error>, () => void ] => {
         }
         setStatus(new Loading());
         loginDispatch({ type: "logout" });
-        navigate('/profile');
         setStatus(new Loaded(true));
+        navigate('/profile');
     }, []);
     return [ status, logout ];
 }

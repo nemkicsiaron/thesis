@@ -1,9 +1,11 @@
 import { aggregatorUri } from "../../config/config";
 import Category from "../../interfaces/category";
 
-export async function listAllCategories(): Promise<string[]> {
+export async function listAllCategories(server?: string): Promise<string[]> {
     try {
-        const result = await fetch(`${aggregatorUri}/aggreg/allcat`, {
+        const result = await fetch(`${aggregatorUri}/aggreg/allcat/?` + new URLSearchParams({
+            server: server ?? ""
+        }), {
             method: "GET",
             headers: {
                 Accept: "application/json",

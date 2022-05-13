@@ -1,7 +1,7 @@
 export default interface Post {
     title: string,
     category: string,
-    publish: boolean,
+    published: boolean,
     price: string,
     description?: string,
     created: Date,

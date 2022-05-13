@@ -1,5 +1,7 @@
+import { aggregatorUri } from "../config/config";
+import Post from "../interfaces/post";
 
-export default function useRegister() {
+export function useRegister() {
     const register = async (password: string, onGenerated:(pubkey: string, privkey: string) => void ) => {
 
         if(!password) {
@@ -35,4 +37,26 @@ export default function useRegister() {
         return {message: "Sikeres kulcsgenerálás!"};
     }
     return {register: register};
+}
+
+export function useCreate() {
+    const create = async (post: Post, server: string) => {
+        try{
+            const result = await fetch(`${aggregatorUri}/aggreg/newpost`, {
+                method: "POST",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({post: post, server: server})
+            });
+            const postdone: Post = await result.json();
+            console.log("Post created:", postdone);
+            return {postdone: postdone, message: "Sikeres hozzáadás!"};
+        } catch (error) {
+            console.error(error);
+            return {message: "Hiba történt!", error: true}
+        };
+    }
+    return {create: create};
 }
