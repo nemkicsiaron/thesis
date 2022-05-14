@@ -1,23 +1,16 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Form, Input, Label, ListGroup, ListGroupItem } from "reactstrap";
+import LoginProvider, { LoggedIn, LoggedOut, LoginContext } from "../components/contexts/LoginProvider";
 import { listAllCategories } from "../components/services/CategoryServices";
-import { findPost, listAllPosts } from "../components/services/PostsServices";
+import { findOwnPost } from "../components/services/PostsServices";
+import { Failed, Idle, useLogin } from "../hooks/LoginHooks";
 import Post from "../interfaces/post";
 
-import "./styles/Posts.scss";
-// const dummyPost: Post = {
-//     title: "dummytitle",
-//     category: "dummycategory",
-//     published: true,
-//     price: "420",
-//     description: "dummydescription",
-//     created: new Date(),
-//     author: "dummyauthor",
-//     signature: "dummysignature - " + Math.random().toString(36).substring(7)
-// }
-
-const PostsPage = () => {
+const OwnPage = () => {
+    const {loginState} = React.useContext(LoginContext);
+    const [loginStatus, login] = useLogin();
+    const navigate = useNavigate();
     const [posts, setPosts] = React.useState<Post[]>([]);
     const [categories, setCategories] = React.useState<string[]>(["Minden kategória"]);
     const [category, setCategory] = React.useState("");
@@ -26,47 +19,61 @@ const PostsPage = () => {
     const [minPrice, setMinPrice] = React.useState("0");
     const [maxPrice, setMaxPrice] = React.useState("");
     const [dropdownOpen, setDropdownOpen] = React.useState(false);
-
     const toggle = () => setDropdownOpen(prevState => !prevState);
+
+    React.useEffect(() => {
+        if(loginState instanceof Failed) {
+            window.alert(`Nem sikerült bejelentkezni: ${loginState.error}`)
+        } else if(loginState instanceof LoggedOut && loginStatus instanceof Idle) {
+            try {
+                let user = JSON.parse(sessionStorage.getItem("user")?.toString() ?? "");
+                if(loginStatus instanceof Idle && user) login(user);
+
+            } catch {
+                window.alert("Hirdetéseid megtekintéséhez be kell jelentkezned!");
+                navigate("/profile");
+            }
+        }
+    }, [loginState, loginStatus, login, navigate, posts]);
 
     React.useEffect(() => {
         (async () => {
             setCategories([...categories, ...await listAllCategories()]);
+            //console.log(categories)
         })();
 
         return () => {};
     }, []);
 
     React.useEffect(() => {
-        console.log(posts)
-    }, [posts]);
+        if(loginState instanceof LoggedIn) {
+            (async () => {
+                const goodposts = await findOwnPost(searchTerm.trim(), category, minPrice, maxPrice, loginState.user);
+                setPosts(goodposts);
+                setIsLoading(false);
+            })()
+        } else {
+            try {
+                let user = JSON.parse(sessionStorage.getItem("user")?.toString() ?? "");
+                console.log(loginState, loginStatus);
+                if(loginStatus instanceof Idle && user) login(user);
+                setIsLoading(false);
+            } catch {
+                console.log(loginState, loginStatus);
+                window.alert("Hirdetéseid megtekintéséhez be kell jelentkezned!");
+                navigate("/profile");
+            }
+        }
 
-    React.useEffect(() => {
-        if(searchTerm.trim() && category.trim() &&
-           (Number.parseInt(minPrice.trim()) >= 0) &&
-           (Number.parseInt(maxPrice.trim()) >= 0 || maxPrice.trim() === "")) {
-            console.log("Prices:", minPrice,maxPrice);
-            (async () => {
-                const goodposts = await findPost(searchTerm.trim(), category, minPrice, maxPrice);
-                console.log("Posts:", goodposts);
-                setPosts(goodposts);
-                setIsLoading(false);
-            })();
-        }
-        else {
-            (async () => {
-                const goodposts = await listAllPosts();
-                console.log("Posts:", goodposts);
-                setPosts(goodposts);
-                setIsLoading(false);
-            })();
-        }
         return () => {};
     }, [isLoading]);
 
     return (
+        <LoginProvider>
         <div className="main-page">
-            <h1> Hirdetések </h1>
+            <h1>Saját Hirdetések</h1>
+            { loginState instanceof LoggedIn && (
+            <>
             <Form>
                 <Input type="text" value={searchTerm} className="search-input" onChange={(value) => setSearchTerm(value.target.value)} placeholder="Cím" />
                 <Dropdown className="category-dropdown" isOpen={dropdownOpen} toggle={toggle}>
@@ -86,8 +93,7 @@ const PostsPage = () => {
             <Button type="button" className="btn back-btn" color="danger" size="lg" tag={Link} to="/">Vissza a főoldalra</Button>
             <Label className="error-label">{isLoading ? "Hirdetések betöltése folyamatban!" : null}</Label>
             <ListGroup className="postlist-group">
-            {   posts !== undefined &&
-                posts.map(post => (
+            {   posts?.map(post => (
                         <ListGroupItem className="lg-item" key={post.signature}>
                                 <div>
                                 <p>
@@ -108,8 +114,11 @@ const PostsPage = () => {
                         </ListGroupItem>
             ))}
             </ListGroup>
+            </>
+            )}
         </div>
+        </LoginProvider>
     );
 }
 
-export default PostsPage;
+export default OwnPage;

@@ -14,15 +14,9 @@ import LoginPage from './routes/LoginPage';
 import LoginProvider from './components/contexts/LoginProvider';
 import ManagePage from './routes/ManagePage';
 import CreatePage from './routes/CreatePage';
+import OwnPage from './routes/OwnPage';
 
 const App = () => {
-  /*return (
-      <NotificationProvider>
-          <LoginProvider>
-              <Main />
-          </LoginProvider>
-      </NotificationProvider>
-  );*/
   return (
     <LoginProvider>
       <Main />;
@@ -31,25 +25,10 @@ const App = () => {
 };
 
 const Main = () => {
-  /*
-  const [loginStatus, login] = useCookieLogin();
-  const { notificationDispatch } = useContext(NotificationContext);
-
-  useEffectAsync(login, []);
-  useEffect(() => {
-      if(loginStatus instanceof Failed) {
-          console.error('Error communicating with the server', loginStatus.error);
-          notificationDispatch({ type: 'addError', message: 'Hiba a szerverrel való kommunikációban' });
-      }
-
-  }, [loginStatus]);
-
-  if(loginStatus instanceof Idle || loginStatus instanceof Loading) return <p>Loading...</p>;
-
-  */
   React.useEffect(() => {
     document.title = "Peer-to-peer piac portál";
  }, []);
+
   return (
       <Router>
           <div className="main-layout">
@@ -64,6 +43,7 @@ const Main = () => {
                       <Route path='/login' element = {<LoginPage />} />
                       <Route path="/manage" element={<ManagePage />} />
                       <Route path="/create" element={<CreatePage />} />
+                      <Route path="/own" element={<OwnPage />} />
                       <Route path="*" element={<NotFoundPage />} />
                   </Routes>
               </div>

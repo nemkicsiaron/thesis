@@ -17,7 +17,7 @@ const CreatePage = () => {
     const [newPost, setNewPost] = React.useState<Post>();
     const [dummyTitle, setDummyTitle] = React.useState("");
     const [dummyContent, setDummyContent] = React.useState("");
-    const [dummyPrice, setDummyPrice] = React.useState("");
+    const [dummyPrice, setDummyPrice] = React.useState("0");
     const [dummyPublish, setDummyPublish] = React.useState(true);
     const [servers, setServers] = React.useState<IServer[]>([]);
     const [server, setServer] = React.useState<IServer>();
@@ -73,6 +73,10 @@ const CreatePage = () => {
                     window.alert("Nem választottál kategóriát!");
                     return;
                 }
+                if(!dummyTitle.trim() || !dummyPrice.trim()) {
+                    window.alert("Minden szükséges mezőt ki kell tölteni!");
+                    return;
+                }
                 const create = useCreateHook.create(newPost, server.address);
                 if(create.error) window.alert(`Hirdetés létrehozása sikertelen: ${create.message}`);
                 else {
@@ -100,7 +104,7 @@ const CreatePage = () => {
                 try{
                     let key = await importPrivateKey(loginState.user.privatekey)
                     if(key) {
-                        let signature = await window.crypto.subtle.sign({name: "RSA-PSS", saltLength: 32}, key, new TextEncoder().encode(dummyPost.title + dummyContent))
+                        let signature = await window.crypto.subtle.sign({name: "RSA-PSS", saltLength: 32}, key, new TextEncoder().encode(dummyTitle + dummyContent));
                         dummyPost.signature = window.btoa(String.fromCharCode.apply(null, [...new Uint8Array(signature)]));
                         dummyPost.created = new Date();
                         setNewPost(dummyPost);
@@ -116,7 +120,7 @@ const CreatePage = () => {
     }
 
     return (
-        <div className="main-page">
+        <>
             {loginState instanceof LoggedIn && (
                 <div className="main-page">
                     <h1>Hirdetés létrehozása</h1>
@@ -142,10 +146,10 @@ const CreatePage = () => {
                                     ))}
                                 </DropdownMenu>
                             </Dropdown>
-                            <Input invalid={dummyTitle.length <= 0} type="text" value={dummyTitle} className="search-input" onChange={(value) => setDummyTitle(value.target.value)} placeholder="Cím" />
+                            <Input invalid={dummyTitle.trim().length <= 0} type="text" value={dummyTitle} className="search-input" onChange={(value) => setDummyTitle(value.target.value)} placeholder="Cím" />
                             <FormFeedback>A cím nem lehet üres!</FormFeedback>
-                            <Input invalid={Number.parseInt(dummyPrice) < 0} type="number" value={dummyPrice} className="price-input" onChange={(value) => setDummyPrice(value.target.value)} placeholder="Ár" />
-                            <FormFeedback>Az ár nem lehet negatív!</FormFeedback>
+                            <Input invalid={Number.parseInt(dummyPrice) < 0 || dummyPrice.length <= 0} type="number" value={dummyPrice} className="price-input" onChange={(value) => setDummyPrice(value.target.value)} placeholder="Ár" />
+                            <FormFeedback>Az ár pozitív vagy 0 kell legyen!</FormFeedback>
                             <Input type="textarea" value={dummyContent} className="description-input" onChange={(value) => setDummyContent(value.target.value)} placeholder="Leírás" />
                             <Input type="checkbox" checked={dummyPublish} onChange={(value) => setDummyPublish(value.target.checked)} /> Publikus
                         </Form>
@@ -154,7 +158,7 @@ const CreatePage = () => {
                     </div>
                 </div>
             )}
-        </div>
+        </>
     )};
 
     export default CreatePage;

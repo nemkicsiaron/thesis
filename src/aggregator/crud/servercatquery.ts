@@ -13,7 +13,7 @@ async function filterbycategory(category: string): Promise<IServer[]> {
     return results.filter(x => x.hascategory).map(x => x.server);
 };
 
-export default async function servercatquery(searchterm: string, category: string, minprice?: number, maxprice?: number): Promise<Post[]> {
+export default async function servercatquery(searchterm: string, category: string, minprice?: number, maxprice?: number) {
     console.log(new Date(), "Searching category including servers for: " + searchterm);
 
     const goodservers = await filterbycategory(category);
@@ -31,10 +31,11 @@ export default async function servercatquery(searchterm: string, category: strin
                 maxprice: maxprice ? maxprice.toString() : ""
             })));
             posts.push(...(await res.json()));
-        } catch (error) {
+        } catch (error: any) {
             console.error(error);
+            return { posts: [], error: true, message: error.message };
         }
     }));
 
-    return posts;
+    return { posts: posts, error: false, message:"Success" };
 };

@@ -20,6 +20,12 @@ h1 {
   font-size: 6rem !important;
 }
 
+h2 {
+  padding: 0.5vh;
+  font-family: 'Jaapokki';
+  font-size: 3rem !important;
+}
+
 body {
   margin: 0;
   font-family: 'Jaapokki', 'Cascadia', sans-serif;

@@ -13,7 +13,7 @@ export async function listAllCategories(server?: string): Promise<string[]> {
             }
         });
         const categories: Category[] = await result.json();
-        console.log(new Date(), "Categories:", categories);
+        ///console.log(new Date(), "Categories:", categories);
         return categories.map(c => c.name);
     } catch (error) {
         console.error(error);

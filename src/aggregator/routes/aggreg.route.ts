@@ -70,18 +70,44 @@ aggregrouter.get('/findpost', async (req, res) => {
     if(category) {
         try {
             console.log("Category query");
-            const posts = await servercatquery(searchterm, category, Number(minprice), Number(maxprice));
-            console.log("Done:", posts);
-            res.status(200).json(posts);
+            const postsres = await servercatquery(searchterm, category, Number(minprice), Number(maxprice));
+            if(postsres.error) res.status(500).json(postsres.message);
+            else {
+                console.log("Done:", postsres.posts);
+                res.status(200).json(postsres.posts);
+            }
         } catch (error: any) {
             console.error(error);
-            res.status(404).json(error.message);
+            res.status(500).json(error.message);
         }
     } else {
         console.log("General query");
-        const posts = await generalquery(searchterm, Number(minprice), Number(maxprice));
-        console.log("Done:", posts);
-        res.status(200).json(posts);
+        const postsres = await generalquery(searchterm, Number(minprice), Number(maxprice));
+        if(postsres.error) res.status(500).json(postsres.message);
+        else {
+            console.log("Done:", postsres.posts);
+            res.status(200).json(postsres.posts);
+        }
+    }
+});
+
+aggregrouter.get('/findownpost', async (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+
+    const category = (req.query.category ?? "").toString();
+    const searchterm =(req.query.searchterm ?? "").toString();
+    const minprice = (req.query.minprice ?? "").toString();
+    const maxprice = (req.query.maxprice ?? "").toString();
+    const author = (req.query.author ?? "").toString();
+
+    console.log(new Date(), "Searching for own posts:", searchterm, category, minprice, maxprice, "by", author);
+
+    const postsres = await generalquery(searchterm, Number(minprice), Number(maxprice), author);
+    if(postsres.error) res.status(500).json(postsres.message);
+    else {
+        console.log("Done:", postsres.posts);
+        res.status(200).json(postsres.posts);
     }
 });
 

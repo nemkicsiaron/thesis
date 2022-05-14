@@ -45,22 +45,22 @@ const ProfilePage: React.FC = () => {
             <div className="main-page">
                 <h1>Profil</h1>
                 <div className="profile">
-                    <h2>Felhasználónév:
+                    <h3>Felhasználónév:
                     {
                         loginState instanceof LoggedIn && (
-                            <p>{loginState.user.username}</p>
+                            <> {loginState.user.username}</>
                     )}
-                    </h2>
-                    <h2>Nyilvános kulcs:</h2>
+                    </h3>
+                    <h3>Nyilvános kulcs:</h3>
                     {
                         loginState instanceof LoggedIn && (
                             <p>{loginState.user.publickey}</p>
                     )}
 
-                    <h2>Privát kulcs:</h2>
+                    <h3>Privát kulcs:</h3>
                     {
                         loginState instanceof LoggedIn && (
-                            <p>{loginState.user.privatekey.length ? "Sikeresen betöltve" : "Nincs betöltve"}</p>
+                            <> {loginState.user.privatekey.length ? "Sikeresen betöltve" : "Nincs betöltve"}</>
                     )}
                 </div>
                     {

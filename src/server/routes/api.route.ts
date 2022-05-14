@@ -72,6 +72,26 @@ router.get('/findpost', async (req, res) => {
     }
 });
 
+router.get('/findownpost', async (req, res) => {
+
+    const searchterm = (req.query.searchterm ?? "").toString();
+    const minprice = (req.query.minprice ?? "").toString();
+    const maxprice = (req.query.maxprice ?? "").toString();
+    const author = (req.query.author ?? "").toString();
+
+    console.log(new Date(), "Search for:", searchterm, minprice, maxprice, "by", author);
+
+    try {
+        const posts = await findpost(searchterm, minprice, maxprice, author);
+        //console.log(new Date(), ":", posts);
+        res.status(200).json(posts);
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json(error);
+    }
+});
+
 
 router.get('/filterbycategory', async (req, res) => {
     const category = req.query.category?.toString();

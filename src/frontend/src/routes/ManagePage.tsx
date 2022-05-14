@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "reactstrap";
-import { LoggedIn, LoggedOut, LoginContext } from "../components/contexts/LoginProvider";
+import LoginProvider, { LoggedIn, LoggedOut, LoginContext } from "../components/contexts/LoginProvider";
 import { Failed, Idle, useLogin } from "../hooks/LoginHooks";
 
 const ManagePage = () => {
@@ -26,18 +26,18 @@ const ManagePage = () => {
 
 
     return (
-        <div className="main-page">
+        <LoginProvider>
             {loginState instanceof LoggedIn && (
             <div className="main-page">
                 <h1>Hirdetések kezelése</h1>
                 <div className="manage-posts">
                     <Button type="button" className="btn back-btn" color="success" size="lg" tag={Link} to="/create">Hirdetés létrehozása</Button>
-                    <Button type="button" className="btn back-btn" color="info" size="lg" tag={Link} to="/create">Hirdetéseim megtekintése</Button>
+                    <Button type="button" className="btn back-btn" color="info" size="lg" tag={Link} to="/own">Hirdetéseim megtekintése</Button>
                     <Button type="button" className="btn back-btn" color="danger" size="lg" tag={Link} to="/">Vissza a főoldalra</Button>
                 </div>
             </div>
             )}
-        </div>
+        </LoginProvider>
 )};
 
 export default ManagePage;
