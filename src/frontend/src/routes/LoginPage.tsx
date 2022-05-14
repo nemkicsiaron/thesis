@@ -6,20 +6,20 @@ import { Failed, Loaded, useLogin } from "../hooks/LoginHooks";
 import IUser from "../interfaces/user";
 
 const LoginPage = () => {
-    const [loginState, login] = useLogin();
+    const [loginStatus, login] = useLogin();
     const [password, setPassword] = React.useState("");
     const [passwordhash, setPasswordhash] = React.useState("");
     const [dummyuser, setDummyuser] = React.useState({ username: "", publickey: "" , privatekey: "" });
     const navigate = useNavigate();
 
     React.useEffect(() => {
-        if(loginState instanceof Failed) {
-            window.alert(`Nem sikerült bejelentkezni: ${loginState.error}`);
-        } else if (loginState instanceof Loaded) {
-            sessionStorage.setItem("user", JSON.stringify(loginState.value));
+        if(loginStatus instanceof Failed) {
+            window.alert(`Nem sikerült bejelentkezni: ${loginStatus.error}`);
+        } else if (loginStatus instanceof Loaded) {
+            sessionStorage.setItem("user", JSON.stringify(loginStatus.value));
             navigate("/profile");
         }
-    }, [loginState, navigate]);
+    }, [loginStatus, navigate]);
 
     const handleFile = (e: any) => {
         const file: File = e.target.files[0];

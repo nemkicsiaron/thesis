@@ -2,7 +2,6 @@ import Post from "../../interfaces/post";
 import { aggregatorUri } from "../../config/config";
 import IUser from "../../interfaces/user";
 import { importPrivateKey, importPublicKey, str2ab } from "./UserServices";
-import { pathToFileURL } from "url";
 
 export async function listAllPosts(): Promise<Post[]> {
     const result = await fetch(`${aggregatorUri}/aggreg/allposts`, {
@@ -46,29 +45,17 @@ export async function findPost(searchterm: string, category: string, minprice: s
     }
 }
 
-async function verifyPost(signature: string, publicKeyStr: string, privateKeyStr: string, encodedMessage: Uint8Array): Promise<boolean> {
+function b642ab(base64_string: string): Uint8Array{
+    return Uint8Array.from(window.atob(base64_string), c => c.charCodeAt(0));
+}
+
+export async function verifyPost(signature: string, publicKeyStr: string, privateKeyStr: string, encodedMessage: Uint8Array): Promise<boolean> {
     const publicKey: CryptoKey | null = await importPublicKey(publicKeyStr);
     const privateKey: CryptoKey | null = await importPrivateKey(privateKeyStr);
-    // console.log(publicKey);
-    // if(!publicKey) return false;
-    // const res = await window.crypto.subtle.verify(
-    //     {
-    //         name: "RSA-PSS",
-    //         saltLength: 32,
-    //     },
-    //     publicKey,
-    //     str2ab(signature),
-    //     encodedMessage
-    // );
-    // console.log("Verifying:", signature, publicKey, res);
-    // return res;
-
     if(privateKey && publicKey) {
         try {
-            const sign = await window.crypto.subtle.sign({name: "RSA-PSS", saltLength: 32}, privateKey, encodedMessage);
-            const signature = window.btoa(String.fromCharCode.apply(null, [...new Uint8Array(sign)]));
-            const res = await window.crypto.subtle.verify({name: "RSA-PSS", saltLength: 32}, publicKey, str2ab(signature), encodedMessage);
-            console.log("Verifying:", signature, publicKey, res);
+            const res = await window.crypto.subtle.verify({name: "RSA-PSS", saltLength: 32}, publicKey, b642ab(signature), encodedMessage);
+            //console.log("Verifying:", signature, publicKey, res);
             return res;
         } catch (error) {
             console.error(error);

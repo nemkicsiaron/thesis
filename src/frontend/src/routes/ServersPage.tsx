@@ -6,18 +6,18 @@ import IServer from "../interfaces/servers";
 
 import "./styles/Servers.scss";
 
+// const dummyServer: IServer = {
+//     address: "dummyaddress",
+//     categories: [],
+//     lastactive: new Date()
+// }
 const ServersPage = () => {
-    const dummyServer: IServer = {
-        address: "dummyaddress",
-        categories: [],
-        lastactive: new Date()
-    }
     const [servers, setServers] = React.useState<IServer[]>([]);
     const [isLoading, setIsLoading] = React.useState(true);
 
     React.useEffect(() => {
         listAllServers().then(allservers => {
-            setServers(allservers.concat(dummyServer));
+            setServers(allservers);
         }).catch(error => {
             console.log(error);
             window.alert(error);

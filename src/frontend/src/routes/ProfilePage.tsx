@@ -15,8 +15,8 @@ const ProfilePage: React.FC = () => {
     const navigate = useNavigate();
 
     React.useEffect(() => {
-        if(loginState instanceof Failed) {
-            window.alert(`Nem sikerült bejelentkezni: ${loginState.error}`)
+        if(loginStatus instanceof Failed) {
+            window.alert(`Nem sikerült bejelentkezni: ${loginStatus.error}`)
         } else if(loginState instanceof LoggedOut && loginStatus instanceof Idle) {
             try {
                 let user = JSON.parse(sessionStorage.getItem("user")?.toString() ?? "");
