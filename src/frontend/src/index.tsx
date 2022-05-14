@@ -15,6 +15,7 @@ import LoginProvider from './components/contexts/LoginProvider';
 import ManagePage from './routes/ManagePage';
 import CreatePage from './routes/CreatePage';
 import OwnPage from './routes/OwnPage';
+import ViewPostPage from './routes/ViewPostPage';
 
 const App = () => {
   return (
@@ -38,6 +39,7 @@ const Main = () => {
                       <Route path="/profile" element={<ProfilePage />} />
                       <Route path="/servers" element={<Servers />} />
                       <Route path="/posts" element={<PostsPage />} />
+                      <Route path="/post/*" element={<ViewPostPage />} />
                       <Route path="/info" element = {<InfoPage />} />
                       <Route path='/register' element = {<RegisterPage />} />
                       <Route path='/login' element = {<LoginPage />} />
