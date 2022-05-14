@@ -1,7 +1,8 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Form, Input, Label, ListGroup, ListGroupItem } from "reactstrap";
+import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Form, Input, Label} from "reactstrap";
 import LoginProvider, { LoggedIn, LoggedOut, LoginContext } from "../components/contexts/LoginProvider";
+import PostList from "../components/PostList";
 import { listAllCategories } from "../components/services/CategoryServices";
 import { findOwnPost } from "../components/services/PostsServices";
 import { Failed, Idle, useLogin } from "../hooks/LoginHooks";
@@ -22,8 +23,8 @@ const OwnPage = () => {
     const toggle = () => setDropdownOpen(prevState => !prevState);
 
     React.useEffect(() => {
-        if(loginState instanceof Failed) {
-            window.alert(`Nem sikerült bejelentkezni: ${loginState.error}`)
+        if(loginStatus instanceof Failed) {
+            window.alert(`Nem sikerült bejelentkezni: ${loginStatus.error}`)
         } else if(loginState instanceof LoggedOut && loginStatus instanceof Idle) {
             try {
                 let user = JSON.parse(sessionStorage.getItem("user")?.toString() ?? "");
@@ -92,28 +93,7 @@ const OwnPage = () => {
             <Button type="button" onClick={() => setIsLoading(true)} className="btn list-btn" color="success" size="lg">Hirdetés keresése</Button>
             <Button type="button" className="btn back-btn" color="danger" size="lg" tag={Link} to="/">Vissza a főoldalra</Button>
             <Label className="error-label">{isLoading ? "Hirdetések betöltése folyamatban!" : null}</Label>
-            <ListGroup className="postlist-group">
-            {   posts?.map(post => (
-                        <ListGroupItem className="lg-item" key={post.signature}>
-                                <div>
-                                <p>
-                                    <strong>{post.title}</strong>
-                                    <br />
-                                    Kategória: {post.category}
-                                    <br />
-                                    Leírás: {post.description}
-                                    <br />
-                                    Ár: {post.price} Ft
-                                    <br />
-                                    Feladó: {post.author}
-                                    <br />
-                                    Aláírás: {post.signature}
-                                </p>
-                                <Button type="button" className="btn" id="post-list-btn" color="success" size="lg" tag={Link} to="/:thatpost">Megtekintés</Button>
-                                </div>
-                        </ListGroupItem>
-            ))}
-            </ListGroup>
+            <PostList posts={posts} />
             </>
             )}
         </div>

@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Form, Input, Label, ListGroup, ListGroupItem } from "reactstrap";
+import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Form, Input, Label } from "reactstrap";
+import PostList from "../components/PostList";
 import { listAllCategories } from "../components/services/CategoryServices";
 import { findPost, listAllPosts } from "../components/services/PostsServices";
 import Post from "../interfaces/post";
@@ -85,29 +86,7 @@ const PostsPage = () => {
             <Button type="button" onClick={() => setIsLoading(true)} className="btn list-btn" color="success" size="lg">Hirdetés keresése</Button>
             <Button type="button" className="btn back-btn" color="danger" size="lg" tag={Link} to="/">Vissza a főoldalra</Button>
             <Label className="error-label">{isLoading ? "Hirdetések betöltése folyamatban!" : null}</Label>
-            <ListGroup className="postlist-group">
-            {   posts !== undefined &&
-                posts.map(post => (
-                        <ListGroupItem className="lg-item" key={post.signature}>
-                                <div>
-                                <p>
-                                    <strong>{post.title}</strong>
-                                    <br />
-                                    Kategória: {post.category}
-                                    <br />
-                                    Leírás: {post.description}
-                                    <br />
-                                    Ár: {post.price} Ft
-                                    <br />
-                                    Feladó: {post.author}
-                                    <br />
-                                    Aláírás: {post.signature}
-                                </p>
-                                <Button type="button" className="btn" id="post-list-btn" color="success" size="lg" tag={Link} to="/:thatpost">Megtekintés</Button>
-                                </div>
-                        </ListGroupItem>
-            ))}
-            </ListGroup>
+            <PostList posts={posts} />
         </div>
     );
 }
