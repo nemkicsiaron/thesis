@@ -58,11 +58,12 @@ router.get('/findpost', async (req, res) => {
     const searchterm = (req.query.searchterm ?? "").toString();
     const minprice = (req.query.minprice ?? "").toString();
     const maxprice = (req.query.maxprice ?? "").toString();
+    const signature = (req.query.signature ?? "").toString();
 
-    console.log(new Date(), "Search for:", searchterm, minprice, maxprice);
+    console.log(new Date(), "Search for:", searchterm, minprice, maxprice, signature);
 
     try {
-        const posts = await findpost(searchterm, minprice, maxprice);
+        const posts = await findpost(searchterm, minprice, maxprice, "", signature);
         //console.log(new Date(), ":", posts);
         res.status(200).json(posts);
     }
@@ -78,12 +79,13 @@ router.get('/findownpost', async (req, res) => {
     const minprice = (req.query.minprice ?? "").toString();
     const maxprice = (req.query.maxprice ?? "").toString();
     const author = (req.query.author ?? "").toString();
+    const signature = (req.query.signature ?? "").toString();
 
-    console.log(new Date(), "Search for:", searchterm, minprice, maxprice, "by", author);
+    console.log(new Date(), "Search for own post:", searchterm, minprice, maxprice, "by", author);
 
     try {
-        const posts = await findpost(searchterm, minprice, maxprice, author);
-        //console.log(new Date(), ":", posts);
+        const posts = await findpost(searchterm, minprice, maxprice, author, signature);
+        console.log(new Date(), ":", posts);
         res.status(200).json(posts);
     }
     catch (error) {
@@ -116,8 +118,13 @@ router.post('/newpost', async (req, res) => {
 });
 
 router.delete('/deletepost', async (req, res) => {
-    const data = await req.body;
-    const deleteres = await deletepost(data.title, data.author, data.signature);
+    const post = await req.body;
+    console.log(post);
+    if (post && !('signature' in post)) {
+        res.status(401).json("No signature provided!");
+        return;
+    }
+    const deleteres = await deletepost(post.title, post.author, post.signature);
     if(deleteres.status === "success") res.status(200).json(deleteres.message);
     else res.status(500).json("There was a problem with deleting the post!");
 });

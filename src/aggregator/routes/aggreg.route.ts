@@ -5,6 +5,7 @@ import { indexer, serverslist } from "../indexing/indexer";
 import Post from "../interfaces/post";
 import generalquery from "../crud/generalquery";
 import servercatquery from "../crud/servercatquery";
+import deletepost from "../crud/deletepost";
 
 const aggregrouter = Router();
 
@@ -40,7 +41,7 @@ aggregrouter.get('/allposts', async (_, res) => {
     try {
         res.setHeader('Content-Type', 'application/json');
         res.setHeader('Access-Control-Allow-Origin', '*');
-        res.status(200).json(await generalquery(""));
+        res.status(200).json(await generalquery("", "", "", "", ""));
     } catch (error) {
         console.error(error);
         res.status(500).json(error);
@@ -61,16 +62,17 @@ aggregrouter.get('/findpost', async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
 
     const category = (req.query.category ?? "").toString();
-    const searchterm =(req.query.searchterm ?? "").toString();
+    const searchterm = (req.query.searchterm ?? "").toString();
     const minprice = (req.query.minprice ?? "").toString();
     const maxprice = (req.query.maxprice ?? "").toString();
+    const signature = (req.query.signature ?? "").toString();
 
-    console.log(new Date(), "Searching for:", searchterm, category, minprice, maxprice);
+    console.log(new Date(), "Searching for:", searchterm, category, minprice, maxprice, signature);
 
     if(category) {
         try {
             console.log("Category query");
-            const postsres = await servercatquery(searchterm, category, Number(minprice), Number(maxprice));
+            const postsres = await servercatquery(searchterm, category, minprice, maxprice, "", signature);
             if(postsres.error) res.status(500).json(postsres.message);
             else {
                 console.log("Done:", postsres.posts);
@@ -82,7 +84,7 @@ aggregrouter.get('/findpost', async (req, res) => {
         }
     } else {
         console.log("General query");
-        const postsres = await generalquery(searchterm, Number(minprice), Number(maxprice));
+        const postsres = await generalquery(searchterm, minprice, maxprice, "", signature);
         if(postsres.error) res.status(500).json(postsres.message);
         else {
             console.log("Done:", postsres.posts);
@@ -97,13 +99,14 @@ aggregrouter.get('/findownpost', async (req, res) => {
 
     const category = (req.query.category ?? "").toString();
     const searchterm =(req.query.searchterm ?? "").toString();
-    const minprice = (req.query.minprice ?? "").toString();
-    const maxprice = (req.query.maxprice ?? "").toString();
+    const minprice = (req.query.minprice ?? " ").toString();
+    const maxprice = (req.query.maxprice ?? " ").toString();
     const author = (req.query.author ?? "").toString();
+    const signature = (req.query.signature ?? "").toString();
 
     console.log(new Date(), "Searching for own posts:", searchterm, category, minprice, maxprice, "by", author);
 
-    const postsres = await generalquery(searchterm, Number(minprice), Number(maxprice), author);
+    const postsres = await generalquery(searchterm, minprice, maxprice, author, signature);
     if(postsres.error) res.status(500).json(postsres.message);
     else {
         console.log("Done:", postsres.posts);
@@ -128,37 +131,40 @@ aggregrouter.post('/newpost', async (req, res) => {
             },
         body: JSON.stringify(newpost)
     });
-
-    res.status(200).json(await createres.json());
+    const success = await createres.json();
+    if(success && createres.ok && 'signature' in success) res.status(201).json(success);
+    else res.status(500).json(success);
 });
 
 aggregrouter.delete('/deletepost', async (req, res) => {
-    const data = await req.body;
-    const newpost: Post = {
-        title : data.post.title,
-        category: data.post.category,
-        published: data.post.published,
-        price: data.post.price,
-        author: data.post.author,
-        signature: data.post.signature,
-        description: data.post.description,
-        created: data.post.created,
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+
+    const data = await req.body.post;
+    const deletedpost: Post = {
+        title: data.title,
+        description: data.description,
+        price: data.price,
+        category: data.category,
+        created: new Date(data.created),
+        signature: data.signature,
+        author: data.author,
+        published: data.published
     };
 
-    console.log(data.post.publish);
+    if(!deletedpost || !('signature'in deletedpost)){
+        res.status(400).json("Invalid post");
+        return;
+    }
 
     try {
-        const deleteres = await fetch(data.server?.toString() + "/api/deletepost", {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json"
-                },
-            body: JSON.stringify(newpost)
-        });
-        res.status(200).json(await deleteres.json());
+        const success = await deletepost(deletedpost);
+        console.log(success);
+        if(success) res.status(200).json(success);
+        else res.status(500).json("There was an error deleting the post");
     } catch(error: any) {
         console.error(error);
-        res.status(404).json(error.message);
+        res.status(500).json(error.message);
     }
 });
 

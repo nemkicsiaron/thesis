@@ -13,29 +13,47 @@ async function filterbycategory(category: string): Promise<IServer[]> {
     return results.filter(x => x.hascategory).map(x => x.server);
 };
 
-export default async function servercatquery(searchterm: string, category: string, minprice?: number, maxprice?: number) {
+export default async function servercatquery(searchterm: string, category: string, minprice: string, maxprice: string, author: string, signature: string) {
     console.log(new Date(), "Searching category including servers for: " + searchterm);
 
     const goodservers = await filterbycategory(category);
     var posts: Post[] = [];
 
-    //console.log(goodservers);
-
     if (goodservers.length === 0 || !goodservers) throw new Error("No servers found storing given category: " + category);
 
-    Promise.all(goodservers.map(async s => {
-        try {
-            const res = (await fetch(s.address + '/api/findpost/?' + new URLSearchParams({
-                searchterm: searchterm.toString(),
-                minprice: minprice ? minprice.toString() : "",
-                maxprice: maxprice ? maxprice.toString() : ""
-            })));
-            posts.push(...(await res.json()));
-        } catch (error: any) {
-            console.error(error);
-            return { posts: [], error: true, message: error.message };
-        }
-    }));
+    if(author)
+    {
+        await Promise.all(goodservers.map(async s => {
+            try {
+                const res = await fetch(s.address + '/api/findownpost/?' + new URLSearchParams({
+                    searchterm: searchterm,
+                    minprice: minprice,
+                    maxprice: maxprice,
+                    author: author,
+                    signature: signature
+                }));
+                posts.push(...(await res.json()));
+            } catch (error: any) {
+                console.error(error);
+                return { posts: [], error: true, message: error.message };
+            }
+        }));
+    } else {
+        Promise.all(goodservers.map(async s => {
+            try {
+                const res = (await fetch(s.address + '/api/findpost/?' + new URLSearchParams({
+                    searchterm: searchterm,
+                    minprice: minprice,
+                    maxprice: maxprice,
+                    signature: signature
+                })));
+                posts.push(...(await res.json()));
+            } catch (error: any) {
+                console.error(error);
+                return { posts: [], error: true, message: error.message };
+            }
+        }));
+    }
 
     return { posts: posts, error: false, message:"Success" };
 };

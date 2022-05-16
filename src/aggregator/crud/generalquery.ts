@@ -1,19 +1,21 @@
 import { serverslist } from "../indexing/indexer";
 import Post from "../interfaces/post";
 
-export default async function generalquery(searchterm: string, minprice?: number, maxprice?: number, author?: string) {
-    console.log(new Date(), "Searching all servers for: " + searchterm);
+export default async function generalquery(searchterm: string, minprice: string, maxprice: string, author: string, signature: string) {
+    console.log(new Date(), "Searching all servers for: " + searchterm + " with minprice: " + minprice + " and maxprice: " + maxprice + " and author: " + author);
 
     var posts: Post[] = [];
     const servers = serverslist();
-    if(author) {
+    if(author)
+    {
         await Promise.all(servers.map(async s => {
             try {
                 const res = await fetch(s.address + '/api/findownpost/?' + new URLSearchParams({
                     searchterm: searchterm,
-                    minprice: minprice ? minprice.toString() : "",
-                    maxprice: maxprice ? maxprice.toString() : "",
-                    author: author
+                    minprice: minprice,
+                    maxprice: maxprice,
+                    author: author,
+                    signature: signature
                 }));
                 posts.push(...(await res.json()));
             } catch (error: any) {
@@ -21,13 +23,16 @@ export default async function generalquery(searchterm: string, minprice?: number
                 return { posts: [], error: true, message: error.message };
             }
         }));
-    } else {
+    }
+    else
+    {
         await Promise.all(servers.map(async s => {
             try {
                 const res = await fetch(s.address + '/api/findpost/?' + new URLSearchParams({
                     searchterm: searchterm,
-                    minprice: minprice ? minprice.toString() : "",
-                    maxprice: maxprice ? maxprice.toString() : ""
+                    minprice: minprice,
+                    maxprice: maxprice,
+                    signature: signature
                 }));
                 posts.push(...(await res.json()));
             } catch (error: any) {
