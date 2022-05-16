@@ -48,7 +48,7 @@ const PostsPage = () => {
            (Number.parseInt(maxPrice.trim()) >= 0 || maxPrice.trim() === "")) {
             console.log("Prices:", minPrice,maxPrice);
             (async () => {
-                const goodposts = await findPost(searchTerm.trim(), category, minPrice, maxPrice);
+                const goodposts = await findPost(searchTerm.trim(), category, minPrice, maxPrice, "");
                 console.log("Posts:", goodposts);
                 setPosts(goodposts);
                 setIsLoading(false);
@@ -86,7 +86,7 @@ const PostsPage = () => {
             <Button type="button" onClick={() => setIsLoading(true)} className="btn list-btn" color="success" size="lg">Hirdetés keresése</Button>
             <Button type="button" className="btn back-btn" color="danger" size="lg" tag={Link} to="/">Vissza a főoldalra</Button>
             <Label className="error-label">{isLoading ? "Hirdetések betöltése folyamatban!" : null}</Label>
-            <PostList posts={posts} />
+            <PostList posts={posts} isViewed={false} isOwn={false} prev="/posts" />
         </div>
     );
 }

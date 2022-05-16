@@ -49,7 +49,7 @@ const OwnPage = () => {
     React.useEffect(() => {
         if(loginState instanceof LoggedIn) {
             (async () => {
-                const goodposts = await findOwnPost(searchTerm.trim(), category, minPrice, maxPrice, loginState.user);
+                const goodposts = await findOwnPost(searchTerm.trim(), category, minPrice, maxPrice, loginState.user, "");
                 setPosts(goodposts);
                 setIsLoading(false);
             })()
@@ -93,7 +93,7 @@ const OwnPage = () => {
             <Button type="button" onClick={() => setIsLoading(true)} className="btn list-btn" color="success" size="lg">Hirdetés keresése</Button>
             <Button type="button" className="btn back-btn" color="danger" size="lg" tag={Link} to="/">Vissza a főoldalra</Button>
             <Label className="error-label">{isLoading ? "Hirdetések betöltése folyamatban!" : null}</Label>
-            <PostList posts={posts} />
+            <PostList posts={posts} isViewed={false} isOwn={true} prev="/own" />
             </>
             )}
         </div>

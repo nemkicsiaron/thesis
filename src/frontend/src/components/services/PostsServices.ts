@@ -15,14 +15,16 @@ export async function listAllPosts(): Promise<Post[]> {
     return posts.posts;
 }
 
-export async function findPost(searchterm: string, category: string, minprice: string, maxprice: string): Promise<Post[]> {
+export async function findPost(searchterm: string, category: string, minprice: string, maxprice: string, signature: string): Promise<Post[]> {
     try {
         if(category.includes("Minden")) category = "";
+        console.log(new Date(), "Searching for:", searchterm, category, minprice, maxprice, signature);
         const result = await fetch(`${aggregatorUri}/aggreg/findpost/?` + new URLSearchParams({
                 searchterm: searchterm,
                 category: category,
-                minprice: minprice ? minprice.toString() : "",
-                maxprice: maxprice ? maxprice.toString() : ""
+                minprice: minprice,
+                maxprice: maxprice,
+                signature: signature
             }), {
             method: "GET",
             headers: {
@@ -49,31 +51,29 @@ function b642ab(base64_string: string): Uint8Array{
     return Uint8Array.from(window.atob(base64_string), c => c.charCodeAt(0));
 }
 
-export async function verifyPost(signature: string, publicKeyStr: string, privateKeyStr: string, encodedMessage: Uint8Array): Promise<boolean> {
+export async function verifyPost(signature: string, publicKeyStr: string, encodedMessage: Uint8Array): Promise<boolean> {
     const publicKey: CryptoKey | null = await importPublicKey(publicKeyStr);
-    const privateKey: CryptoKey | null = await importPrivateKey(privateKeyStr);
-    if(privateKey && publicKey) {
-        try {
-            const res = await window.crypto.subtle.verify({name: "RSA-PSS", saltLength: 32}, publicKey, b642ab(signature), encodedMessage);
-            //console.log("Verifying:", signature, publicKey, res);
-            return res;
-        } catch (error) {
-            console.error(error);
-            return false;
-        }
+    if(!publicKey) return false;
+    try {
+        const res = await window.crypto.subtle.verify({name: "RSA-PSS", saltLength: 32}, publicKey, b642ab(signature), encodedMessage);
+        //console.log("Verifying:", signature, publicKey, res);
+        return res;
+    } catch (error) {
+        console.error(error);
+        return false;
     }
-    return false;
 }
 
-export async function findOwnPost(searchterm: string, category: string, minprice: string, maxprice: string, author: IUser): Promise<Post[]> {
+export async function findOwnPost(searchterm: string, category: string, minprice: string, maxprice: string, author: IUser, signature: string): Promise<Post[]> {
     try {
         if(category.includes("Minden")) category = "";
         const result = await fetch(`${aggregatorUri}/aggreg/findownpost/?` + new URLSearchParams({
                 searchterm: searchterm,
                 category: category,
-                minprice: minprice ? minprice.toString() : "",
-                maxprice: maxprice ? maxprice.toString() : "",
-                author: author.username
+                minprice: minprice,
+                maxprice: maxprice,
+                author: author.username,
+                signature: signature
             }), {
             method: "GET",
             headers: {
@@ -83,9 +83,30 @@ export async function findOwnPost(searchterm: string, category: string, minprice
         });
         const posts: Post[] = await result.json();
         if(!posts.length) return [];
-        return posts.filter(p => verifyPost(p.signature ?? "", author.publickey, author.privatekey, new TextEncoder().encode(p.title + p.description)));
+        return posts.filter(p => verifyPost(p.signature ?? "", author.publickey, new TextEncoder().encode(p.title + p.description)));
     } catch (error) {
         console.error(error);
         return [];
+    }
+}
+
+export async function deletePost(post: Post, server?: string) {
+    try {
+        const result = await fetch(`${aggregatorUri}/aggreg/deletepost`, {
+            method: "DELETE",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                post: post,
+                server: server ?? ""
+            })
+        });
+        const res = await result.json();
+        return res;
+    } catch (error) {
+        console.error(error);
+        return false;
     }
 }
