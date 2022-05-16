@@ -16,6 +16,7 @@ import ManagePage from './routes/ManagePage';
 import CreatePage from './routes/CreatePage';
 import OwnPage from './routes/OwnPage';
 import ViewPostPage from './routes/ViewPostPage';
+import EditPage from './routes/EditPage';
 
 const App = () => {
   return (
@@ -39,7 +40,8 @@ const Main = () => {
                       <Route path="/profile" element={<ProfilePage />} />
                       <Route path="/servers" element={<Servers />} />
                       <Route path="/posts" element={<PostsPage />} />
-                      <Route path="/post/*" element={<ViewPostPage />} />
+                      <Route path="/view" element={<ViewPostPage />} />
+                      <Route path="/edit" element={<EditPage />} />
                       <Route path="/info" element = {<InfoPage />} />
                       <Route path='/register' element = {<RegisterPage />} />
                       <Route path='/login' element = {<LoginPage />} />
