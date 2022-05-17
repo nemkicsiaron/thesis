@@ -6,19 +6,7 @@ import { listAllCategories } from "../components/services/CategoryServices";
 import { findPost, listAllPosts } from "../components/services/PostsServices";
 import Post from "../interfaces/post";
 
-import "./styles/Posts.scss";
-// const dummyPost: Post = {
-//     title: "dummytitle",
-//     category: "dummycategory",
-//     published: true,
-//     price: "420",
-//     description: "dummydescription",
-//     created: new Date(),
-//     author: "dummyauthor",
-//     signature: "dummysignature - " + Math.random().toString(36).substring(7)
-// }
-
-const PostsPage = () => {
+const ServerViewPage = () => {
     const [posts, setPosts] = React.useState<Post[]>([]);
     const [categories, setCategories] = React.useState<string[]>(["Minden kategória"]);
     const [category, setCategory] = React.useState("");
@@ -27,6 +15,7 @@ const PostsPage = () => {
     const [minPrice, setMinPrice] = React.useState("0");
     const [maxPrice, setMaxPrice] = React.useState("");
     const [dropdownOpen, setDropdownOpen] = React.useState(false);
+    const [server, setServer] = React.useState("");
 
     const toggle = () => setDropdownOpen(prevState => !prevState);
 
@@ -39,12 +28,21 @@ const PostsPage = () => {
     }, []);
 
     React.useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        setServer(decodeURIComponent(params.get("post") ?? ""));
+    }, []);
+
+    React.useEffect(() => {
+        console.log(posts)
+    }, [posts]);
+
+    React.useEffect(() => {
         if(searchTerm.trim() && category.trim() &&
            (Number.parseInt(minPrice.trim()) >= 0) &&
            (Number.parseInt(maxPrice.trim()) >= 0 || maxPrice.trim() === "")) {
             console.log("Prices:", minPrice,maxPrice);
             (async () => {
-                const goodposts = await findPost(searchTerm.trim(), category, minPrice, maxPrice, "");
+                const goodposts = await findPost(searchTerm.trim(), category, minPrice, maxPrice, "", server);
                 console.log("Posts:", goodposts);
                 setPosts(goodposts);
                 setIsLoading(false);
@@ -52,7 +50,7 @@ const PostsPage = () => {
         }
         else {
             (async () => {
-                const goodposts = await listAllPosts();
+                const goodposts = await listAllPosts(server);
                 console.log("Posts:", goodposts);
                 setPosts(goodposts);
                 setIsLoading(false);
@@ -63,7 +61,7 @@ const PostsPage = () => {
 
     return (
         <div className="main-page">
-            <h1> Hirdetések </h1>
+            <h1> {server} </h1>
             <Form>
                 <Input type="text" value={searchTerm} className="search-input" onChange={(value) => setSearchTerm(value.target.value)} placeholder="Cím" />
                 <Dropdown className="category-dropdown" isOpen={dropdownOpen} toggle={toggle}>
@@ -85,6 +83,6 @@ const PostsPage = () => {
             <PostList posts={posts} isViewed={false} isOwn={false} prev="/posts" />
         </div>
     );
-}
+};
 
-export default PostsPage;
+export default ServerViewPage;

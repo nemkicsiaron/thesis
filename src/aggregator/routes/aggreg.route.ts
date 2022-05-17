@@ -6,6 +6,7 @@ import Post from "../interfaces/post";
 import generalquery from "../crud/generalquery";
 import servercatquery from "../crud/servercatquery";
 import deletepost from "../crud/deletepost";
+import listallposts from "../functions/listallposts";
 
 const aggregrouter = Router();
 
@@ -37,11 +38,18 @@ aggregrouter.get('/allcat', async (req, res) => {
     }
 });
 
-aggregrouter.get('/allposts', async (_, res) => {
+aggregrouter.get('/allposts', async (req, res) => {
     try {
         res.setHeader('Content-Type', 'application/json');
         res.setHeader('Access-Control-Allow-Origin', '*');
-        res.status(200).json(await generalquery("", "", "", "", ""));
+        const server = req.query.server?.toString().trim() ?? "";
+        var allposts: Post[] = await listallposts(server);
+        if(allposts) {
+            res.status(200).json(allposts);
+        }
+        else {
+            res.status(500).json("There was a problem with the request!");
+        }
     } catch (error) {
         console.error(error);
         res.status(500).json(error);

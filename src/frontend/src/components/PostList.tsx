@@ -22,7 +22,7 @@ const PostList = ({posts, isViewed, isOwn, prev}: {posts: Post[], isViewed: bool
             })()
         }
     }
-    return (
+    return ( posts &&
         <ListGroup className="postlist-group">
             {   posts?.map(post => (
                         <ListGroupItem className="lg-item" key={post.signature}>

@@ -5,12 +5,14 @@ const prisma = new PrismaClient();
 export default async function findpost(searchterm: string, minprice: string, maxprice: string, author: string, signature: string): Promise<Post[] | null> {
     var res;
     if (author.length > 0) {
+        console.log("authored search");
         res = await prisma.post.findMany({
             where: {
                 author: author,
             }
         });
     } else if(signature) {
+        console.log("signature search");
         res = await prisma.post.findMany({
             where: {
                 published: true,
@@ -20,6 +22,7 @@ export default async function findpost(searchterm: string, minprice: string, max
         });
     }
     else {
+        console.log("general search");
         res = await prisma.post.findMany({
             where: {
                 published: true

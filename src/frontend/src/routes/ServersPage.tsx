@@ -36,9 +36,9 @@ const ServersPage = () => {
             <ListGroup>
             {   (servers).map(server => (
                         <ListGroupItem className="lg-item" key={server.address}>
-                            <strong>{server.address}</strong>
-                            <p>{server.lastactive.toString()}</p>
-                            <Button type="button" className="btn" id="server-list-btn" color="success" size="lg" tag={Link} to="/:thatserver">Megtekintés</Button>
+                            <strong>Szerver címe: {server.address}</strong>
+                            <p>Utoljára elérhető: {server.lastactive.toString()}</p>
+                            <Button type="button" className="btn" id="server-list-btn" color="success" size="lg" tag={Link} to={"/server?server=" + encodeURIComponent(server.address)}>Megtekintés</Button>
                         </ListGroupItem>
             ))}
             </ListGroup>

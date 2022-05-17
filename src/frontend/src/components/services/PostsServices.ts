@@ -3,8 +3,10 @@ import { aggregatorUri } from "../../config/config";
 import IUser from "../../interfaces/user";
 import { importPrivateKey, importPublicKey, str2ab } from "./UserServices";
 
-export async function listAllPosts(): Promise<Post[]> {
-    const result = await fetch(`${aggregatorUri}/aggreg/allposts`, {
+export async function listAllPosts(server?: string): Promise<Post[]> {
+    const result = await fetch(`${aggregatorUri}/aggreg/allposts?` + new URLSearchParams({
+        server: server ?? ""
+    }), {
         method: "GET",
         headers: {
             Accept: "application/json",
@@ -12,10 +14,11 @@ export async function listAllPosts(): Promise<Post[]> {
         }
     });
     const posts = await result.json();
-    return posts.posts;
+    // console.log("Posts: ", posts);
+    return posts;
 }
 
-export async function findPost(searchterm: string, category: string, minprice: string, maxprice: string, signature: string): Promise<Post[]> {
+export async function findPost(searchterm: string, category: string, minprice: string, maxprice: string, signature: string, server?: string): Promise<Post[]> {
     try {
         if(category.includes("Minden")) category = "";
         console.log(new Date(), "Searching for:", searchterm, category, minprice, maxprice, signature);
@@ -24,7 +27,8 @@ export async function findPost(searchterm: string, category: string, minprice: s
                 category: category,
                 minprice: minprice,
                 maxprice: maxprice,
-                signature: signature
+                signature: signature,
+                server: server ?? ""
             }), {
             method: "GET",
             headers: {
@@ -34,7 +38,7 @@ export async function findPost(searchterm: string, category: string, minprice: s
         });
         if(result.ok) {
             const posts = await result.json();
-            //console.log(posts);
+            console.log("Posts got with fetch" + posts);
             return posts;
         }
         else {

@@ -17,6 +17,7 @@ import CreatePage from './routes/CreatePage';
 import OwnPage from './routes/OwnPage';
 import ViewPostPage from './routes/ViewPostPage';
 import EditPage from './routes/EditPage';
+import ServerViewPage from './routes/ServerViewPage';
 
 const App = () => {
   return (
@@ -39,6 +40,7 @@ const Main = () => {
                       <Route path="/" element={<Home />} />
                       <Route path="/profile" element={<ProfilePage />} />
                       <Route path="/servers" element={<Servers />} />
+                      <Route path="/server" element={<ServerViewPage />} />
                       <Route path="/posts" element={<PostsPage />} />
                       <Route path="/view" element={<ViewPostPage />} />
                       <Route path="/edit" element={<EditPage />} />
