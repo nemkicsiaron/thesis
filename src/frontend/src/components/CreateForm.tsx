@@ -2,7 +2,7 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Form, FormFeedback, Input } from "reactstrap";
 import { Failed, Idle, useLogin } from "../hooks/LoginHooks";
-import { useCreate } from "../hooks/UserHooks";
+import { useCreate, useUpdate } from "../hooks/UserHooks";
 import Post from "../interfaces/post";
 import IServer from "../interfaces/servers";
 import { LoggedIn, LoggedOut, LoginContext } from "./contexts/LoginProvider";
@@ -28,6 +28,7 @@ const CreateForm = ({oldpost, edit}: {oldpost: Post | null, edit: boolean}) => {
     const [cdropdownOpen, setCDropdownOpen] = React.useState(false);
     const ctoggle = () => setCDropdownOpen(prevState => !prevState);
     const useCreateHook: any = useCreate();
+    const useUpdateHook: any = useUpdate();
 
     React.useEffect(() => {
         if(loginStatus instanceof Failed) {
@@ -77,12 +78,22 @@ const CreateForm = ({oldpost, edit}: {oldpost: Post | null, edit: boolean}) => {
                     window.alert("Minden szükséges mezőt ki kell tölteni!");
                     return;
                 }
-                const create = useCreateHook.create(newPost, server.address);
-                if(create.error) window.alert(`Hirdetés létrehozása sikertelen: ${create.message}`);
-                else {
-                    window.alert("Hirdetés létrehozása sikeres!");
-                    navigate("/manage");
+
+                var error: boolean = false;
+                var message: string = "";
+                if(edit){
+                    const edited = await useUpdateHook.update(newPost, server.address, oldpost?.signature ?? "error");
+                    error = edited.error;
+                    message = edited.message;
+
+                } else {
+                    const created = await useCreateHook.create(newPost, server.address);
+                    error = created.error;
+                    message = created.message;
                 }
+                window.alert(message);
+
+                if(!error) navigate("/manage");
 
             })();
         }
@@ -151,7 +162,7 @@ const CreateForm = ({oldpost, edit}: {oldpost: Post | null, edit: boolean}) => {
                         <Input type="textarea" value={dummyContent} className="description-input" onChange={(value) => setDummyContent(value.target.value)} placeholder="Leírás" />
                         <Input type="checkbox" checked={dummyPublish} onChange={(value) => setDummyPublish(value.target.checked)} /> Publikus
                     </Form>
-                    <Button type="button" onClick={handleSubmit} className="btn list-btn" color="success" size="lg">Létrehozás</Button>
+                    <Button type="button" onClick={handleSubmit} className="btn list-btn" color="success" size="lg">Ok</Button>
                     <Button type="button" className="btn back-btn" color="danger" size="lg" tag={Link} to="/manage">Mégsem</Button>
                 </div>
             )}

@@ -7,6 +7,8 @@ import generalquery from "../crud/generalquery";
 import servercatquery from "../crud/servercatquery";
 import deletepost from "../crud/deletepost";
 import listallposts from "../functions/listallposts";
+import updatepost from "../crud/updatepost";
+import createpost from "../crud/createpost";
 
 const aggregrouter = Router();
 
@@ -84,7 +86,7 @@ aggregrouter.get('/findpost', async (req, res) => {
             if(postsres.error) res.status(500).json(postsres.message);
             else {
                 console.log("Done:", postsres.posts);
-                res.status(200).json(postsres.posts);
+                res.status(200).json(postsres);
             }
         } catch (error: any) {
             console.error(error);
@@ -96,7 +98,7 @@ aggregrouter.get('/findpost', async (req, res) => {
         if(postsres.error) res.status(500).json(postsres.message);
         else {
             console.log("Done:", postsres.posts);
-            res.status(200).json(postsres.posts);
+            res.status(200).json(postsres);
         }
     }
 });
@@ -118,7 +120,7 @@ aggregrouter.get('/findownpost', async (req, res) => {
     if(postsres.error) res.status(500).json(postsres.message);
     else {
         console.log("Done:", postsres.posts);
-        res.status(200).json(postsres.posts);
+        res.status(200).json(postsres);
     }
 });
 
@@ -128,20 +130,19 @@ aggregrouter.post('/newpost', async (req, res) => {
 
     const data = await req.body;
     var serveraddr: string = data.server?.toString();
-    if(!serveraddr) serveraddr = serverslist().find(s => calculateBetweenDates(s.lastactive, new Date()) < 15)?.address ?? "";
+    if(!serveraddr) serveraddr = serverslist().find(s => calculateBetweenDates(s.lastactive, new Date()) < 15 && s.address === serveraddr)?.address ?? "";
     //console.log(serveraddr);
     const newpost: Post = data.post;
-
-    const createres = await fetch(serveraddr + "/api/newpost", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-            },
-        body: JSON.stringify(newpost)
-    });
-    const success = await createres.json();
-    if(success && createres.ok && 'signature' in success) res.status(201).json(success);
-    else res.status(500).json(success);
+    if(!newpost || !('signature'in newpost)){
+        res.status(400).json("Invalid post");
+        return;
+    }
+    const createres = await createpost(newpost, serveraddr);
+    if(createres.error) res.status(500).json(createres.message);
+    else {
+        console.log("Done:", createres.posts);
+        res.status(200).json(createres);
+    }
 });
 
 aggregrouter.delete('/deletepost', async (req, res) => {
@@ -166,10 +167,10 @@ aggregrouter.delete('/deletepost', async (req, res) => {
     }
 
     try {
-        const success = await deletepost(deletedpost);
-        console.log(success);
-        if(success) res.status(200).json(success);
-        else res.status(500).json("There was an error deleting the post");
+        const deleteres = await deletepost(deletedpost);
+        //console.log(success);
+        if(!deleteres.error) res.status(200).json(deleteres);
+        else res.status(500).json("There was an error deleting the post: " + deleteres.message);
     } catch(error: any) {
         console.error(error);
         res.status(500).json(error.message);
@@ -177,7 +178,30 @@ aggregrouter.delete('/deletepost', async (req, res) => {
 });
 
 aggregrouter.put('/updatepost', async (req, res) => {
-    console.log(req.body);
+    //console.log(req.body);
+    const data = await req.body;
+    var serveraddr: string = data.server?.toString();
+    if(!serveraddr) serveraddr = serverslist().find(s => calculateBetweenDates(s.lastactive, new Date()) < 15 && s.address === serveraddr)?.address ?? "";
+    //console.log(serveraddr);
+    const newpost: Post = data.post;
+    if(!newpost || !('signature'in newpost)){
+        res.status(400).json("Invalid post");
+        return;
+    }
+    const oldsignature: string = data.oldsignature;
+    if(!oldsignature) {
+        res.status(400).json("Invalid old signature");
+        return;
+    }
+    try {
+        const success = await updatepost(newpost, oldsignature);
+        if(!success.error) res.status(200).json(success);
+        else res.status(500).json("There was an error updating the post: " + success.message);
+    } catch(error: any) {
+        console.error(error);
+        res.status(500).json(error.message);
+    }
+
 });
 
 export default aggregrouter;

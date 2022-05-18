@@ -1,8 +1,9 @@
 import { Post, PrismaClient } from "@prisma/client";
+import APIReturn from "../util/return";
 
 const prisma = new PrismaClient();
 
-export default async function newpost(post: Post): Promise<Post | null> {
+export default async function newpost(post: Post): Promise<APIReturn> {
 
     try {
         await prisma.category.upsert({
@@ -23,9 +24,17 @@ export default async function newpost(post: Post): Promise<Post | null> {
                 signature: post.signature
             },
         });
-        return newPost;
-    } catch (error) {
+        return {
+            posts: [newPost],
+            error: false,
+            message: "Post created successfully"
+        };
+    } catch (error: any) {
         console.error(error);
-        return null;
+        return {
+            posts: [],
+            error: true,
+            message: error.message || error
+        };
     }
 }

@@ -1,11 +1,12 @@
-import { Post, PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
+import APIReturn from "../util/return";
 
 const prisma = new PrismaClient();
 
-export default async function deletepost(title: string, author: string, signature?: string) {
+export default async function deletepost(title: string, author: string, signature?: string): Promise<APIReturn> {
 
     try {
-        await prisma.post.deleteMany({
+        const post = await prisma.post.deleteMany({
             where: {
             title,
             author,
@@ -13,14 +14,16 @@ export default async function deletepost(title: string, author: string, signatur
             },
         });
         return {
-            status: "success",
-            message: "Post deleted",
+            posts: [post],
+            error: false,
+            message: "Post deleted successfully"
         };
     } catch (error: any) {
         console.error(error);
         return {
-            status: "error",
-            message: error.message,
+            posts: [],
+            error: true,
+            message: error.message || error
         };
     }
 

@@ -1,5 +1,6 @@
 import { serverslist } from "../indexing/indexer";
 import Post from "../interfaces/post";
+import APIReturn from "../interfaces/return";
 import IServer from "../interfaces/servers";
 
 async function filterbycategory(category: string): Promise<IServer[]> {
@@ -13,7 +14,7 @@ async function filterbycategory(category: string): Promise<IServer[]> {
     return results.filter(x => x.hascategory).map(x => x.server);
 };
 
-export default async function servercatquery(searchterm: string, category: string, minprice: string, maxprice: string, author: string, signature: string) {
+export default async function servercatquery(searchterm: string, category: string, minprice: string, maxprice: string, author: string, signature: string): Promise<APIReturn> {
     console.log(new Date(), "Searching category including servers for: " + searchterm);
 
     const goodservers = await filterbycategory(category);
@@ -32,7 +33,7 @@ export default async function servercatquery(searchterm: string, category: strin
                     author: author,
                     signature: signature
                 }));
-                posts.push(...(await res.json()));
+                posts.push(...(await res.json()).posts);
             } catch (error: any) {
                 console.error(error);
                 return { posts: [], error: true, message: error.message };
@@ -47,7 +48,7 @@ export default async function servercatquery(searchterm: string, category: strin
                     maxprice: maxprice,
                     signature: signature
                 })));
-                posts.push(...(await res.json()));
+                posts.push(...(await res.json()).posts);
             } catch (error: any) {
                 console.error(error);
                 return { posts: [], error: true, message: error.message };

@@ -1,10 +1,11 @@
 import { Post, PrismaClient } from "@prisma/client";
+import APIReturn from "../util/return";
 
 const prisma = new PrismaClient();
 
-export default async function updatepost(updatedpost: Post, oldsignature: string) {
+export default async function updatepost(updatedpost: Post, oldsignature: string): Promise<APIReturn> {
     try{
-        await prisma.post.upsert({
+        const post = await prisma.post.upsert({
             where: {
                 signature: oldsignature
             },
@@ -12,13 +13,15 @@ export default async function updatepost(updatedpost: Post, oldsignature: string
             create: {...updatedpost}
         });
         return {
-            status: "success",
+            posts: [post],
+            error: false,
             message: "Post updated successfully"
         };
     } catch(error: any) {
         console.error(error);
         return {
-            status: "error",
+            posts: [],
+            error: true,
             message: error.message
         };
 

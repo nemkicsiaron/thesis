@@ -65,7 +65,8 @@ router.get('/findpost', async (req, res) => {
     try {
         const posts = await findpost(searchterm, minprice, maxprice, "", signature);
         // console.log(new Date(), ":", posts);
-        res.status(200).json(posts);
+        if(posts.error) res.status(500).json("There was a problem with finding own post: " + posts.message);
+        else res.status(200).json(posts);
     }
     catch (error) {
         console.error(error);
@@ -85,8 +86,9 @@ router.get('/findownpost', async (req, res) => {
 
     try {
         const posts = await findpost(searchterm, minprice, maxprice, author, signature);
-        console.log(new Date(), ":", posts);
-        res.status(200).json(posts);
+        console.log(new Date(), ":", posts.posts);
+        if(posts.error) res.status(500).json("There was a problem with finding own post: " + posts.message);
+        else res.status(200).json(posts);
     }
     catch (error) {
         console.error(error);
@@ -113,8 +115,8 @@ router.post('/newpost', async (req, res) => {
     console.log(post);
 
     const createres = await newpost(post);
-    if(createres) res.status(200).json(createres);
-    else res.status(500).json("There was a problem with creating the post!");
+    if(!createres.error) res.status(200).json(createres);
+    else res.status(500).json("There was a problem with creating the post: " + createres.message);
 });
 
 router.delete('/deletepost', async (req, res) => {
@@ -125,16 +127,16 @@ router.delete('/deletepost', async (req, res) => {
         return;
     }
     const deleteres = await deletepost(post.title, post.author, post.signature);
-    if(deleteres.status === "success") res.status(200).json(deleteres.message);
-    else res.status(500).json("There was a problem with deleting the post!");
+    if(!deleteres.error) res.status(200).json(deleteres);
+    else res.status(500).json("There was a problem with deleting the post: " + deleteres.message);
 });
 
 router.put('updatepost', async (req, res) => {
     const data = await req.body;
 
     const updateres = await updatepost(data.updatepost, data.oldsignature);
-    if(updateres.status === "success") res.status(200).json(updateres.message);
-    else res.status(500).json("There was a problem with updating the post!");
+    if(!updateres.error) res.status(200).json(updateres);
+    else res.status(500).json("There was a problem with updating the post: " + updateres.message);
 });
 
 export default router;

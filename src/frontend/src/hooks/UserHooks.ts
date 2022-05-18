@@ -60,3 +60,25 @@ export function useCreate() {
     }
     return {create: create};
 }
+
+export function useUpdate() {
+    const update = async (post: Post, server: string, oldsignature: string) => {
+        try{
+            const result = await fetch(`${aggregatorUri}/aggreg/updatepost`, {
+                method: "PUT",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({post: post, server: server, oldsignature: oldsignature})
+            });
+            const postdone: Post = await result.json();
+            console.log("Post updated:", postdone);
+            return {postdone: postdone, message: "Sikeres frissítés!"};
+        } catch (error) {
+            console.error(error);
+            return {message: "Hiba történt: " + error, error: true}
+        };
+    }
+    return {update: update};
+}

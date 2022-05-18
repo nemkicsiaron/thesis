@@ -1,7 +1,8 @@
 import { serverslist } from "../indexing/indexer";
 import Post from "../interfaces/post";
+import APIReturn from "../interfaces/return";
 
-export default async function generalquery(searchterm: string, minprice: string, maxprice: string, author: string, signature: string) {
+export default async function generalquery(searchterm: string, minprice: string, maxprice: string, author: string, signature: string): Promise<APIReturn> {
     console.log(new Date(), "Searching all servers for: " + searchterm + " with minprice: " + minprice + " and maxprice: " + maxprice + " and author: " + author);
 
     var posts: Post[] = [];
@@ -17,7 +18,7 @@ export default async function generalquery(searchterm: string, minprice: string,
                     author: author,
                     signature: signature
                 }));
-                posts.push(...(await res.json()));
+                posts.push(...(await res.json()).posts);
             } catch (error: any) {
                 console.error(error);
                 return { posts: [], error: true, message: error.message };
@@ -34,7 +35,7 @@ export default async function generalquery(searchterm: string, minprice: string,
                     maxprice: maxprice,
                     signature: signature
                 }));
-                posts.push(...(await res.json()));
+                posts.push(...(await res.json()).posts);
             } catch (error: any) {
                 console.error(error);
                 return { posts: [], error: true, message: error.message };

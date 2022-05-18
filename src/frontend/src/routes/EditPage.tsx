@@ -46,15 +46,11 @@ const EditPage = () => {
         return () => {}
     }, [uri, loginState]);
 
-    return (
-        <>
-            ( oldpost &&
+    return ( oldpost &&
             <div className="main-page">
                 <h1>Hirdetés szerkesztése</h1>
                 <CreateForm oldpost={oldpost} edit={true}/>
             </div>
-            )
-        </>
     );
 }
 
