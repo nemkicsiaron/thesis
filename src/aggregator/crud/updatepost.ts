@@ -8,12 +8,15 @@ export default async function updatepost(post: Post, oldsignature: string, serve
         error: false,
         message: ""
     };
+    //console.log(new Date(), "Updating post: ", post, " on server: " + server);
+    const body = JSON.stringify({post: post, oldsignature: oldsignature});
+    //console.log(new Date(), "Body: ", body);
     const options: RequestInit = {
         method: "PUT",
         headers: {
             "Content-Type": "application/json"
             },
-        body: JSON.stringify({post: post, oldsignature: oldsignature})
+        body: body
     };
 
     if (!server) {
@@ -21,6 +24,7 @@ export default async function updatepost(post: Post, oldsignature: string, serve
         await Promise.all(servers.map(async s => {
             try {
                 const res = await fetch(s.address + '/api/updatetepost', options);
+                console.log("Result: " + res)
                 const data: APIReturn = await res.json();
                 updated = data
             } catch (error: any) {
@@ -31,6 +35,7 @@ export default async function updatepost(post: Post, oldsignature: string, serve
     } else {
         try {
             const res = await fetch(server + "/api/updatepost", options);
+            console.log(res)
             const data: APIReturn = await res.json();
             updated = data
         } catch (error: any) {

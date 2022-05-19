@@ -66,7 +66,7 @@ router.get('/findpost', async (req, res) => {
         const posts = await findpost(searchterm, minprice, maxprice, "", signature);
         // console.log(new Date(), ":", posts);
         if(posts.error) res.status(500).json("There was a problem with finding own post: " + posts.message);
-        else res.status(200).json(posts);
+        else res.status(200).json(posts.posts);
     }
     catch (error) {
         console.error(error);
@@ -88,7 +88,7 @@ router.get('/findownpost', async (req, res) => {
         const posts = await findpost(searchterm, minprice, maxprice, author, signature);
         console.log(new Date(), ":", posts.posts);
         if(posts.error) res.status(500).json("There was a problem with finding own post: " + posts.message);
-        else res.status(200).json(posts);
+        else res.status(200).json(posts.posts);
     }
     catch (error) {
         console.error(error);
@@ -131,10 +131,11 @@ router.delete('/deletepost', async (req, res) => {
     else res.status(500).json("There was a problem with deleting the post: " + deleteres.message);
 });
 
-router.put('updatepost', async (req, res) => {
+router.put('/updatepost', async (req, res) => {
     const data = await req.body;
-
-    const updateres = await updatepost(data.updatepost, data.oldsignature);
+    console.log(data)
+    const updateres = await updatepost(data.post, data.oldsignature);
+    console.log(updateres);
     if(!updateres.error) res.status(200).json(updateres);
     else res.status(500).json("There was a problem with updating the post: " + updateres.message);
 });

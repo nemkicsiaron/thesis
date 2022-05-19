@@ -1,7 +1,8 @@
 import Post from "../../interfaces/post";
 import { aggregatorUri } from "../../config/config";
 import IUser from "../../interfaces/user";
-import { importPrivateKey, importPublicKey, str2ab } from "./UserServices";
+import { importPublicKey } from "./UserServices";
+import APIReturn from "../../interfaces/return";
 
 export async function listAllPosts(server?: string): Promise<Post[]> {
     const result = await fetch(`${aggregatorUri}/aggreg/allposts?` + new URLSearchParams({
@@ -13,9 +14,13 @@ export async function listAllPosts(server?: string): Promise<Post[]> {
             "Content-Type": "application/json"
         }
     });
-    const posts = await result.json();
+    const postsres: APIReturn = await result.json();
+    console.log(postsres);
+    if(postsres.error) {
+        throw new Error(postsres.message);
+    }
     // console.log("Posts: ", posts);
-    return posts;
+    return postsres.posts;
 }
 
 export async function findPost(searchterm: string, category: string, minprice: string, maxprice: string, signature: string, server?: string): Promise<Post[]> {
@@ -37,9 +42,12 @@ export async function findPost(searchterm: string, category: string, minprice: s
             }
         });
         if(result.ok) {
-            const posts = await result.json();
+            const posts: APIReturn = await result.json();
             console.log("Posts got with fetch" + posts);
-            return posts;
+            if(posts.error) {
+                throw new Error(posts.message);
+            }
+            return posts.posts;
         }
         else {
             console.error("Error: " + result.status); // result.statusText
@@ -85,9 +93,9 @@ export async function findOwnPost(searchterm: string, category: string, minprice
                 "Content-Type": "application/json"
             }
         });
-        const posts: Post[] = await result.json();
-        if(!posts.length) return [];
-        return posts.filter(p => verifyPost(p.signature ?? "", author.publickey, new TextEncoder().encode(p.title + p.description)));
+        const postsres: APIReturn = await result.json();
+        if(postsres.error) { return []; }
+        return postsres.posts.filter((p: Post) => verifyPost(p.signature ?? "", author.publickey, new TextEncoder().encode(p.title + p.description)));
     } catch (error) {
         console.error(error);
         return [];
@@ -107,8 +115,11 @@ export async function deletePost(post: Post, server?: string) {
                 server: server ?? ""
             })
         });
-        const res = await result.json();
-        return res;
+        const res: APIReturn = await result.json();
+        if(res.error) {
+            throw new Error(res.message);
+        }
+        return res.posts;
     } catch (error) {
         console.error(error);
         return false;

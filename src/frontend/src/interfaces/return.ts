@@ -1,5 +1,4 @@
-import { Post } from "@prisma/client";
-
+import Post from "./post";
 
 export default interface APIReturn {
     posts: Post[],

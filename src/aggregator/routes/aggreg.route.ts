@@ -9,6 +9,7 @@ import deletepost from "../crud/deletepost";
 import listallposts from "../functions/listallposts";
 import updatepost from "../crud/updatepost";
 import createpost from "../crud/createpost";
+import APIReturn from "../interfaces/return";
 
 const aggregrouter = Router();
 
@@ -45,7 +46,7 @@ aggregrouter.get('/allposts', async (req, res) => {
         res.setHeader('Content-Type', 'application/json');
         res.setHeader('Access-Control-Allow-Origin', '*');
         const server = req.query.server?.toString().trim() ?? "";
-        var allposts: Post[] = await listallposts(server);
+        var allposts: APIReturn = await listallposts(server);
         if(allposts) {
             res.status(200).json(allposts);
         }
@@ -182,19 +183,19 @@ aggregrouter.put('/updatepost', async (req, res) => {
     const data = await req.body;
     var serveraddr: string = data.server?.toString();
     if(!serveraddr) serveraddr = serverslist().find(s => calculateBetweenDates(s.lastactive, new Date()) < 15 && s.address === serveraddr)?.address ?? "";
-    //console.log(serveraddr);
     const newpost: Post = data.post;
+    //console.log(newpost);
     if(!newpost || !('signature'in newpost)){
         res.status(400).json("Invalid post");
         return;
     }
     const oldsignature: string = data.oldsignature;
-    if(!oldsignature) {
+    if(!oldsignature.trim()) {
         res.status(400).json("Invalid old signature");
         return;
     }
     try {
-        const success = await updatepost(newpost, oldsignature);
+        const success = await updatepost(newpost, oldsignature, serveraddr);
         if(!success.error) res.status(200).json(success);
         else res.status(500).json("There was an error updating the post: " + success.message);
     } catch(error: any) {

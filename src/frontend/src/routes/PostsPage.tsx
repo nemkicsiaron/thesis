@@ -21,7 +21,7 @@ import "./styles/Posts.scss";
 const PostsPage = () => {
     const [posts, setPosts] = React.useState<Post[]>([]);
     const [categories, setCategories] = React.useState<string[]>(["Minden kategória"]);
-    const [category, setCategory] = React.useState("");
+    const [category, setCategory] = React.useState(categories[0]);
     const [isLoading, setIsLoading] = React.useState(true);
     const [searchTerm, setSearchTerm] = React.useState("");
     const [minPrice, setMinPrice] = React.useState("0");

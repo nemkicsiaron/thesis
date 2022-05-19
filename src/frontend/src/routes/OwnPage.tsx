@@ -73,7 +73,7 @@ const OwnPage = () => {
         <LoginProvider>
         <div className="main-page">
             <h1>Saját Hirdetések</h1>
-            { loginState instanceof LoggedIn && (
+            { loginState instanceof LoggedIn && posts && (
             <>
             <Form>
                 <Input type="text" value={searchTerm} className="search-input" onChange={(value) => setSearchTerm(value.target.value)} placeholder="Cím" />

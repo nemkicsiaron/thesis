@@ -1,7 +1,8 @@
 import { serverslist } from "../indexing/indexer";
 import Post from "../interfaces/post";
+import APIReturn from "../interfaces/return";
 
-export default async function listallposts(server?: string): Promise<Post[]> {
+export default async function listallposts(server?: string): Promise<APIReturn> {
     console.log("Searching for all posts!");
 
     var posts: Post[] = [];
@@ -16,10 +17,11 @@ export default async function listallposts(server?: string): Promise<Post[]> {
                 maxprice: ""
             }));
             posts.push(...(await res.json()));
-        } catch (error) {
+        } catch (error: any) {
             console.error(error);
+            return { posts: [], error: true, message: error.message || error };
         }
     }));
 
-    return posts;
+    return { posts: posts, error: false, message: "Success" };
 }

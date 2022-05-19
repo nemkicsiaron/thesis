@@ -33,7 +33,7 @@ export default async function servercatquery(searchterm: string, category: strin
                     author: author,
                     signature: signature
                 }));
-                posts.push(...(await res.json()).posts);
+                posts.push(...(await res.json()));
             } catch (error: any) {
                 console.error(error);
                 return { posts: [], error: true, message: error.message };
@@ -48,7 +48,7 @@ export default async function servercatquery(searchterm: string, category: strin
                     maxprice: maxprice,
                     signature: signature
                 })));
-                posts.push(...(await res.json()).posts);
+                posts.push(...(await res.json()));
             } catch (error: any) {
                 console.error(error);
                 return { posts: [], error: true, message: error.message };

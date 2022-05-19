@@ -14,9 +14,9 @@ export default async function deletepost(title: string, author: string, signatur
             },
         });
         return {
-            posts: [post],
+            posts: [],
             error: false,
-            message: "Post deleted successfully"
+            message: "Post deleted successfully: " + JSON.stringify(post)
         };
     } catch (error: any) {
         console.error(error);
