@@ -19,7 +19,7 @@ const InfoPage = () => {
                     <p> Természetesen a <a href="/login">Bejelentkezés</a> is a Profil menüben elérhető. A bejelentkezéshez a <i>.ppem</i> kiterjesztésű fájl és a jelszó megadása szükséges.
                     Onnantól a használat ideje alatt a weboldal bejelentkezve tartja a felhasználót. </p>
                     <h3>Kijelentkezés</h3>
-                    <p> A kijelentkezéshez elég megnyomni a respektív feliratú gombot a <a href="/profile">Profil kezelése</a> menüben. </p>
+                    <p> A kijelentkezéshez elég megnyomni a megfelelő feliratú gombot a <a href="/profile">Profil kezelése</a> menüben. </p>
                 </div>
                 <h2>Hirdetések kezelése</h2>
                 <div className="info-tab">
