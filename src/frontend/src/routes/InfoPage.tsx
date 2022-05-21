@@ -44,7 +44,7 @@ const InfoPage = () => {
                         Jelen esetben ez azt jelenti, hogy az adatok egy tetszőlegesen kihelyezett szerverek hálózatán van elhelyezve.
                         Így a rendszer annyira erős, mint amennyire a mögötte elhelyezkedő támogató közösség. </p>
                     <h3>Hogyan csatlakozhatok én is ehhez a hálozathoz?</h3>
-                    <p> Egyszerű! Letöltöd az adattároló szerver fájljait, majd a szervert folderében futtatod a következő parancsokat parancssorból:
+                    <p> Egyszerű! Letöltöd az adattároló szerver fájljait, majd a szerver folderében futtatod a következő parancsokat parancssorból:
                         <br/>
                         <code>
                             npm install
