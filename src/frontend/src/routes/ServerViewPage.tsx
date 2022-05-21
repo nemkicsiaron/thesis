@@ -29,7 +29,7 @@ const ServerViewPage = () => {
 
     React.useEffect(() => {
         const params = new URLSearchParams(window.location.search);
-        setServer(decodeURIComponent(params.get("post") ?? ""));
+        setServer(decodeURIComponent(params.get("server") ?? ""));
     }, []);
 
     React.useEffect(() => {
@@ -61,7 +61,8 @@ const ServerViewPage = () => {
 
     return (
         <div className="main-page">
-            <h1> {server} </h1>
+            <h1> Szerver </h1>
+            <p className="server-addr"> {server} </p>
             <Form>
                 <Input type="text" value={searchTerm} className="search-input" onChange={(value) => setSearchTerm(value.target.value)} placeholder="Cím" />
                 <Dropdown className="category-dropdown" isOpen={dropdownOpen} toggle={toggle}>

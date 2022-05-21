@@ -1,12 +1,13 @@
 $buttoncolor: #198754;
 
-.list-group{
+.postlist-group{
     :hover {
-        filter: brightness(80%);
-        transition: 0.30s;
-        -webkit-transition: 0.30s;
-        -moz-transition: 0.30s;
-        -ms-transition: 0.30s;
+        background-color: #d2d2d2;
+        transition: 0.5s;
+        -webkit-transition: 0.5s;
+        -moz-transition: 0.5s;
+        -o-transition: 0.5s;
+
     }
     strong {
         font-size: 1.2rem;
@@ -50,12 +51,28 @@ li.list-group-item {
     float: right;
 }
 
+#post-list-btn:hover{
+    background-color: #157347;
+    border-color: #146c43;
+}
+
+#edit-list-btn:hover{
+    background-color: #157347;
+    border-color: #146c43;
+}
+
+#delete-list-btn:hover{
+    background-color: #bb2d3b;
+    border-color: #821d28;
+}
+
 .search-input {
     max-width: 80%;
     margin-bottom: 0.41%;
 }
 
 .price-input {
+    display: block;
     max-width: 39.8%;
     margin-right: .3%;
     display: inline;

@@ -17,7 +17,7 @@ const CreateForm = ({oldpost, edit}: {oldpost: Post | null, edit: boolean}) => {
     const [newPost, setNewPost] = React.useState<Post>();
     const [dummyTitle, setDummyTitle] = React.useState(oldpost?.title ?? "");
     const [dummyContent, setDummyContent] = React.useState(oldpost?.description ?? "");
-    const [dummyPrice, setDummyPrice] = React.useState(oldpost?.price ?? "0");
+    const [dummyPrice, setDummyPrice] = React.useState(oldpost?.price ?? "");
     const [dummyPublish, setDummyPublish] = React.useState(oldpost?.published ?? true);
     const [servers, setServers] = React.useState<IServer[]>([]);
     const [server, setServer] = React.useState<IServer>();
@@ -129,6 +129,10 @@ const CreateForm = ({oldpost, edit}: {oldpost: Post | null, edit: boolean}) => {
         }
 
     }
+    function containsSpecialChars(str: string) {
+        const specialChars: RegExp = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+        return specialChars.test(str);
+      }
 
     return (
         <>
@@ -155,9 +159,9 @@ const CreateForm = ({oldpost, edit}: {oldpost: Post | null, edit: boolean}) => {
                                 ))}
                             </DropdownMenu>
                         </Dropdown>
-                        <Input invalid={dummyTitle.trim().length <= 0} type="text" value={dummyTitle} className="search-input" onChange={(value) => setDummyTitle(value.target.value)} placeholder="Cím" />
-                        <FormFeedback>A cím nem lehet üres!</FormFeedback>
-                        <Input invalid={Number.parseInt(dummyPrice) < 0 || dummyPrice.length <= 0} type="number" value={dummyPrice} className="price-input" onChange={(value) => setDummyPrice(value.target.value)} placeholder="Ár" />
+                        <Input invalid={dummyTitle.trim().length <= 0 || containsSpecialChars(dummyTitle)} type="text" value={dummyTitle} className="title-input" onChange={(value) => setDummyTitle(value.target.value)} placeholder="Cím" />
+                        <FormFeedback>A cím nem lehet üres és nem tartalmazhat speciális karaktereket!</FormFeedback>
+                        <Input invalid={Number.parseInt(dummyPrice) < 0 || dummyPrice.trim().length <= 0} type="number" value={dummyPrice} className="price-input" onChange={(value) => setDummyPrice(value.target.value)} placeholder="Ár" />
                         <FormFeedback>Az ár pozitív vagy 0 kell legyen!</FormFeedback>
                         <Input type="textarea" value={dummyContent} className="description-input" onChange={(value) => setDummyContent(value.target.value)} placeholder="Leírás" />
                         <Input type="checkbox" checked={dummyPublish} onChange={(value) => setDummyPublish(value.target.checked)} /> Publikus

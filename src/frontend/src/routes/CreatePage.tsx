@@ -1,6 +1,8 @@
 import React from "react";
 import CreateForm from "../components/CreateForm";
 
+import "./styles/Create.scss";
+
 const CreatePage = () =>
 {
     return (

@@ -25,34 +25,34 @@ const PostList = ({posts, isViewed, isOwn, prev}: {posts: Post[], isViewed: bool
     return ( posts &&
         <ListGroup className="postlist-group">
             {   posts?.map(post => (
-                        <ListGroupItem className="lg-item" key={post.signature}>
-                                <div>
-                                <p>
-                                    <strong>{post.title}</strong>
-                                    <br />
-                                    Kategória: {post.category}
-                                    <br />
-                                    Leírás: {post.description}
-                                    <br />
-                                    Ár: {post.price} Ft
-                                    <br />
-                                    Feladó: {post.author}
-                                    <br />
-                                    Aláírás: {post.signature}
-                                    <br />
-                                    Nyilvános: {post.published ? "✔️" : "❌"}
-                                </p>
-                                {!isViewed &&
-                                    <Button type="button" className="btn" id="post-list-btn" color="success" size="lg" tag={Link} to={LinkPost(post.signature ?? "notfound")}>Megtekintés</Button>
-                                }
-                                {isOwn &&
-                                    <>
-                                    <Button type="button" className="btn" id="edit-list-btn" color="success" size="lg" tag={Link} to={LinkPostEdit(post.signature ?? "notfound")}>Módosítás</Button>
-                                    <Button type="button" className="btn" id="delete-list-btn" color="danger" size="lg" onClick={() => {handleDelete(post, prev);}}>Törlés</Button>
-                                    </>
-                                }
-                                </div>
-                        </ListGroupItem>
+                <ListGroupItem className="lg-item" key={post.signature}>
+                    <div>
+                        <p>
+                            <strong>{post.title}</strong>
+                            <br />
+                            Kategória: {post.category}
+                            <br />
+                            Leírás: {post.description}
+                            <br />
+                            Ár: {post.price} Ft
+                            <br />
+                            Feladó: {post.author}
+                            <br />
+                            Aláírás: {post.signature}
+                            <br />
+                            Nyilvános: {post.published ? "✔️" : "❌"}
+                        </p>
+                        {!isViewed &&
+                            <Button type="button" className="btn" id="post-list-btn" color="success" size="lg" tag={Link} to={LinkPost(post.signature ?? "notfound")}>Megtekintés</Button>
+                        }
+                        {isOwn &&
+                            <>
+                            <Button type="button" className="btn" id="edit-list-btn" color="success" size="lg" tag={Link} to={LinkPostEdit(post.signature ?? "notfound")}>Módosítás</Button>
+                            <Button type="button" className="btn" id="delete-list-btn" color="danger" size="lg" onClick={() => {handleDelete(post, prev);}}>Törlés</Button>
+                            </>
+                        }
+                    </div>
+                </ListGroupItem>
             ))}
             </ListGroup>
     );
