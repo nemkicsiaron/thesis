@@ -1,3 +1,4 @@
+import filterForUniques from "../functions/filterforuniques";
 import { serverslist } from "../indexing/indexer";
 import Post from "../interfaces/post";
 import APIReturn from "../interfaces/return";
@@ -56,5 +57,5 @@ export default async function servercatquery(searchterm: string, category: strin
         }));
     }
 
-    return { posts: posts, error: false, message:"Success" };
+    return { posts: filterForUniques(posts), error: false, message:"Success" };
 };

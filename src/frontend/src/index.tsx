@@ -15,7 +15,7 @@ import LoginProvider from './components/contexts/LoginProvider';
 import ManagePage from './routes/ManagePage';
 import CreatePage from './routes/CreatePage';
 import OwnPage from './routes/OwnPage';
-import ViewPostPage from './routes/ViewPostPage';
+import PostViewPage from './routes/PostViewPage';
 import EditPage from './routes/EditPage';
 import ServerViewPage from './routes/ServerViewPage';
 
@@ -42,7 +42,7 @@ const Main = () => {
                       <Route path="/servers" element={<Servers />} />
                       <Route path="/server" element={<ServerViewPage />} />
                       <Route path="/posts" element={<PostsPage />} />
-                      <Route path="/view" element={<ViewPostPage />} />
+                      <Route path="/view" element={<PostViewPage />} />
                       <Route path="/edit" element={<EditPage />} />
                       <Route path="/info" element = {<InfoPage />} />
                       <Route path='/register' element = {<RegisterPage />} />

@@ -9,7 +9,7 @@ import Post from "../interfaces/post";
 
 import "./styles/ViewPost.scss";
 
-const ViewPostPage = () => {
+const PostViewPage = () => {
     const [viewPost, setViewPost] = React.useState<Post>({
         title: "",
         description: "",
@@ -94,4 +94,4 @@ const ViewPostPage = () => {
     )
 }
 
-export default ViewPostPage;
+export default PostViewPage;

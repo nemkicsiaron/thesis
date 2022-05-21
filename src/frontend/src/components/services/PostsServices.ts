@@ -43,14 +43,14 @@ export async function findPost(searchterm: string, category: string, minprice: s
         });
         if(result.ok) {
             const posts: APIReturn = await result.json();
-            console.log("Posts got with fetch" + posts);
+            console.log("Posts got with fetch:", posts.posts);
             if(posts.error) {
-                throw new Error(posts.message);
+                throw new Error("APIReturn Error: " + posts.message);
             }
             return posts.posts;
         }
         else {
-            console.error("Error: " + result.status); // result.statusText
+            console.error("Error: " + result.status + " " + result.statusText); // result.statusText
             return [];
         };
     } catch (error) {
