@@ -48,7 +48,7 @@ const InfoPage = () => {
                     (Amennyiben a letöltés nem működik innen tudod beszerezni az <i>src/server</i> mappát: <Link to="https://github.com/nemkicsiaron/thesis">https://github.com/nemkicsiaron/thesis</Link>)
                         <br/>
                         <code>
-                            npm install
+                            npm install --omit=dev
                             <br/>
                             set PORT=6969 <strong> (tetszőleges port szám) </strong>
                             <br/>
