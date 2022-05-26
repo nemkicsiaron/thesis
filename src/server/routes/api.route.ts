@@ -36,12 +36,15 @@ router.get('/allposts', async (_, res) => {
 });*/
 
 router.get('/probe', (_, res) => {
-    const allok: boolean = true;
-    if(allok) {
+    listallcat().then((allcats) => {
         res.status(200).json({
             message: "Server available",
+            categories: JSON.stringify(allcats),
         });
-    }
+    }).catch((error) => {
+        console.error(error);
+        res.status(500).json(error);
+    });
 });
 
 router.post('/discovery', async (req, res) => {

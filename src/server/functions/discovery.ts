@@ -15,6 +15,9 @@ export default async function discovery(discoveryaddr: string, ownaddr: string):
         });
         return true;
     } catch (error) {
+        if(error instanceof TypeError && error.message.includes("Failed to fetch") && error.message.includes("UND_ERR_HEADERS_TIMEOUT")) {
+            console.error("Discovery server is not responding");
+        }
         console.error(error);
         return false;
     }

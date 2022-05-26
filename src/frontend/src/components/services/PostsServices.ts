@@ -1,5 +1,5 @@
 import Post from "../../interfaces/post";
-import { aggregatorUri } from "../../config/config";
+import { aggregatorUri } from "../../util/config";
 import IUser from "../../interfaces/user";
 import { importPublicKey } from "./UserServices";
 import APIReturn from "../../interfaces/return";

@@ -1,12 +1,13 @@
 import { Post, PrismaClient } from "@prisma/client";
+import listallcat from "../functions/listallcat";
 
 const prisma = new PrismaClient();
 const defCats = ["Járművek", "Elektronika", "Könyvek", "Kisállatok", "Sport és szabadidő", "Divat és szépségápolás", "Bútorzat", "Ingatlan", "Szolgáltatások", "Egyéb"].sort();
 
 export default async function(cats?: string[], posts?: Post[]): Promise<void> {
     console.log("Starting up...");
-    if(await prisma.category.findMany()) {
-        console.log("Categories already exist");
+    if((await listallcat()).length > 0) {
+        console.log("Categories already exist... aborting");
         return;
     }
 
@@ -14,11 +15,12 @@ export default async function(cats?: string[], posts?: Post[]): Promise<void> {
 
     try {
         Promise.all(categories.map(async c => {
-            await prisma.category.create({
+            const newCat = await prisma.category.create({
                 data: {
                     name: c
                 }
             });
+            console.log("Created category: " + newCat.name);
         }));
         console.log("Categories created successfully");
         if(posts) {

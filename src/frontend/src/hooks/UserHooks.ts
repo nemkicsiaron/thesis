@@ -1,4 +1,4 @@
-import { aggregatorUri } from "../config/config";
+import { aggregatorUri } from "../util/config";
 import Post from "../interfaces/post";
 
 export function useRegister() {

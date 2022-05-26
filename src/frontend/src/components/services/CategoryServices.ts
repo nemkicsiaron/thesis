@@ -1,4 +1,4 @@
-import { aggregatorUri } from "../../config/config";
+import { aggregatorUri } from "../../util/config";
 import Category from "../../interfaces/category";
 
 export async function listAllCategories(server?: string): Promise<string[]> {

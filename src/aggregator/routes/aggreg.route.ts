@@ -46,6 +46,7 @@ aggregrouter.get('/allposts', async (req, res) => {
         res.setHeader('Content-Type', 'application/json');
         res.setHeader('Access-Control-Allow-Origin', '*');
         const server = req.query.server?.toString().trim() ?? "";
+        //console.log("Server:", server);
         var allposts: APIReturn = await listallposts(server);
         if(allposts) {
             res.status(200).json(allposts);

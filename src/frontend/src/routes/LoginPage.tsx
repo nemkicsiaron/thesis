@@ -73,6 +73,7 @@ const LoginPage = () => {
             <h1>Bejelentkezés</h1>
             <Input type="file" onChange={handleFile}/>
             <Input type="password" placeholder="Jelszó" onChange={(value) => setPassword(value.target.value)} />
+            <p><br /><a href="/info" target="_blank" referrerPolicy="same-origin">Segítségre van szüksége a bejelentkezéshez?</a></p>
             <Button type="button" className="btn" color="success" size="lg" onClick={() => {handleSubmit(dummyuser)}}>Bejelentkezés</Button>
             <Button type="button" className="btn back-btn" color="danger" size="lg" tag={Link} to="/">Vissza a főoldalra</Button>
         </div>

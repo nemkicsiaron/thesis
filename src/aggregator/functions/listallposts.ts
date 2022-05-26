@@ -6,8 +6,8 @@ export default async function listallposts(server?: string): Promise<APIReturn> 
     console.log("Searching for all posts!");
 
     var posts: Post[] = [];
-    const list = serverslist().map(s => s.address);
-    const servers = (server && server in list) ? [server] : list;
+    const list: string[] = serverslist().map(s => s.address);
+    const servers = (server && (list.indexOf(server) != -1)) ? [server] : list;
 
     await Promise.all(servers.map(async s => {
         try {

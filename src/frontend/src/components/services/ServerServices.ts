@@ -1,5 +1,5 @@
 import IServer from "../../interfaces/servers";
-import { aggregatorUri } from "../../config/config";
+import { aggregatorUri } from "../../util/config";
 
 export default async function listAllServers(): Promise<IServer[]> {
 

@@ -12,7 +12,7 @@ const ServerViewPage = () => {
     const [category, setCategory] = React.useState("");
     const [isLoading, setIsLoading] = React.useState(true);
     const [searchTerm, setSearchTerm] = React.useState("");
-    const [minPrice, setMinPrice] = React.useState("0");
+    const [minPrice, setMinPrice] = React.useState("");
     const [maxPrice, setMaxPrice] = React.useState("");
     const [dropdownOpen, setDropdownOpen] = React.useState(false);
     const [server, setServer] = React.useState("");
@@ -29,7 +29,7 @@ const ServerViewPage = () => {
 
     React.useEffect(() => {
         const params = new URLSearchParams(window.location.search);
-        setServer(decodeURIComponent(params.get("server") ?? ""));
+        setServer(decodeURIComponent(params.get("server") ?? "ERROR"))
     }, []);
 
     React.useEffect(() => {
@@ -37,11 +37,14 @@ const ServerViewPage = () => {
     }, [posts]);
 
     React.useEffect(() => {
+        if(!server)
+            return;
         if(searchTerm.trim() && category.trim() &&
            (Number.parseInt(minPrice.trim()) >= 0) &&
            (Number.parseInt(maxPrice.trim()) >= 0 || maxPrice.trim() === "")) {
             console.log("Prices:", minPrice,maxPrice);
             (async () => {
+                console.log("Server:", server);
                 const goodposts = await findPost(searchTerm.trim(), category, minPrice, maxPrice, "", server);
                 console.log("Posts:", goodposts);
                 setPosts(goodposts);
@@ -57,9 +60,9 @@ const ServerViewPage = () => {
             })();
         }
         return () => {};
-    }, [isLoading]);
+    }, [isLoading, server]);
 
-    return (
+    return <>{server && (
         <div className="main-page">
             <h1> Szerver </h1>
             <p className="server-addr"> {server} </p>
@@ -83,7 +86,7 @@ const ServerViewPage = () => {
             <Label className="error-label">{isLoading ? "Hirdetések betöltése folyamatban!" : null}</Label>
             <PostList posts={posts} isViewed={false} isOwn={false} prev="/posts" />
         </div>
-    );
+    )}</>;
 };
 
 export default ServerViewPage;
