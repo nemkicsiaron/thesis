@@ -17,7 +17,7 @@ const InfoPage = () => {
                         A sikeres regisztráció eredménye egy <i>.ppem</i> kiterjesztésű fájl, melyben az RSA kulcs adatai tárolódnak.</p>
                     <h3>Bejelentkezés</h3>
                     <p> Természetesen a <Link to="/login">Bejelentkezés</Link> is a Profil menüben elérhető. A bejelentkezéshez a <i>.ppem</i> kiterjesztésű fájl és a jelszó megadása szükséges.
-                    Onnantól a használat ideje alatt a weboldal bejelentkezve tartja a felhasználót. </p>
+                    Onnantól a használat ideje alatt a weboldal bejelentkezve tartja a felhasználót. Elfelejtett jelszó esetén sajnos új profil létrehozása szükséges.</p>
                     <h3>Kijelentkezés</h3>
                     <p> A kijelentkezéshez elég megnyomni a megfelelő feliratú gombot a <Link to="/profile">Profil kezelése</Link> menüben. </p>
                 </div>
@@ -44,7 +44,7 @@ const InfoPage = () => {
                         Jelen esetben ez azt jelenti, hogy az adatok egy tetszőlegesen kihelyezett szerverek hálózatán van elhelyezve.
                         Így a rendszer annyira erős, mint amennyire a mögötte elhelyezkedő támogató közösség. </p>
                     <h3>Hogyan csatlakozhatok én is ehhez a hálozathoz?</h3>
-                    <p> Egyszerű! <Link to="..\util\p2p-pp-server.zip" target="_blank" download="server">Letöltöd az adattároló szerver fájljait</Link>, majd a szerver folderében futtatod a következő parancsokat parancssorból:
+                    <p> Egyszerű! <Link to="/p2p-pp-server.tar.gz" target="_blank" download>Letöltöd az adattároló szerver fájljait</Link>, majd a szerver folderében futtatod a következő parancsokat parancssorból:
                     (Amennyiben a letöltés nem működik innen tudod beszerezni az <i>src/server</i> mappát: <Link to="https://github.com/nemkicsiaron/thesis">https://github.com/nemkicsiaron/thesis</Link>)
                         <br/>
                         <code>
@@ -57,6 +57,8 @@ const InfoPage = () => {
                             set OWN_URI=sajatszerverem.com <strong> (tetszőleges URL amire kihelyezed a szervert) </strong>
                             <br/>
                             npx prisma migrate reset
+                            <br/>
+                            npx prisma db push
                             <br/>
                             npm run start
                         </code>

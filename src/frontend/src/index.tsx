@@ -50,6 +50,7 @@ const Main = () => {
                       <Route path="/manage" element={<ManagePage />} />
                       <Route path="/create" element={<CreatePage />} />
                       <Route path="/own" element={<OwnPage />} />
+                      <Route path="/p2p-pp-server.tar.gz" />
                       <Route path="*" element={<NotFoundPage />} />
                   </Routes>
               </div>
