@@ -7,14 +7,14 @@ const defCats = ["Járművek", "Elektronika", "Könyvek", "Kisállatok", "Sport 
 export default async function(cats?: string[], posts?: Post[]): Promise<void> {
     console.log("Starting up...");
     if((await listallcat()).length > 0) {
-        console.log("Categories already exist... aborting");
+        console.log("Categories already exist... aborting category init");
         return;
     }
 
     const categories = cats || defCats;
 
     try {
-        Promise.all(categories.map(async c => {
+        await Promise.all(categories.map(async c => {
             const newCat = await prisma.category.create({
                 data: {
                     name: c
@@ -24,7 +24,7 @@ export default async function(cats?: string[], posts?: Post[]): Promise<void> {
         }));
         console.log("Categories created successfully");
         if(posts) {
-            Promise.all(posts.map(async p => {
+            await Promise.all(posts.map(async p => {
                 await prisma.post.create({
                     data: {
                         ...p

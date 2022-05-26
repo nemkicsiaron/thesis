@@ -6,7 +6,7 @@ export default async function listallcat(): Promise<Category[]> {
     var allCats: Category[] = []
     try {
        allCats = await prisma.category.findMany();
-       console.log(allCats);
+    //    console.log(allCats);
     } catch (error) {
         console.error(error);
     }

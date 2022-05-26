@@ -39,7 +39,7 @@ router.get('/probe', (_, res) => {
     listallcat().then((allcats) => {
         res.status(200).json({
             message: "Server available",
-            categories: JSON.stringify(allcats),
+            categories: allcats,
         });
     }).catch((error) => {
         console.error(error);
@@ -53,7 +53,7 @@ router.post('/discovery', async (req, res) => {
     if(await discovery(discoveryaddr, ownUri)) {
         res.status(200).json({
             message: "Server available",
-            categories: JSON.stringify(allcats),
+            categories: allcats,
         });
     } else {
         res.status(500).json("There was a problem with discovery process!");

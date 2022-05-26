@@ -1,13 +1,15 @@
 import Category from "../interfaces/category";
 import IServer from "../interfaces/servers";
 import { probeeach } from "./keepalive";
+import ServerAlreadyRegistered from "./ServerError";
 
 var servers: IServer[] = [];
+
 
 export function indexer(addr: string, categories?: Category[]): number {
     if (servers.some(server => server.address === addr)){
         if(servers.some(server => JSON.stringify(server.categories) === JSON.stringify(categories)))
-            throw new Error("Server already registered on: " + addr);
+            throw new ServerAlreadyRegistered("Server already registered on: " + addr);
         else if (categories) {
             console.log("Updating categories for: " + addr);
             update(addr, categories);

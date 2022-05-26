@@ -39,7 +39,7 @@ const ServersPage = () => {
                         <ListGroupItem className="lg-item" key={server.address}>
                             <strong>Szerver címe: {server.address}</strong>
                             <p>Utoljára elérhető: {server.lastactive.toString()}</p>
-                            <p>Kategóriák: [{JSON.parse(server.categories.toString()).map((c: Category) => c.name).join(", ")}]</p>
+                            <p>Kategóriák: [{server.categories && server.categories.map((c: Category) => c.name).join(", ")}]</p>
                             <Button type="button" className="btn" id="server-list-btn" color="success" size="lg" tag={Link} to={"/server?server=" + encodeURIComponent(server.address)}>Megtekintés</Button>
                         </ListGroupItem>
             ))}

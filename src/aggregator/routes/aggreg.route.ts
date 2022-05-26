@@ -10,6 +10,8 @@ import listallposts from "../functions/listallposts";
 import updatepost from "../crud/updatepost";
 import createpost from "../crud/createpost";
 import APIReturn from "../interfaces/return";
+import ServerAlreadyRegistered from "../indexing/ServerError";
+import Category from "../interfaces/category";
 
 const aggregrouter = Router();
 
@@ -64,10 +66,15 @@ aggregrouter.post('/discover', (req, res) => {
     const address = req.body.address?.toString().trim() ?? "";
     const categories = req.body.categories?.toString().trim() ?? "";
     console.log("Address:", address);
-    console.log("Categories:", categories);
+    console.log("Categories:", JSON.stringify(categories));
     try {
         res.json(indexer(address, categories));
     } catch (error) {
+        if(error instanceof ServerAlreadyRegistered) {
+            res.status(200).json(error.message);
+            console.log(error.message);
+            return;
+        }
         console.error(error);
     }
 });

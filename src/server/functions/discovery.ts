@@ -3,7 +3,7 @@ import listallcat from "./listallcat";
 export default async function discovery(discoveryaddr: string, ownaddr: string): Promise<boolean> {
     discoveryaddr += "/aggreg/discover";
     try {
-        const categorylist: string[] = (await listallcat()).map(c => c.name);
+        const categorylist = (await listallcat());
         const body = {
             address: ownaddr,
             categories: categorylist
@@ -15,8 +15,9 @@ export default async function discovery(discoveryaddr: string, ownaddr: string):
         });
         return true;
     } catch (error) {
-        if(error instanceof TypeError && error.message.includes("Failed to fetch") && error.message.includes("UND_ERR_HEADERS_TIMEOUT")) {
+        if(error instanceof TypeError && error.message.includes("fetch failed") && error.message.includes("UND_ERR_HEADERS_TIMEOUT")) {
             console.error("Discovery server is not responding");
+            console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
         }
         console.error(error);
         return false;
