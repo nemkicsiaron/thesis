@@ -49,8 +49,12 @@ router.get('/probe', (_, res) => {
 
 router.post('/discovery', async (req, res) => {
     const discoveryaddr = (req.body.address || aggregatorUri);
+    const allcats = await listallcat();
     if(await discovery(discoveryaddr, ownUri)) {
-        res.status(200).json("Successful discovery");
+        res.status(200).json({
+            message: "Server available",
+            categories: JSON.stringify(allcats),
+        });
     } else {
         res.status(500).json("There was a problem with discovery process!");
     }

@@ -6,7 +6,7 @@ export default async function discovery(discoveryaddr: string, ownaddr: string):
         const categorylist: string[] = (await listallcat()).map(c => c.name);
         const body = {
             address: ownaddr,
-            cat: categorylist
+            categories: categorylist
         };
         await fetch(discoveryaddr, {
             method: "POST",

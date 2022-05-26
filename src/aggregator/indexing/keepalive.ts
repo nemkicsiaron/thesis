@@ -7,9 +7,10 @@ async function probe(s: IServer) {
             method: "get",
             headers: {"Content-Type": "application/json"}
         });
+        const data = await res.json();
 
         if(res.ok) {
-            update(s.address);
+            update(s.address, data.categories);
         }
     } catch (error: any) {
         console.error(error);

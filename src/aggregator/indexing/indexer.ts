@@ -5,14 +5,21 @@ import { probeeach } from "./keepalive";
 var servers: IServer[] = [];
 
 export function indexer(addr: string, categories?: Category[]): number {
-    if (servers.some(server => server.address === addr)) throw new Error("Server already registered on: " + addr);
+    if (servers.some(server => server.address === addr)){
+        if(servers.some(server => JSON.stringify(server.categories) === JSON.stringify(categories)))
+            throw new Error("Server already registered on: " + addr);
+        else if (categories) {
+            console.log("Updating categories for: " + addr);
+            update(addr, categories);
+        }
+    }
     else console.log("Registered new server on address: " + addr);
 
     return servers.push({address: addr, categories: categories || [], lastactive: new Date()});
 }
 
-export function update(addr: string): void {
-    servers.map(s => {if(s.address === addr) {s.lastactive = new Date()}});
+export function update(addr: string, categories: Category[]): void {
+    servers.map(s => {if(s.address === addr) {s.lastactive = new Date(); categories ? s.categories = categories : s.categories;}});
 }
 
 export function badaddr(addr: string): void {

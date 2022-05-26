@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Button, Label, ListGroup, ListGroupItem } from "reactstrap";
 import listAllServers from "../components/services/ServerServices";
+import Category from "../interfaces/category";
 import IServer from "../interfaces/servers";
 
 import "./styles/Servers.scss";
@@ -38,6 +39,7 @@ const ServersPage = () => {
                         <ListGroupItem className="lg-item" key={server.address}>
                             <strong>Szerver címe: {server.address}</strong>
                             <p>Utoljára elérhető: {server.lastactive.toString()}</p>
+                            <p>Kategóriák: [{JSON.parse(server.categories.toString()).map((c: Category) => c.name).join(", ")}]</p>
                             <Button type="button" className="btn" id="server-list-btn" color="success" size="lg" tag={Link} to={"/server?server=" + encodeURIComponent(server.address)}>Megtekintés</Button>
                         </ListGroupItem>
             ))}

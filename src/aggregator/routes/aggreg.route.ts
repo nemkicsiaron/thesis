@@ -61,8 +61,12 @@ aggregrouter.get('/allposts', async (req, res) => {
 });
 
 aggregrouter.post('/discover', (req, res) => {
+    const address = req.body.address?.toString().trim() ?? "";
+    const categories = req.body.categories?.toString().trim() ?? "";
+    console.log("Address:", address);
+    console.log("Categories:", categories);
     try {
-        res.json(indexer(req.body.address, req.body.cat));
+        res.json(indexer(address, categories));
     } catch (error) {
         console.error(error);
     }
