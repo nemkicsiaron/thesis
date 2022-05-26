@@ -1,5 +1,5 @@
 @echo off
-cd ".\frontend"
+cd "..\frontend"
 start "Frontend" /min npm start
 cd "..\aggregator"
 start "Aggregator" /min npm run demon

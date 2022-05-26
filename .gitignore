@@ -112,3 +112,7 @@ node_modules
 # secrets
 *.secret
 .*
+
+#server export
+*.tar.gz
+*.zip

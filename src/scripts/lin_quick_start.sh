@@ -1,5 +1,5 @@
 #!/bin/sh
-cd "./frontend"
+cd "../frontend"
 npm run start &
 cd "../aggregator"
 (npm run demon || npm run start ) &
