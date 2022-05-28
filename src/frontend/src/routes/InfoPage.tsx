@@ -1,5 +1,6 @@
 import {Link} from "react-router-dom"
 import {Button} from "reactstrap"
+import { aggregatorUri } from "../util/config";
 
 import "./styles/Info.scss"
 
@@ -44,19 +45,20 @@ const InfoPage = () => {
                         Jelen esetben ez azt jelenti, hogy az adatok egy tetszőlegesen kihelyezett szerverek hálózatán van elhelyezve.
                         Így a rendszer annyira erős, mint amennyire a mögötte elhelyezkedő támogató közösség. </p>
                     <h3>Hogyan csatlakozhatok én is ehhez a hálozathoz?</h3>
-                    <p> Egyszerű! <Link to="/p2p-pp-server.tar.gz" target="_blank" download>Letöltöd az adattároló szerver fájljait</Link>, majd a szerver folderében futtatod a következő parancsokat parancssorból:
+                    <p> Egyszerű! Először bizonyosodj meg, hogy az eszközödön megtalálható a Node.js keretrendszer legújabb változata (de legalább 17.8-as).
+                        Amennyiben ez nincs meg azt az alábbi linken teheted meg: <Link to="https://nodejs.org/en/">https://nodejs.org/en/</Link>!
+                        <br />
+                        Majd <Link to="/p2p-pp-server.tar.gz" target="_blank" download>letöltöd az adattároló szerver fájljait</Link>, majd a szerver folderében futtatod a következő parancsokat parancssorból:
                     (Amennyiben a letöltés nem működik innen tudod beszerezni az <i>src/server</i> mappát: <Link to="https://github.com/nemkicsiaron/thesis">https://github.com/nemkicsiaron/thesis</Link>)
                         <br/>
                         <code>
                             npm install --omit=dev
                             <br/>
-                            set PORT=6969 <strong> (tetszőleges port szám) </strong>
+                            set PORT=6969 <strong> @(tetszőleges port szám) </strong>
                             <br/>
-                            set AGGREGATOR_URI=aggregator.com <strong> (az aggregátor címe, amiről most is olvasol, és amire a szerver csatlakozhat) </strong>
+                            set AGGREGATOR_URI=aggregator.com <strong> @(az aggregátor címe, amire a szerver csatlakozhat. Jelenleg: {aggregatorUri}) </strong>
                             <br/>
-                            set OWN_URI=sajatszerverem.com <strong> (tetszőleges URL amire kihelyezed a szervert) </strong>
-                            <br/>
-                            npx prisma migrate reset
+                            set OWN_URI=sajatszerverem.com <strong> @(tetszőleges URL amire kihelyezed a szervert) </strong>
                             <br/>
                             npx prisma db push
                             <br/>

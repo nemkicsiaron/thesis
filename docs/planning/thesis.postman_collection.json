@@ -1,0 +1,565 @@
+{
+	"info": {
+		"_postman_id": "1fe20ed8-0bfa-44fa-9f0c-2df59036ca85",
+		"name": "thesis",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20065579"
+	},
+	"item": [
+		{
+			"name": "Aggregator",
+			"item": [
+				{
+					"name": "Get all categories from a server",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{AGGREGATOR_URI}}/aggreg/allcat?server=",
+							"host": [
+								"{{AGGREGATOR_URI}}"
+							],
+							"path": [
+								"aggreg",
+								"allcat"
+							],
+							"query": [
+								{
+									"key": "server",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Discover 69 server",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"address\": \"http://localhost:3069\",\r\n    \"cat\": [\"pets\", \"cars\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{AGGREGATOR_URI}}/aggreg/discover",
+							"host": [
+								"{{AGGREGATOR_URI}}"
+							],
+							"path": [
+								"aggreg",
+								"discover"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search for post",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{AGGREGATOR_URI}}/aggreg/findpost",
+							"host": [
+								"{{AGGREGATOR_URI}}"
+							],
+							"path": [
+								"aggreg",
+								"findpost"
+							],
+							"query": [
+								{
+									"key": "searchterm",
+									"value": "cica",
+									"disabled": true
+								},
+								{
+									"key": "category",
+									"value": "jatekok",
+									"disabled": true
+								},
+								{
+									"key": "minprice",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "maxprice",
+									"value": "100000",
+									"disabled": true
+								},
+								{
+									"key": "signature",
+									"value": "Lajossign",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search for own post",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{AGGREGATOR_URI}}/aggreg/findownpost?author=Lajos",
+							"host": [
+								"{{AGGREGATOR_URI}}"
+							],
+							"path": [
+								"aggreg",
+								"findownpost"
+							],
+							"query": [
+								{
+									"key": "searchterm",
+									"value": "cica",
+									"disabled": true
+								},
+								{
+									"key": "category",
+									"value": "jatekok",
+									"disabled": true
+								},
+								{
+									"key": "minprice",
+									"value": "0",
+									"disabled": true
+								},
+								{
+									"key": "maxprice",
+									"value": "100000",
+									"disabled": true
+								},
+								{
+									"key": "author",
+									"value": "Lajos"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New post",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"connection": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"post\":{\r\n        \"title\" : \"Kacsa\",\r\n        \"category\" : \"pets\",\r\n        \"price\" : \"10000\",\r\n        \"published\" : true,\r\n        \"description\" : \"Egy nagyon cuki kiskacsa\",\r\n        \"author\" : \"Lajos\",\r\n        \"signature\" : \"Lajossign69\"\r\n    },\r\n    \"server\": \"http://localhost:5000\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{AGGREGATOR_URI}}/aggreg/newpost",
+							"host": [
+								"{{AGGREGATOR_URI}}"
+							],
+							"path": [
+								"aggreg",
+								"newpost"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all DB-s in aggreg",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"connection": true,
+							"accept": true,
+							"accept-encoding": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{AGGREGATOR_URI}}/aggreg/alldb",
+							"host": [
+								"{{AGGREGATOR_URI}}"
+							],
+							"path": [
+								"aggreg",
+								"alldb"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all posts from aggreg",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{AGGREGATOR_URI}}/aggreg/allposts",
+							"host": [
+								"{{AGGREGATOR_URI}}"
+							],
+							"path": [
+								"aggreg",
+								"allposts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete post",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"post\": {\r\n        \"title\": \"cica\",\r\n        \"category\": \"pets\",\r\n        \"published\": true,\r\n        \"description\": \"Egy nagyon cuki macsek\",\r\n        \"price\": \"42069\",\r\n        \"created\": \"2022-04-18T12:55:52.596Z\",\r\n        \"author\": \"Lajos\",\r\n        \"signature\": \"Lajossign\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{AGGREGATOR_URI}}/aggreg/deletepost",
+							"host": [
+								"{{AGGREGATOR_URI}}"
+							],
+							"path": [
+								"aggreg",
+								"deletepost"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update post",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"post\": {\r\n        \"title\": \"Tangóbicikli 2\",\r\n        \"category\": \"autók\",\r\n        \"published\": false,\r\n        \"description\": \"Egy piros bicikli tangózásra\",\r\n        \"price\": \"4555\",\r\n        \"created\": \"2022-05-12T21:34:48.299Z\",\r\n        \"author\": \"Lajos\",\r\n        \"signature\": \"Tangósign\"\r\n    },\r\n    \"server\": \"http://localhost:5000\",\r\n    \"oldsignature\": \"D/TKf/HBuFpf94v+kd7kKcK2fN9VGLJAshZE4GFviWNnFLSdMv/AmwUTvRguigbK8QA8D+mLPoI2o1hcLswVFtcupqHJBcOe4AljyT7C6Km7Q3hz7ZPuNgq1XipbSMbeOXOp/OFq3VgrxPg/hPiCyPgt/wBd+ZUZLs5LfDARhJDeEhu5KKfEVbp5OJQoRklqw3e8WLvOyszXqa57L0lQ8oRnJKr/xqJqkEbJRlKT8fUfwcnISc4hEbNi+/BMV/J+Rvh2HT3mfPpDk/ZS13o/t55L1XF4HySUdKZoUqQV9/sMhzorH5oqAnOgY/Kt4DS2r+3iGw5WsBZSmBrbmQxJJw==\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{AGGREGATOR_URI}}/aggreg/updatepost",
+							"host": [
+								"{{AGGREGATOR_URI}}"
+							],
+							"path": [
+								"aggreg",
+								"updatepost"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Server",
+			"item": [
+				{
+					"name": "Get all categories from server",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{SERVER_URI}}/api/allcat",
+							"host": [
+								"{{SERVER_URI}}"
+							],
+							"path": [
+								"api",
+								"allcat"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Broadcast aggregator's restart",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{SERVER_URI}}/api/restart",
+							"host": [
+								"{{SERVER_URI}}"
+							],
+							"path": [
+								"api",
+								"restart"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Probe",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{SERVER_URI}}/api/probe",
+							"host": [
+								"{{SERVER_URI}}"
+							],
+							"path": [
+								"api",
+								"probe"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Aggregator discovery process",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{SERVER_URI}}/api/discovery",
+							"host": [
+								"{{SERVER_URI}}"
+							],
+							"path": [
+								"api",
+								"discovery"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search for post",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{AGGREGATOR_URI}}/aggreg/findpost",
+							"host": [
+								"{{AGGREGATOR_URI}}"
+							],
+							"path": [
+								"aggreg",
+								"findpost"
+							],
+							"query": [
+								{
+									"key": "searchterm",
+									"value": "cica",
+									"disabled": true
+								},
+								{
+									"key": "category",
+									"value": "jatekok",
+									"disabled": true
+								},
+								{
+									"key": "minprice",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "maxprice",
+									"value": "100000",
+									"disabled": true
+								},
+								{
+									"key": "signature",
+									"value": "Lajossign",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search for own post",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{AGGREGATOR_URI}}/aggreg/findownpost?author=Lajos",
+							"host": [
+								"{{AGGREGATOR_URI}}"
+							],
+							"path": [
+								"aggreg",
+								"findownpost"
+							],
+							"query": [
+								{
+									"key": "searchterm",
+									"value": "cica",
+									"disabled": true
+								},
+								{
+									"key": "category",
+									"value": "jatekok",
+									"disabled": true
+								},
+								{
+									"key": "minprice",
+									"value": "0",
+									"disabled": true
+								},
+								{
+									"key": "maxprice",
+									"value": "100000",
+									"disabled": true
+								},
+								{
+									"key": "author",
+									"value": "Lajos"
+								},
+								{
+									"key": "signature",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check if Server has category or not",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{SERVER_URI}}/api/filterbycategory?category=Lajos",
+							"host": [
+								"{{SERVER_URI}}"
+							],
+							"path": [
+								"api",
+								"filterbycategory"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "Lajos"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New post Copy",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"connection": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"post\":{\r\n        \"title\" : \"Kacsa\",\r\n        \"category\" : \"pets\",\r\n        \"price\" : \"10000\",\r\n        \"published\" : true,\r\n        \"description\" : \"Egy nagyon cuki kiskacsa\",\r\n        \"author\" : \"Lajos\",\r\n        \"signature\" : \"Lajossign69\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{SERVER_URI}}/aggreg/newpost",
+							"host": [
+								"{{SERVER_URI}}"
+							],
+							"path": [
+								"aggreg",
+								"newpost"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete post Copy",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"post\": {\r\n        \"title\": \"cica\",\r\n        \"category\": \"pets\",\r\n        \"published\": true,\r\n        \"description\": \"Egy nagyon cuki macsek\",\r\n        \"price\": \"42069\",\r\n        \"created\": \"2022-04-18T12:55:52.596Z\",\r\n        \"author\": \"Lajos\",\r\n        \"signature\": \"Lajossign\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{SERVER_URI}}/aggreg/deletepost",
+							"host": [
+								"{{SERVER_URI}}"
+							],
+							"path": [
+								"aggreg",
+								"deletepost"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update post",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"post\": {\r\n        \"title\": \"Tangóbicikli 2\",\r\n        \"category\": \"autók\",\r\n        \"published\": false,\r\n        \"description\": \"Egy piros bicikli tangózásra\",\r\n        \"price\": \"4555\",\r\n        \"created\": \"2022-05-12T21:34:48.299Z\",\r\n        \"author\": \"Lajos\",\r\n        \"signature\": \"Tangósign\"\r\n    },\r\n    \"oldsignature\": \"D/TKf/HBuFpf94v+kd7kKcK2fN9VGLJAshZE4GFviWNnFLSdMv/AmwUTvRguigbK8QA8D+mLPoI2o1hcLswVFtcupqHJBcOe4AljyT7C6Km7Q3hz7ZPuNgq1XipbSMbeOXOp/OFq3VgrxPg/hPiCyPgt/wBd+ZUZLs5LfDARhJDeEhu5KKfEVbp5OJQoRklqw3e8WLvOyszXqa57L0lQ8oRnJKr/xqJqkEbJRlKT8fUfwcnISc4hEbNi+/BMV/J+Rvh2HT3mfPpDk/ZS13o/t55L1XF4HySUdKZoUqQV9/sMhzorH5oqAnOgY/Kt4DS2r+3iGw5WsBZSmBrbmQxJJw==\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{SERVER_URI}}/aggreg/updatepost",
+							"host": [
+								"{{SERVER_URI}}"
+							],
+							"path": [
+								"aggreg",
+								"updatepost"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

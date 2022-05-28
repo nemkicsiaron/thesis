@@ -35,11 +35,16 @@ router.get('/allposts', async (_, res) => {
     }
 });*/
 
+router.get('/restart', (_, res) => {
+    setTimeout(() => discovery(aggregatorUri, ownUri), 5 * 1000);
+    res.json("Acknowledged Aggregator restart");
+})
+
 router.get('/probe', (_, res) => {
     listallcat().then((allcats) => {
         res.status(200).json({
             message: "Server available",
-            categories: allcats,
+            categories: JSON.stringify(allcats),
         });
     }).catch((error) => {
         console.error(error);
@@ -53,7 +58,7 @@ router.post('/discovery', async (req, res) => {
     if(await discovery(discoveryaddr, ownUri)) {
         res.status(200).json({
             message: "Server available",
-            categories: allcats,
+            categories: JSON.stringify(allcats),
         });
     } else {
         res.status(500).json("There was a problem with discovery process!");

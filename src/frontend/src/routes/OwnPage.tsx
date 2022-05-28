@@ -1,12 +1,13 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Form, Input, Label} from "reactstrap";
+import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Form, FormFeedback, Input, Label} from "reactstrap";
 import LoginProvider, { LoggedIn, LoggedOut, LoginContext } from "../components/contexts/LoginProvider";
 import PostList from "../components/PostList";
 import { listAllCategories } from "../components/services/CategoryServices";
 import { findOwnPost } from "../components/services/PostsServices";
 import { Failed, Idle, useLogin } from "../hooks/LoginHooks";
 import Post from "../interfaces/post";
+import containsSpecialChars from "../util/containsSpecialChars";
 
 const OwnPage = () => {
     const {loginState} = React.useContext(LoginContext);
@@ -76,7 +77,8 @@ const OwnPage = () => {
             { loginState instanceof LoggedIn && posts && (
             <>
             <Form>
-                <Input type="text" value={searchTerm} className="search-input" onChange={(value) => setSearchTerm(value.target.value)} placeholder="Cím" />
+                <Input valid={containsSpecialChars(searchTerm)} type="text" value={searchTerm} className="search-input" onChange={(value) => setSearchTerm(value.target.value)} placeholder="Cím" />
+                <FormFeedback>A cím nem tartalmazhat speciális karaktereket!</FormFeedback>
                 <Dropdown className="category-dropdown" isOpen={dropdownOpen} toggle={toggle}>
                     <DropdownToggle caret>{category || "Kategóriák"}</DropdownToggle>
                     <DropdownMenu end>

@@ -38,7 +38,12 @@ li.list-group-item {
     display: inline;
   &:focus {
     border: 1px solid #00a6f3;
-  }
+    }
+}
+
+.dropdown-menu {
+    max-height: 70vh;
+    overflow-y: auto;
 }
 
 .lg-item p:hover{

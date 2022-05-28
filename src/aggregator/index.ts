@@ -5,6 +5,7 @@ import routes from "./routes";
 import { keepalive } from "./indexing/keepalive";
 import saveservers from "./indexing/saveservers";
 import loadservers from "./indexing/loadservers";
+import broadcastrestart from "./indexing/broadcastrestart";
 //import controller from "./auth/controller/user"
 
 const aggregator: express.Application = express();
@@ -19,21 +20,26 @@ aggregator.use(express.json());
 aggregator.use(cors());
 aggregator.use(routes);
 aggregator.use(limiter);
-
-loadservers();
-keepalive();
+try
+{
+    await loadservers();
+    await broadcastrestart();
+    keepalive();
+} catch (error) {
+    console.error(error);
+}
 
 aggregator.listen(port,() => {
     console.log(`Aggregator Server listening on port: ${port}`);
 });
 
-process.once("SIGUSR2", () => {
+process.once("SIGUSR2", async () => {
     saveservers();
     console.log("Aggregator Server stopped USR2!");
     process.kill(process.pid, "SIGUSR2");
 });
 
-process.once("SIGINT", () => {
+process.once("SIGINT", async () => {
     saveservers();
     console.log("Aggregator Server stopped with SIGINT!");
     process.kill(process.pid, "SIGINT");

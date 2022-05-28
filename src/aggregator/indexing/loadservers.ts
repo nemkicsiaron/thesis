@@ -1,12 +1,15 @@
 import { readFileSync } from "fs";
 import { parseservers } from "./indexer";
 
-export default function loadservers(): void {
+export default async function loadservers(): Promise<void> {
     console.log("Loading servers");
     try {
-        const servers = JSON.parse(readFileSync(".servers.json", "utf8"));
+        const servstr = readFileSync(".servers.json", "utf8");
+        const servers = servstr.split(",");
         console.log(servers);
-        parseservers(servers);
+        await parseservers(servers).then(() => {
+            console.log("Servers loaded!");
+        });
     } catch (error: any) {
         if(error.code === "ENOENT") {
             console.error("No servers file found");

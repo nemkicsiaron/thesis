@@ -5,6 +5,7 @@ import { Failed, Idle, useLogin } from "../hooks/LoginHooks";
 import { useCreate, useUpdate } from "../hooks/UserHooks";
 import Post from "../interfaces/post";
 import IServer from "../interfaces/servers";
+import containsSpecialChars from "../util/containsSpecialChars";
 import { LoggedIn, LoggedOut, LoginContext } from "./contexts/LoginProvider";
 import { listAllCategories } from "./services/CategoryServices";
 import listAllServers from "./services/ServerServices";
@@ -47,7 +48,7 @@ const CreateForm = ({oldpost, edit}: {oldpost: Post | null, edit: boolean}) => {
 
     React.useEffect(() => {
         (async () => {
-            setServers(await listAllServers());
+            setServers([...await listAllServers()]);
             console.log("Servers loaded successfully: " + servers);
         })();
 
@@ -128,11 +129,7 @@ const CreateForm = ({oldpost, edit}: {oldpost: Post | null, edit: boolean}) => {
             return () => {};
         }
 
-    }
-    function containsSpecialChars(str: string) {
-        const specialChars: RegExp = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
-        return specialChars.test(str);
-      }
+    };
 
     return (
         <>
@@ -159,11 +156,12 @@ const CreateForm = ({oldpost, edit}: {oldpost: Post | null, edit: boolean}) => {
                                 ))}
                             </DropdownMenu>
                         </Dropdown>
-                        <Input invalid={dummyTitle.trim().length <= 0 || containsSpecialChars(dummyTitle)} type="text" value={dummyTitle} className="title-input" onChange={(value) => setDummyTitle(value.target.value)} placeholder="Cím" />
+                        <Input invalid={dummyTitle.trim().length <= 0 || containsSpecialChars(dummyTitle)} valid type="text" value={dummyTitle} className="title-input" onChange={(value) => setDummyTitle(value.target.value)} placeholder="Cím" />
                         <FormFeedback>A cím nem lehet üres és nem tartalmazhat speciális karaktereket!</FormFeedback>
-                        <Input invalid={Number.parseInt(dummyPrice) < 0 || dummyPrice.trim().length <= 0} type="number" value={dummyPrice} className="price-input" onChange={(value) => setDummyPrice(value.target.value)} placeholder="Ár" />
+                        <Input invalid={Number.parseInt(dummyPrice) < 0 || dummyPrice.trim().length <= 0} valid type="number" value={dummyPrice} className="price-input" onChange={(value) => setDummyPrice(value.target.value)} placeholder="Ár" />
                         <FormFeedback>Az ár pozitív vagy 0 kell legyen!</FormFeedback>
-                        <Input type="textarea" value={dummyContent} className="description-input" onChange={(value) => setDummyContent(value.target.value)} placeholder="Leírás" />
+                        <Input type="textarea" invalid={dummyContent.length > 2000} valid value={dummyContent} className="description-input" onChange={(value) => setDummyContent(value.target.value)} placeholder="Leírás" />
+                        <FormFeedback>A leírás maximum 2000 karakter hosszú lehet! (Jelenleg {dummyContent.length})</FormFeedback>
                         <Input type="checkbox" checked={dummyPublish} onChange={(value) => setDummyPublish(value.target.checked)} /> Publikus
                     </Form>
                     <Button type="button" onClick={handleSubmit} className="btn list-btn" color="success" size="lg">Ok</Button>

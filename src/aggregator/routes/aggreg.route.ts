@@ -10,8 +10,7 @@ import listallposts from "../functions/listallposts";
 import updatepost from "../crud/updatepost";
 import createpost from "../crud/createpost";
 import APIReturn from "../interfaces/return";
-import ServerAlreadyRegistered from "../indexing/ServerError";
-import Category from "../interfaces/category";
+import {ServerAlreadyRegistered} from "../indexing/ServerError";
 
 const aggregrouter = Router();
 
@@ -35,7 +34,7 @@ aggregrouter.get('/allcat', async (req, res) => {
     try {
         res.setHeader('Content-Type', 'application/json');
         res.setHeader('Access-Control-Allow-Origin', '*');
-        const server = req.query.server?.toString();
+        const server = req.query.server?.toString() || "";
         res.json(await listallcat(server));
     } catch (error) {
         console.error(error);
@@ -64,12 +63,12 @@ aggregrouter.get('/allposts', async (req, res) => {
 
 aggregrouter.post('/discover', (req, res) => {
     const address = req.body.address?.toString().trim() ?? "";
-    const categories = req.body.categories?.toString().trim() ?? "";
+    const categories = req.body.categories?.toString().trim() ?? "[]";
     console.log("Address:", address);
-    console.log("Categories:", JSON.stringify(categories));
+    console.log("Categories:", categories);
     try {
-        res.json(indexer(address, categories));
-    } catch (error) {
+        res.json(indexer(address, JSON.parse(categories)));
+    } catch (error: any) {
         if(error instanceof ServerAlreadyRegistered) {
             res.status(200).json(error.message);
             console.log(error.message);

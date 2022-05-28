@@ -2,7 +2,7 @@ import { serverslist } from "../indexing/indexer";
 import Category from "../interfaces/category";
 import IServer from "../interfaces/servers";
 
-export default async function listallcat(serveraddr?: string) : Promise<Category[]> {
+export default async function listallcat(serveraddr: string) : Promise<string[]> {
     if(serveraddr) {
         var response = await fetch(serveraddr + "/api/allcat", {
             method: "GET",
@@ -10,7 +10,8 @@ export default async function listallcat(serveraddr?: string) : Promise<Category
                 "Content-Type": "application/json"
                 }
             });
-        return await response.json();
+        const allCats: Category[] = await response.json();
+        return [...new Set(allCats.map(c => c.name))];
     }
     else {
         var allCats: Category[] = []
@@ -32,7 +33,7 @@ export default async function listallcat(serveraddr?: string) : Promise<Category
             console.error(error);
         }
         finally {
-            return allCats
+            return [...new Set(allCats.map(c => c.name))]
         }
     }
 }
