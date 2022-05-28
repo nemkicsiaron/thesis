@@ -6,7 +6,6 @@ import { keepalive } from "./indexing/keepalive";
 import saveservers from "./indexing/saveservers";
 import loadservers from "./indexing/loadservers";
 import broadcastrestart from "./indexing/broadcastrestart";
-//import controller from "./auth/controller/user"
 
 const aggregator: express.Application = express();
 const port: number = 4000;
