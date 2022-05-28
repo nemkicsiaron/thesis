@@ -20,8 +20,10 @@ export function str2ab(str: string): ArrayBuffer {
 
 export async function importKeyPair(publicKeyStr: string, privateKeyStr: string): Promise<CryptoKeyPair | null> {
     try {
-        const publicKey = await window.crypto.subtle.importKey("spki", str2ab(window.atob(publicKeyStr)), { name: "RSA-PSS", hash: { name: "SHA-256" } }, false, ["verify"])
-        const privateKey = await window.crypto.subtle.importKey("pkcs8", str2ab(window.atob(privateKeyStr)), { name: "RSA-PSS", hash: { name: "SHA-256" } }, false, ["sign"])
+        const publicKey = await window.crypto.subtle.importKey("spki", str2ab(window.atob(publicKeyStr)),
+        { name: "RSA-PSS", hash: { name: "SHA-256" } }, false, ["verify"])
+        const privateKey = await window.crypto.subtle.importKey("pkcs8", str2ab(window.atob(privateKeyStr)),
+        { name: "RSA-PSS", hash: { name: "SHA-256" } }, false, ["sign"])
         console.log("Keypair imported: ", { publicKey, privateKey });
         return { publicKey, privateKey };
     } catch (error) {

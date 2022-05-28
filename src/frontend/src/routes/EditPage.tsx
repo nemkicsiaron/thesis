@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { LoggedIn, LoggedOut, LoginContext } from "../components/contexts/LoginProvider";
 import CreateForm from "../components/CreateForm";
-import { findOwnPost, findPost } from "../components/services/PostsServices";
+import { findOwnPost } from "../components/services/PostsServices";
 import { Failed, Idle, useLogin } from "../hooks/LoginHooks";
 import Post from "../interfaces/post";
 
