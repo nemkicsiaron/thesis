@@ -8,7 +8,7 @@
         "**/*"
     ],
     "events": {
-        "restart": "start /min \"Build\" cmd /c npm run build || npm run build & exit 1"
+        "restart": "start /min \"Build\" cmd /c npm run build && start \"Export\" /c ../scripts/export_server.bat || npm run build & exit 1"
     },
     "verbose": true,
     "delay": 1500,

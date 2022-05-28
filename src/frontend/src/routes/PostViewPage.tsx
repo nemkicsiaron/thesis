@@ -88,6 +88,7 @@ const PostViewPage = () => {
                     }
                 </div>
             </div>
+            <Button type="button" className="btn back-button" color="danger" size="lg" tag={Link} to="/posts" >Vissza a hirdtésekhez</Button>
             <Button type="button" className="btn back-btn" color="danger" size="lg" tag={Link} to="/">Vissza a főoldalra</Button>
         </div>
         </LoginProvider>

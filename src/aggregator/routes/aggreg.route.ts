@@ -88,13 +88,14 @@ aggregrouter.get('/findpost', async (req, res) => {
     const minprice = (req.query.minprice ?? "").toString();
     const maxprice = (req.query.maxprice ?? "").toString();
     const signature = (req.query.signature ?? "").toString();
+    const server = (req.query.server ?? "").toString();
 
     console.log(new Date(), "Searching for:", searchterm, category, minprice, maxprice, signature);
 
     if(category) {
         try {
             console.log("Category query");
-            const postsres = await servercatquery(searchterm, category, minprice, maxprice, "", signature);
+            const postsres = await servercatquery(searchterm, category, minprice, maxprice, "", signature, server);
             if(postsres.error) res.status(500).json(postsres.message);
             else {
                 console.log("Done:", postsres.posts);
@@ -106,7 +107,7 @@ aggregrouter.get('/findpost', async (req, res) => {
         }
     } else {
         console.log("General query");
-        const postsres = await generalquery(searchterm, minprice, maxprice, "", signature);
+        const postsres = await generalquery(searchterm, minprice, maxprice, "", signature, server);
         if(postsres.error) res.status(500).json(postsres.message);
         else {
             console.log("Done:", postsres.posts);
@@ -125,10 +126,11 @@ aggregrouter.get('/findownpost', async (req, res) => {
     const maxprice = (req.query.maxprice ?? " ").toString();
     const author = (req.query.author ?? "").toString();
     const signature = (req.query.signature ?? "").toString();
+    const server = (req.query.server ?? "").toString();
 
     console.log(new Date(), "Searching for own posts:", searchterm, category, minprice, maxprice, "by", author);
 
-    const postsres = await generalquery(searchterm, minprice, maxprice, author, signature);
+    const postsres = await generalquery(searchterm, minprice, maxprice, author, signature, server);
     if(postsres.error) res.status(500).json(postsres.message);
     else {
         console.log("Done:", postsres.posts);
