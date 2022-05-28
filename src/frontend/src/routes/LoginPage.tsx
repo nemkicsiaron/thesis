@@ -8,7 +8,6 @@ import IUser from "../interfaces/user";
 const LoginPage = () => {
     const [loginStatus, login] = useLogin();
     const [password, setPassword] = React.useState("");
-    const [dummyuser, setDummyuser] = React.useState<IUser>({username: "", publickey: "", privatekey: ""});
     const [file, setFile] = React.useState<File | null>(null);
     const navigate = useNavigate();
 
@@ -26,8 +25,8 @@ const LoginPage = () => {
         window.alert(error);
     }
 
-    const handleFile = (u: IUser): any => {
-        var success = false;
+    const handleFile = (): any => {
+        var u: IUser = {username: "", publickey: "", privatekey: ""};
         if(file == null || !file){
             handleError("Fájl kiválasztása kötelező!");
             return;
@@ -62,16 +61,16 @@ const LoginPage = () => {
                 lines[4] === "-----END PUBLIC KEY-----" &&
                 lines[5] === "-----BEGIN PRIVATE KEY-----" &&
                 lines[7] === "-----END PRIVATE KEY-----") {
-                    setDummyuser({ username: lines[0], publickey: lines[3], privatekey: lines[6] });
-                    success = true;
+                    u = { username: lines[0], publickey: lines[3], privatekey: lines[6] };
             } else {
                 handleError("Hibás fájlformátum vagy adatok!");
                 return;
             }
         }
         reader.onloadend = () => {
-            if(!success) return;
+            if(u.username.length <= 0 || u.publickey.length <= 0 || u.privatekey.length <= 0) return;
             importKeyPair(u.publickey, u.privatekey).then((keys) => {
+                console.log(u);
                 if(keys) login(u);
                 else {
                     console.log(keys);
@@ -82,23 +81,26 @@ const LoginPage = () => {
         }
     }
 
-    const handleSubmit = (u: IUser) => {
-        if(password.trim().length === 0) handleError("Nincs jelszó!");
-        if(password.length < 6) handleError("A jelszónak legalább 6 karakter hosszúnak kell lennie!");
-        handleFile(u);
+    const handleSubmit = () => {
+        if(password.trim().length === 0){
+            handleError("Nincs jelszó!");
+            return;
+        }
+        if(password.length < 6) {
+            handleError("A jelszónak legalább 6 karakter hosszúnak kell lennie!");
+            return;
+        }
+        handleFile();
 }
 
     return (
         <div className="main-page">
             <h1>Bejelentkezés</h1>
-            {dummyuser &&
-            <>
             <Input type="file" onChange={(e) => { e.target.files ? setFile(e.target.files[0]) : setFile(null); }} />
             <Input type="password" placeholder="Jelszó" onChange={(value) => setPassword(value.target.value)} />
             <p><br /><a href="/info" target="_blank" referrerPolicy="same-origin">Segítségre van szüksége a bejelentkezéshez?</a></p>
-            <Button type="button" className="btn" color="success" size="lg" onClick={() => {handleSubmit(dummyuser)}}>Bejelentkezés</Button>
+            <Button type="button" className="btn" color="success" size="lg" onClick={() => {handleSubmit()}}>Bejelentkezés</Button>
             <Button type="button" className="btn back-btn" color="danger" size="lg" tag={Link} to="/">Vissza a főoldalra</Button>
-            </>}
         </div>
 )};
 
