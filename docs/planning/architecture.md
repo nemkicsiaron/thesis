@@ -16,7 +16,7 @@
 - Kérés szerint megkeresi a lehetséges találatokat és visszatéríti a helyes találatot tartalmazó szervert
 
 ### 3. Adattároló szerverek
-- SQLite adatbázisok?
+- SQLite adatbázisok
 - Kategóriákra bontva ment hírdetéseket
 - Felhasználók indíthatnak sajátot
 - Prisma segítségével incode lekérdezések
