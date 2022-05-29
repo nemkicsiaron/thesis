@@ -9,6 +9,8 @@ import broadcastrestart from "./indexing/broadcastrestart";
 
 const aggregator: express.Application = express();
 const port: number = 4000;
+
+//Rate limiter
 const limiter: RateLimitRequestHandler = rateLimit({
     windowMs: 10 * 60 * 1000, // 10min
     max: 100, // 100 req per `window` per IP
@@ -19,6 +21,8 @@ aggregator.use(express.json());
 aggregator.use(cors());
 aggregator.use(routes);
 aggregator.use(limiter);
+
+//A simple quality of life improving try catch for automatic server handling on restarts and bootups
 try
 {
     await loadservers();
@@ -31,6 +35,9 @@ try
 aggregator.listen(port,() => {
     console.log(`Aggregator Server listening on port: ${port}`);
 });
+
+
+//A simple quality of life improving functionality for automatic server handling on restarts and stops
 
 process.once("SIGUSR2", async () => {
     saveservers();

@@ -1,7 +1,7 @@
 import { writeFileSync } from "fs";
 import IServer from "../interfaces/servers";
 import { serverslist } from "./indexer";
-import { ServerListEmpty } from "./ServerError";
+import { ServerListEmpty } from "./servererrors";
 
 export default function saveservers() {
     try{

@@ -1,7 +1,7 @@
 import Category from "../interfaces/category";
 import IServer from "../interfaces/servers";
 import { probeeach } from "./keepalive";
-import {ServerAlreadyRegistered} from "./ServerError";
+import {ServerAlreadyRegistered} from "./servererrors";
 
 var servers: IServer[] = [];
 

@@ -10,7 +10,7 @@ import listallposts from "../functions/listallposts";
 import updatepost from "../crud/updatepost";
 import createpost from "../crud/createpost";
 import APIReturn from "../interfaces/return";
-import {ServerAlreadyRegistered} from "../indexing/ServerError";
+import {ServerAlreadyRegistered} from "../indexing/servererrors";
 
 const aggregrouter = Router();
 
@@ -18,6 +18,7 @@ aggregrouter.get('/', (_, res) => {
     return res.json("Szia Dominik");
 });
 
+//GET all servers memorized as online
 aggregrouter.get('/alldb', (_, res) => {
     try {
         res.setHeader('Content-Type', 'application/json');
