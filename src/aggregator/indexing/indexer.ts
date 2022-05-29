@@ -5,6 +5,7 @@ import {ServerAlreadyRegistered} from "./servererrors";
 
 var servers: IServer[] = [];
 
+//Compare two categories to determine if they are the same or one's name is lexicographically before the other's
 const comp = (a: Category, b: Category) => a.name > b.name ? 1 : a.name < b.name ? -1 : 0;
 
 export function indexer(addr: string, categories?: Category[]): number {
