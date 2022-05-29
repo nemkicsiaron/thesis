@@ -1,0 +1,25 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:test.db"
+}
+
+model Category {
+  name  String @unique @id
+  posts Post[]
+}
+
+model Post {
+  title       String
+  category  String
+  published   Boolean?  @default(false)
+  description String?
+  price       String
+  created     DateTime  @default(now())
+  author      String
+  signature   String    @unique
+  categoryRelation    Category? @relation(fields: [category], references: [name])
+}

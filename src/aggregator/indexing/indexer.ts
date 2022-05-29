@@ -8,11 +8,13 @@ var servers: IServer[] = [];
 //Compare two categories to determine if they are the same or one's name is lexicographically before the other's
 const comp = (a: Category, b: Category) => a.name > b.name ? 1 : a.name < b.name ? -1 : 0;
 
+//Try to add a server to the list of servers if it is not already in the list
 export function indexer(addr: string, categories?: Category[]): number {
-    if (servers.some(server => server.address === addr)){
-        if(servers.some(server => JSON.stringify(server.categories.sort(comp)) === JSON.stringify(categories?.sort(comp))))
+    const matches = servers.filter(s => s.address === addr);
+    if (matches.length === 1) {
+        if(JSON.stringify(matches[0].categories.sort(comp)) === JSON.stringify(categories?.sort(comp)))
             throw new ServerAlreadyRegistered("Server already registered on: " + addr);
-        else if (categories) {
+        else if(categories) {
             console.log("Updating categories for: " + addr);
             update(addr, categories.sort(comp));
             return servers.length;
@@ -23,6 +25,7 @@ export function indexer(addr: string, categories?: Category[]): number {
     return servers.push({address: addr, categories: categories?.sort(comp) || [], lastactive: new Date()});
 }
 
+//Update the categories for a server and it's last active time
 export function update(addr: string, categories: Category[]): void {
     try {
         console.log("Updating categories for: " + addr, categories.sort(comp));
@@ -32,6 +35,7 @@ export function update(addr: string, categories: Category[]): void {
     }
 }
 
+//Remove a server from the list of servers
 export function badaddr(addr: string): void {
     servers = servers.filter(s => {return s.address !== addr});
 }

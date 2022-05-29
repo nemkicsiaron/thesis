@@ -18,9 +18,10 @@ async function filterbycategory(category: string): Promise<IServer[]> {
 export default async function servercatquery(searchterm: string, category: string, minprice: string, maxprice: string, author: string, signature: string, server: string): Promise<APIReturn> {
     console.log(new Date(), "Searching category including servers for: " + searchterm);
 
+    var posts: Post[] = [];
+
     const filtered = await filterbycategory(category);
     const goodservers = server.trim() && filtered.map(s => s.address).includes(server) ? [server] : filtered.map(s => s.address);
-    var posts: Post[] = [];
 
     if (goodservers.length === 0 || !goodservers) throw new Error("No servers found storing given category: " + category);
 
